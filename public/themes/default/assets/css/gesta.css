@@ -1,0 +1,489 @@
+/* --= COLOR CODE =-- */
+/* green light : #ccde58 */
+/* green dark : #bcd428 */
+/* mauve dark : #611c49 */
+/* mauve light : #6c2d58 */
+
+
+/*@media only screen and (max-width : 480px)
+{*/
+    
+    
+.navbar
+{
+    /*display: none;*/
+}
+/*}*/
+
+/* --= USEFUL CLASS =-- */
+.pull-center 
+{
+    text-align: center;
+}
+
+a.pull-right
+{
+    margin-left: 10px;
+}
+
+/* --= GENERAL =--*/
+html
+{
+    position: relative;
+}
+
+body
+{
+    font: 11px Verdana, Arial, Helvetica, sans-serif;
+    background-color: #efefef;
+
+}
+
+.clear
+{
+    clear: both;
+}
+
+.spacer
+{
+    margin-bottom: 50px;
+}
+
+div.jGrowl div.jGrowl-notification.success 
+{
+    background: #bed733;
+    border: 0px;
+    color: black;
+}
+
+/* --= HEADER =--*/
+ul.nav
+{
+    font-weight: bold;
+}
+
+.navbar p.navbar-text
+{
+    font-weight: bold;
+}
+
+.navbar p.navbar-text a
+{
+    text-decoration: none;
+    color: #bcd428;
+    font-weight: bold;
+}
+
+.navbar p.navbar-text a:hover
+{
+    color: #ccde58;
+}
+
+.navbar .brand
+{
+    padding: 5px 0px 5px 0px;
+    margin-right: 20px;
+}
+
+.dropdown-menu li > a:hover,
+.dropdown-menu li > a:focus,
+.dropdown-submenu:hover > a 
+{
+  background-color: #ccde58;
+  background-color: #bcd428;
+  background-image: -moz-linear-gradient(top, #ccde58, #bcd428);
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from(#ccde58), to(#bcd428));
+  background-image: -webkit-linear-gradient(top, #ccde58, #bcd428);
+  background-image: -o-linear-gradient(top, #ccde58, #bcd428);
+  background-image: linear-gradient(to bottom, #ccde58, #bcd428);
+  background-repeat: repeat-x;
+  filter: progid:dximagetransform.microsoft.gradient(startColorstr='#ccde58', endColorstr='#bcd428', GradientType=0);
+  font-weight: bold;
+}
+
+/* --= MENU PILLS =-- */
+.nav-pills > .active > a, .nav-pills > .active > a:hover
+{
+    background-color: #611c49;
+}
+
+/* --= CONTENT =--*/
+#content
+{
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 20px;
+    border: 1px solid #cccccc;
+    margin-top: 100px;
+    background-color: white;
+    position: relative;
+    z-index: 3;
+}
+
+#content h2
+{
+    margin: 0px 0px 10px 0px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+
+#content h2.smaller
+{
+    font-size: 18px;
+}
+
+#content button#create-adresse, #content button#create-contact
+{
+    margin-bottom: 20px;
+}
+
+#content h3
+{
+    margin: 0px 0px 20px 0px;
+    font-family: 'Montserrat', sans-serif;
+    display: block;
+    width: 100%;
+    padding: 0;
+    font-size: 21px;
+    line-height: 40px;
+    color: #333333;
+    border: 0;
+    border-bottom: 1px solid #e5e5e5;
+    font-weight: normal;
+}
+
+#content h3
+{
+    margin: 30px 0px 20px 0px;
+    font-size: 14px;
+}
+
+/* FORM */
+#content fieldset legend
+{
+    margin: 0px 0px 20px 0px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+
+#content fieldset > a.btn
+{
+    margin-bottom: 20px;
+}
+
+#content form
+{
+    margin-top: 20px;
+}
+
+#content form label
+{
+    display: block;
+    width: 200px;
+    background-color: #bcd428;
+    float: left;
+    text-align: right;
+    line-height: 2.1em;
+    padding: 0 0.8em 0 0;
+    margin-right: 3px;
+}
+
+#content form input
+{
+    border: 1px solid #cccccc;
+    width: 250px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+}
+
+#content form input:active, #content form input:hover
+{
+    border: 1px solid #cee25d;
+}
+
+#content form input[type=submit]
+{
+    font-weight: bold;
+    margin: 10px;
+}
+
+#content form input[type=checkbox]
+{
+    display: inline;
+    width: 15px;
+}
+
+#content form input[type=radio]
+{
+    height: 18px;
+}
+
+#content form .radio
+{
+    margin-bottom: 20px;
+}
+
+#content form.inline
+{
+    display: inline;
+    margin-left: 20px;
+}
+
+
+#content .bottom-space
+{
+    margin-bottom: 20px;
+}
+
+#content form input.btn-previous
+{
+    height: 30px;
+    width: 180px;
+}
+
+#content form input.btn-next
+{
+    height: 30px;
+    width: 180px;
+}
+
+/* UL */
+#content ul.gesta-list
+{
+    margin: 0px 0px 10px 10px;
+}
+
+#content ul.gesta-list li
+{
+    list-style: none;
+    background-image: url("../img/list.png");
+    background-repeat: no-repeat;
+    background-position: 10px center;
+}
+
+#content ul.gesta-list li a
+{
+    display: block;
+    padding: 3px 0px 3px 30px;
+}
+
+#content ul.gesta-list li a:hover
+{
+    color: white;
+    background-image: url("../img/list-white.png");
+    background-repeat: no-repeat;
+    background-color: #611c49;
+    text-decoration: none;
+    font-weight: bold;
+    background-position: 10px center;
+    border-radius: 3px;
+}
+
+#content ul.document li
+{
+    background-image: url("../img/document.png");
+}
+
+#content ul.document li a:hover
+{
+    background-image: url("../img/document-white.png");
+}
+
+/* TABLE */
+#content table th.actions
+{
+    width: 150px;
+}
+
+#content table td.text-right, #content table th.text-right
+{
+    text-align: right;
+}
+
+#content table td.text-center, #content table th.text-center
+{
+    text-align: center;
+}
+
+#content table td.tdark, #content table th.tdark
+{
+    background-color: #eceaea;
+}
+
+#content table td.thead, #content table th.tdark
+{
+    background-color: #eceaea;
+}
+
+#content table th.tbigger
+{
+    font-size: 20px;
+    padding: 10px;
+}
+
+#content table td.small
+{
+    width: 10%;
+}
+
+#content table.table-inner-bordered td, #content table.table-inner-bordered th
+{
+    border-left: 1px solid #dddddd;
+    border-right: 1px solid #dddddd;
+}
+
+/* TABLE FORM */
+table.form
+{
+    width:100%;
+}
+
+table.form td
+{
+    width: 50%;
+    vertical-align: top;
+}
+
+table.form table
+{
+    width: 100%;
+}
+
+
+
+/* --= FOOTER =-- */
+#footer 
+{
+    background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-top: 70px;
+    padding: 70px 0;
+}
+
+
+
+/* --= HEURES =-- */
+#content form.form_heures
+{
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#content form.form_heures label
+{
+    display: inline;
+    width: auto;
+    background: none;
+    float: none;
+    text-align: right;
+    line-height: 0em;
+    padding: 0 0 0 0;
+    margin-right: 0px;
+}
+
+#content form.form_heures input
+{
+    display: inline;
+    width: auto!important;
+}
+
+#content form.form_heures input[type=checkbox], #content form.form_heures input[type=radio]
+{
+    display: inline;
+    width: 10px;
+}
+
+table.table_heures
+{
+    width: 30%;
+    float: left;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+
+td.wk
+{
+    background-color: #90EE90;
+}
+
+
+
+table.table_heures_details
+{
+    width: 60%;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+
+
+
+
+/* SPECIAL MOBILE DEVICES CSS*/
+@media only screen and (max-width : 800px)
+{
+    .nav-collapse.collapse 
+    {
+        height: auto !important;
+        overflow: visible !important;
+    }
+    
+    .navbar .pull-right
+    {
+        float: none
+    }
+    
+    .navbar p.navbar-text
+    {
+        text-align: center;
+        font-size: 1.5em;
+        width: 100%;
+    }
+    
+    .navbar li {  
+        width: 100%;
+        position: static; 
+        font-size: 1.5em;
+    }
+    
+    .navbar-inverse .nav > li > a 
+    { 
+        color: #ccde58;
+        text-align: center;
+    }
+
+    .navbar a.brand
+    {
+        float: none;
+        margin: 0px;
+        padding: 15px;
+        width: 90%;
+        text-align: center;
+    }
+    
+    #content
+    {
+        margin-top: 50px;
+    }
+}
+
+@media only screen and (max-width : 480px)
+{
+    body { font-size: 50%; }
+}
+
+.alert-error
+{
+    padding-top: 5px;
+    border: 1px solid #b94a48;
+}
+
+.alert-success
+{
+    padding: 5px;
+    border: 1px solid #468847;
+    margin-bottom: 10px;
+}

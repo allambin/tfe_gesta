@@ -1,0 +1,9 @@
+{% set errors = session_get_flash('error') %}
+
+{% if errors %}
+    <div class="alert-error">
+        {{ errors }}
+    </div>
+{% endif %}
+
+{{ form }}

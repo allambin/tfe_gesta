@@ -1,0 +1,8 @@
+<h1>Module de gestion des heures</h1>
+
+<div class="sous_menu">
+    <a href="prestations" class="btn btn-success"><i class="icon-calendar icon-white"></i> Prestation sur l'année</a>
+    <a href="liste_activites" class="btn btn-info"><i class='icon-time icon-white'></i> Admin. des activités</a>
+</div>
+
+<?php echo render($view_dir.'/back', array('url' => Uri::create($view_dir))); ?>

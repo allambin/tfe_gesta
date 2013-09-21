@@ -1,0 +1,1 @@
+<h2>Statistiques des stagiaires</h2>

@@ -1,0 +1,14 @@
+{% extends './layout.twig' %}
+
+{% block list %}
+
+<ul class="gesta-list">
+    <li>{{ html_anchor('administration/liste_type_enseignement','Types d\'enseignement') }}</li>
+    <li>{{ html_anchor('administration/liste_enseignement','Enseignement') }}</li>
+    <li>{{ html_anchor('administration/liste_login','Logins') }}</li>
+    <li>{{ html_anchor('administration/liste_type_cedefop','Types de CEDEFOP') }}</li>
+    <li>{{ html_anchor('administration/liste_type_statut','Types de statuts à l\'entrée') }}</li>
+    <li>{{ html_anchor('administration/liste_statut_entree','Statuts à l\'entrée') }}</li>
+</ul>
+
+{% endblock list %}

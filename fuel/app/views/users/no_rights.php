@@ -1,0 +1,1 @@
+<p>Désolés, vous n'avez pas les droits suffisants pour cette action.</p>

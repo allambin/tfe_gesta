@@ -1,0 +1,36 @@
+{% for parent in parents %}
+<fieldset>
+    
+    <a href="ajouter_{{ key }}" class="btn btn-success pull-right"><i class="icon-white icon-plus"></i> Ajouter</a>
+
+    <legend>{{ attribute(parent, parent_display_key) }}</legend>
+
+    <table class="table table-striped table-top">
+        <thead>
+            <tr>
+                {% for property in properties %}
+                <th>{{ property.label }}</th>
+                {% endfor %}
+                <th class="actions"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in items %}
+            {% if attribute(item, foreign_key) == attribute(parent, parent_primary_key) %}
+            <tr>
+                {% for key, property in properties %}
+                <td>{{ attribute(item, key) }}</td>
+                {% endfor %}
+                <td class="actions"></td>
+                <td class="text-right">
+                    <a class="btn btn-mini btn-warning" href="{{ uri_create('administration/modifier_'~key~'/'~attribute(item, primary_key)) }}"><i class="icon-edit icon-white"></i></a>
+                    <a class="btn btn-mini btn-danger" href="{{ uri_create('administration/supprimer_'~key~'/'~attribute(item, primary_key)) }}" onclick="return confirm('Etes-vous sûr de vouloir supprimer cet item ?')"><i class="icon-remove-sign icon-white"></i></a>
+                </td>
+            </tr>    
+            {% endif %}
+            {% endfor %}
+        </tbody>
+    </table>
+    
+</fieldset>
+{% endfor %}

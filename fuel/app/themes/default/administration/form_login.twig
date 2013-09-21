@@ -1,0 +1,30 @@
+{% extends 'layout.twig' %}
+
+{% block list %}
+<h2>Ajouter un login</h2>
+
+{{ form_open({ class: 'form-horizontal' }) }}
+<div class="control-group">
+    {{ form_label('Login', 'username', { class: 'control-label'}) }}
+    <div class="controls">
+        {{ form_input('username', input_post('username', user ? user.username : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Mot de passe', 'password', { class: 'control-label'}) }}
+    <div class="controls">
+        {{ form_input('password', '') }} {{ form_checkbox('required_password', 1) }} Reset
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Droits', 'group', { class: 'control-label'}) }}
+    <div class="controls">
+        {{ form_select('group', input_post('username', user ? user.group : ''), droits) }}
+    </div>
+</div>
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Modifier le login</button>
+    </div>
+<?php echo Form::close(); ?>
+
+{% endblock list %}

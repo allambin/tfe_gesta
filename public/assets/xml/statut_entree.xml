@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<statut_entree>
+	<personne_en_emploi>	
+		<statut>
+			<nom>Salari&#xE9;</nom>
+			<valeur>A10</valeur>
+		</statut>
+		
+		<statut>
+			<nom>sous contrat de travail article 60/61</nom>
+			<valeur>A11</valeur>
+		</statut>
+		
+		<statut>
+			<nom>sous contrat de travail PTP</nom>	
+			<valeur>A12</valeur>
+		</statut>
+		
+		<statut>
+			<nom>autre contrat de travail</nom>
+			<valeur>A13</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Ind&#xE9;pendant sans personnel</nom>
+			<valeur>A20</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Chef d'entreprise</nom>
+			<valeur>A30</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Autre</nom>
+			<valeur>A40</valeur>
+		</statut>
+		
+	</personne_en_emploi>
+		
+	<demandeur_emploi_inscrit>	
+	
+		<statut>
+			<nom>Ch&#xF4;meur complet indemnis&#xE9;</nom>
+			<valeur>B10</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Allocation d'attente</nom>
+			<valeur>B20</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Stage d'attente</nom>
+			<valeur>B30</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Demandeur d'emploi libre(mais inscrites comme demandeurs d'emploi)</nom>
+			<valeur>B40</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Demandeurs d'emploi &#xE0; aptitude r&#xE9;duite (reconnaissance ONEM, FOREM, ORBEM)</nom>
+			<valeur>B50</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Personnes avec handicap reconnu (affaires sociales, AWIPH, SBFPH, Fonds des accidents du travail)</nom>
+			<valeur>B60</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Personnes &#xE0; charge du CPAS</nom>
+			<valeur>B70</valeur>
+		</statut>
+	
+	</demandeur_emploi_inscrit>
+	
+	<etudiant>
+		
+		<statut>
+			<nom>Enseignement secondaire en alternance</nom>
+			<valeur>C10</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Enseignement secondaire de plein exercice</nom>
+			<valeur>C20</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Enseignement sup&#xE9;rieur de plein exercice</nom>
+			<valeur>C30</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Formation IFPME</nom>
+			<valeur>C40</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Autre</nom>
+			<valeur>C50</valeur>
+		</statut>
+	</etudiant>
+	
+	<autres>
+	
+		<statut>
+			<nom>Personne &#xE0; charge du CPAS</nom>
+			<valeur>D10</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Personne avec handicap reconnu (Affaire sociales, AWIPH, SBFPH, Fonds des accidents du travail)</nom>
+			<valeur>D20</valeur>
+		</statut>
+		
+		<statut>
+			<nom>Autre</nom>
+			<valeur>D30</valeur>
+		</statut>
+		
+	<pays/></autres>
+</statut_entree>

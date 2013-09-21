@@ -1,0 +1,19 @@
+{% extends './base.twig' %}
+
+{% block content %}
+
+<h2>Test checklist</h2>
+
+{{ form_open({ class: 'form-horizontal' }) }}
+
+{{ print_r(checklist) }}
+
+{% for valeur in valeurs %}
+{{ valeur.t_nom }} {{ form_checkbox('test[]', valeur.id_checklist_valeur) }}<br />
+ {% endfor %}
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Go</button>
+</div>
+{{ form_close() }}
+
+{% endblock content %}

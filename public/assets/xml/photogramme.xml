@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+    Document   : photogramme.xml
+    Created on : 30 décembre 2009, 12:35
+    Author     : Gérard Ernaelsten Ernaelsten@gmail.com
+    Description:
+        Document XMl pour la génération des Photogramme
+-->
+<photogramme>
+    
+    
+    
+    
+    
+    
+    <rect1>Réseau personnel</rect1>
+    <rect2>Réseau professionnel</rect2>
+    <rect3>Historique/Parcours</rect3>
+    
+
+<item1>Motivations/Attentes personnelles</item1><item2>Limites d'apprentissage</item2><rect4>Le projet d'accompagnement</rect4><item5>Relationnel/Affectif</item5><item3>Acquis 2</item3><item4>Autonomie +/-2</item4><item6>Statut/Situation Economique2</item6></photogramme>

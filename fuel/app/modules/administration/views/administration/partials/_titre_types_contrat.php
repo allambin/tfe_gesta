@@ -1,0 +1,1 @@
+<h2>Administration <small>Gestion des types de contrat</small></h2>

@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fin_formation>
+
+	<fin>
+		<nom>Mise à l'emploi avant la fin de la formation</nom>
+		<valeur>A10</valeur>
+	</fin>
+
+	<fin>
+		<nom>Emploi indépendant</nom>
+		<valeur>A11</valeur>
+	</fin>
+
+	<fin>
+		<nom>Emploi salarié</nom>
+		<valeur>A12</valeur>
+	</fin>
+
+	<fin>
+		<nom>Emploi non subsidié</nom>
+		<valeur>A1201</valeur>
+	</fin>
+
+	<fin>
+		<nom>Contrat de travail CDD temps plein</nom>
+		<valeur>A120101</valeur>
+	</fin>
+
+	<fin>
+		<nom>Contrat de travail CDD temps partiel</nom>
+		<valeur>A120102</valeur>
+	</fin>
+
+	<fin>
+		<nom>Contrat de travail CDI temps plein</nom>
+		<valeur>A120103</valeur>
+	</fin>
+
+	<fin>
+		<nom>Contrat de travail CDI temps partiel</nom>
+		<valeur>A120104</valeur>
+	</fin>
+
+	<fin>
+		<nom>Intérim</nom>
+		<valeur>A120105</valeur>
+	</fin>
+	
+	<fin>
+		<nom>Contrat de travail conditions non connues</nom>
+		<valeur>A120106</valeur>
+	</fin>
+
+	<fin>
+		<nom>Emploi subsidié</nom>
+		<valeur>A1202</valeur>
+	</fin>
+
+	<fin>
+		<nom>Programme de résorption de chômage</nom>
+		<valeur>A120201</valeur>
+	</fin>	
+	
+	<fin>
+		<nom>Programme d'activation</nom>
+		<valeur>A120202</valeur>
+	</fin>
+	
+	<fin>
+		<nom>Article 60</nom>
+		<valeur>A120203</valeur>
+	</fin>
+	
+	<fin>
+		<nom>Arrêt de la formation pour raison personnelle</nom>
+		<valeur>A20</valeur>
+	</fin>
+	
+	<fin>
+		<nom>Arrêt de la formation pour cas de force majeure motifs impérieux obligeant à interrompre la formation</nom>
+		<valeur>A30</valeur>
+	</fin>
+
+	<fin>
+		<nom>Abandon</nom>
+		<valeur>A40</valeur>
+	</fin>
+
+	<fin>
+		<nom>Autre (à préciser, notamment exclusion)</nom>
+		<valeur>A50</valeur>
+	</fin>
+	
+	
+
+
+	
+	<suite>
+		<nom>Emploi après la formation</nom>
+		<valeur>B10</valeur>
+	</suite>
+
+	<suite>
+		<nom>Emploi indépendant</nom>
+		<valeur>B11</valeur>
+	</suite>
+
+	<suite>
+		<nom>Emploi salarié</nom>
+		<valeur>B12</valeur>
+	</suite>
+
+	<suite>
+		<nom>Emploi non subsidié</nom>
+		<valeur>B1201</valeur>
+	</suite>
+
+	<suite>
+		<nom>Contrat de travail CDD temps plein</nom>
+		<valeur>B120101</valeur>
+	</suite>
+
+	<suite>
+		<nom>Contrat de travail CDD temps partiel</nom>
+		<valeur>B120102</valeur>
+	</suite>
+
+	<suite>
+		<nom>Contrat de travail CDI temps plein</nom>
+		<valeur>B120103</valeur>
+	</suite>
+
+	<suite>
+		<nom>Contrat de travail CDI temps partiel</nom>
+		<valeur>B120104</valeur>
+	</suite>
+
+	<suite>
+		<nom>Intérim</nom>
+		<valeur>B120105</valeur>
+	</suite>
+
+	<suite>
+		<nom>Contrat de travail conditions non connues</nom>
+		<valeur>B120106</valeur>
+	</suite>
+
+	<suite>
+		<nom>Emploi subsidié</nom>
+		<valeur>B1202</valeur>
+	</suite>
+
+	<suite>
+		<nom>Programme de résorption de  chômage</nom>
+		<valeur>B120201</valeur>
+	</suite>
+
+	<suite>
+		<nom>Programme d'activation</nom>
+		<valeur>B120202</valeur>
+	</suite>
+	
+	<suite>
+		<nom>Article 60</nom>
+		<valeur>B120203</valeur>
+	</suite>
+
+	<suite>
+		<nom>Poursuite d'une formation</nom>
+		<valeur>B20</valeur>
+	</suite>
+
+	<suite>
+		<nom>Poursuite d'une formation dans le cadre du dispositif du parcours d'insertion</nom>
+		<valeur>B21</valeur>
+	</suite>
+	
+	<suite>
+		<nom>Poursuite d'une formation hors cadre parcours d'insertion (enseignement)</nom>
+		<valeur>B22</valeur>
+	</suite>
+	
+	<suite>
+		<nom>Aide à la recherche d'emploi après la formation</nom>
+		<valeur>B30</valeur>
+	</suite>
+	
+	<suite>
+		<nom>Recherche d'emploi dans un autre organisme</nom>
+		<valeur>B31</valeur>
+	</suite>
+	
+	<suite>
+		<nom>Orientation SPE (Forem ou Orbem)</nom>
+		<valeur>B32</valeur>
+	</suite>
+	
+	<suite>
+		<nom>Réorientation vers un autre type d'action (aide thérapeutique, aide sociale spécialisée, etc.)</nom>
+		<valeur>B40</valeur>
+	</suite>
+	
+	<autre>
+		<nom>Fin de formation sans suite connue</nom>
+		<valeur>B50</valeur>
+	</autre>
+	
+	<wallonie>
+		<nom>WALLONIE</nom>
+		<valeur>B2101</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>Conditions non connues</nom>
+		<valeur>B210101</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>FOREM</nom>
+		<valeur>B210102</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>Promotion Sociale</nom>
+		<valeur>B210103</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>IFPME</nom>
+		<valeur>B210104</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>CEFA</nom>
+		<valeur>B210105</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>OISP</nom>
+		<valeur>B210106</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>EFT</nom>
+		<valeur>B210107</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>AWIPH</nom>
+		<valeur>B210108</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>PFI</nom>
+		<valeur>B210109</valeur>
+	</wallonie>
+	
+	<wallonie>
+		<nom>Autre (à préciser)</nom>
+		<valeur>B210110</valeur>
+	</wallonie>
+	
+		
+	<bruxelles>
+		<nom>BRUXELLES</nom>
+		<valeur>B2102</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>Conditions non connues</nom>
+		<valeur>B210201</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>Bruxelles-Formation</nom>
+		<valeur>B210202</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>&gt;Promotion Sociale</nom>
+		<valeur>B210203</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>IFPME</nom>
+		<valeur>B210204</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>CEFA</nom>
+		<valeur>B210205</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>OISP</nom>
+		<valeur>B210206</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>EFT</nom>
+		<valeur>B210207</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>SBFPH</nom>
+		<valeur>B210208</valeur>
+	</bruxelles>
+	
+	<bruxelles>
+		<nom>Autre (à préciser)</nom>
+		<valeur>B210209</valeur>
+	</bruxelles>
+</fin_formation>

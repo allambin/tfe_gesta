@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<groupe>
+	
+		
+		
+		<intitule>
+		<nom>Menuiserie</nom>
+		<cedefop>582</cedefop>
+	</intitule>
+		<intitule>
+		<nom>Maconnerie</nom>
+		<cedefop>582</cedefop>
+	</intitule>
+<intitule><nom>Horeca-Collectivite</nom><cedefop>811</cedefop></intitule><intitule><nom>Horeca-Salle</nom><cedefop>811</cedefop></intitule><intitule><nom>Horeca-Cuisine</nom><cedefop>811</cedefop></intitule><intitule><nom>Isolation</nom><cedefop>582</cedefop></intitule><intitule><nom>Orientation</nom><cedefop>582</cedefop></intitule><intitule><nom>TeamCoaching</nom><cedefop>582</cedefop></intitule><intitule><nom>Menuiserie-Isolation</nom><cedefop>582</cedefop></intitule><intitule><nom></nom><cedefop/></intitule></groupe>

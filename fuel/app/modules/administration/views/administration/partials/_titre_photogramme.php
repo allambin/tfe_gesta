@@ -1,0 +1,1 @@
+<h2>Administration <small>Gestion des items du Photogramme</small></h2>

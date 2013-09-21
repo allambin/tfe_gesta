@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ateliers de Pontaury - {{ title }}</title>
+        <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+        {% block css %}
+        {{ asset_css('bootstrap.min.css') }}
+        {{ asset_css('bootstrap-responsive.css') }}
+        {{ asset_css('gesta.css') }}
+        {% endblock css %}
+    </head>
+
+    <body data-spy="scroll" data-target=".navbar">
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+
+                    <a class="brand" href="{{ uri_create('/') }}">Ateliers de Pontaury</a>
+                    <div class="nav-collapse collapse">
+                        <ul class="nav" role="navigation">
+                            <li class="dropdown hidden-phone">
+                                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Participant <b class="caret"></b></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a tabindex="-1" href="{{ uri_create('participant/ajouter') }}">Ajouter</a></li>
+                                    <li><a tabindex="-1" href="{{ uri_create('gesta/choisir/modifier') }}">Modifier</a></li>
+                                    <li><a tabindex="-1" href="{{ uri_create('gesta/choisir/supprimer') }}">Supprimer</a></li>
+                                    <li><a tabindex="-1" href="{{ uri_create('listeattente') }}">Liste Candidat</a></li>
+                                </ul>
+                            </li>
+                            <li class="hidden-phone">{{ html_anchor('contrat','Contrat', {'id':'link_contrat'}) }}</li>
+
+                            <li class="dropdown hidden-phone">
+                                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Prestation <b class="caret"></b></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li><a tabindex="-1" href="{{ uri_create('prestation') }}">Prestation par participant</a></li>
+                                    <li><a tabindex="-1" href="{{ uri_create('tableau') }}">Prestation par Groupe</a></li>
+                                </ul>
+                            </li>
+                            <li class="hidden-phone">{{ html_anchor('document','Document', {'id':'link_document'}) }}</li>
+                            <li class="hidden-phone">{{ html_anchor('statistique','Statistique', {'id':'link_liste'}) }}</li>
+                            <li class="hidden-phone">{{ html_anchor('administration','Admin', {'id':'link_admin'}) }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="content">
+            GREUH FREUH<br />
+            {% block content %}
+            {% endblock content %}
+        </div>
+
+        <div id="footer">
+            <div class="pull-center"><a href="{{ uri_create('/') }}">Gesta v3.0</a> &#169; Ateliers de Pontaury</div>
+	</div>
+    
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        {{ asset_js('jquery-1.7.1.min.js') }}
+        {{ asset_js('bootstrap-dropdown.js') }}
+        {{ asset_js('bootstrap-collapse.js') }}
+        {% block javascript %}
+        {% endblock javascript %}
+    </body>
+</html>

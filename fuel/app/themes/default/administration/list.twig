@@ -1,0 +1,25 @@
+{% extends 'layout.twig' %}
+
+{% block list %}
+
+{% set errors = session_get_flash('error') %}
+{% if errors %}
+    <div class="alert-error">
+        {{ errors }}
+    </div>
+{% endif %}
+
+{% set success = session_get_flash('success') %}
+{% if success %}
+    <div class="alert-success">
+        {{ success }}
+    </div>
+{% endif %}
+
+{% if layout == "simple" %}
+    {% include '_simple_list.twig' %}
+{% elseif layout == "multiple" %}
+    {% include '_multiple_list.twig' %}
+{% endif %}
+
+{% endblock list %}

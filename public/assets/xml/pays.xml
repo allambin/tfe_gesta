@@ -1,0 +1,622 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pays_monde>
+	<hors_europe>
+		<pays>
+			<nom>Afrique du Sud</nom>
+			<valeur>03</valeur>
+		</pays>
+
+		<pays>
+			<nom>Afghanistan
+			</nom>
+			<valeur>03</valeur>
+		</pays>
+
+		<pays>
+			<nom>Albanie</nom>
+			<valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Algérie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Andorre</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Angola</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Antigua-et-Barbuda</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Arabie saoudite</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Argentine</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Arménie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Australie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Azerbaïdjan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Bahamas</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Bahreïn</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Bangladesh</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Barbade</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Belize</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Bénin</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Bhoutan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Biélorussie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Birmanie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Bolivie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Bosnie-Herzégovine</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Botswana</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Brésil</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Brunei</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Burkina Faso</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Burundi</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Cambodge</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Cameroun</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Canada</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Cap-Vert</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Centrafrique</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Chili</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Chine</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Colombie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Comores</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Congo</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Corée du Nord</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Corée du Sud</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Costa Rica</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Côte d'Ivoire</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Croatie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Cuba</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Djibouti</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Dominique</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Égypte</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Émirats</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Équateur</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Érythrée</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>États-Unis</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Éthiopie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Fidji Fidji</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Gabon</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Gambie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Géorgie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Ghana</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Grenade</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Guatemala</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Guernesey</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Guinée</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Guinée équatoriale</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Guinée-Bissau</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Guyana</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Haïti</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Honduras</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Île de Man</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Îles Cook</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Îles Salomon</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Inde</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Indonésie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Irak</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Iran</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Islande</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Israël</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Jamaïque</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Japon</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Jersey</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Jordanie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Kazakhstan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Kenya</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Kirghizistan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Kiribati</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Kosovo</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Koweït</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Laos</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Lesotho</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Liban</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Libéria</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Libye</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Liechtenstein</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Macédoine</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Madagascar</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Malaisie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Malawi</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Maldives</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Mali</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Maroc</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Marshall</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Maurice</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Mauritanie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Mexique</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Micronésie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Moldavie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Monaco</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Mongolie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Monténégro</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Mozambique</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Namibie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Nauru</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Népal</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Nicaragua</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Niger</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Nigeria</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Niué</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Norvège</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Nouvelle-Zélande</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Oman</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Ouganda</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Ouzbékistan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Pakistan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Palaos</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Panamá</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Papouasie-Nouvelle-Guinée</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Paraguay</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Pérou</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Philippines</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Qatar</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>République démocratique du Congo</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>République dominicaine</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Russie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Rwanda</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Saint-Christophe-et-Niévès</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Saint-Marin</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Saint-Vincent-et-les Grenadines</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Sainte-Lucie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Salvador</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Samoa</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>São Tomé-et-Principe</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Sénégal</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Serbie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Seychelles</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Sierra Leone</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Singapour</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Somalie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Soudan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Sri Lanka</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Suisse</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Suriname</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Swaziland</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Syrie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Tadjikistan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Taïwan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Tanzanie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Tchad</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Thaïlande</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Timor oriental</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Togo</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Tonga</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Trinité-et-Tobago</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Tunisie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Turkménistan</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Turquie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Tuvalu</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Ukraine</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Uruguay</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Vanuatu</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Vatican</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Venezuela</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Viêt Nam</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Yémen</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Zambie</nom><valeur>03</valeur>
+		</pays>
+
+		<pays><nom>Zimbabwe</nom><valeur>03</valeur>
+		</pays>
+
+
+	</hors_europe>
+
+	<europe>
+		<pays><nom>Allemagne</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Bulgarie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Chypre</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Danemark</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Espagne</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Estonie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Finlande</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>France</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Grèce</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Hongrie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Irlande</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Italie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Lettonie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Lituanie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Luxembourg</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Malte</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Pays-Bas</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Pologne</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Portugal</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>République tchèque</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Roumanie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Royaume-Uni</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Slovaquie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Slovénie</nom><valeur>02</valeur>
+		</pays>
+
+		<pays><nom>Suède</nom><valeur>02</valeur>
+		</pays>
+
+</europe>
+	<belgique>
+		<pays><nom>Belgique</nom><valeur>01</valeur>
+		</pays>
+	</belgique>
+
+	<autre>
+		<pays><nom>Apatride</nom><valeur>04</valeur>
+		</pays>
+		
+		<pays><nom>Inconnu</nom><valeur>05</valeur>
+		</pays>
+	</autre>
+<fin><pays/></fin></pays_monde>

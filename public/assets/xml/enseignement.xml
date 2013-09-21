@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<enseignement>
+	<type>
+		<nom>Enseignement spécial</nom>
+		<valeur>S</valeur>
+	</type>
+		
+	<type>
+		<nom>Enseignement ordinaire</nom>
+		<valeur>O</valeur>
+	</type>
+	
+	<diplome>
+		<nom>Sans diplôme</nom>
+		<valeur>98</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Certificat d'études de base (primaire)</nom>
+		<valeur>00</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Général et technique ou artistique de transition</nom>
+		<valeur>21</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Technique ou artistique de qualification</nom>
+		<valeur>22</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Professionnel</nom>
+		<valeur>23</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Enseignement secondaire complémentaire</nom>
+		<valeur>30</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Brevet de l'enseignement post-secondaire non supérieur (1, 2, 3 ans)</nom>
+		<valeur>31</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Professionnel avec accès 7ème CESS (accès à l'enseignement supérieur)</nom>
+		<valeur>32</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>7ème de perfectionnement ou de spécialisation</nom>
+		<valeur>33</valeur>
+	</diplome>
+	<diplome>
+		<nom>Enseignement supérieur non universitaire de type court</nom>
+		<valeur>40</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Enseignement supérieur non universitaire de type long</nom>
+		<valeur>50</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Enseignement universitaire</nom>
+		<valeur>60</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Non reconnu</nom>
+		<valeur>70</valeur>
+	</diplome>
+	
+	<diplome>
+		<nom>Inconnu</nom>
+		<valeur>80</valeur>
+	</diplome>
+	
+</enseignement>

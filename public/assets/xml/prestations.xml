@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prestation>
+
+
+    <statut>
+        <nom>Maladie</nom>
+        <valeur>/</valeur>
+    </statut>
+    <statut>
+        <nom>Conge</nom>
+        <valeur>%</valeur>
+    </statut>
+    <statut>
+        <nom>Absent</nom>
+        <valeur>*</valeur>
+    </statut>
+    <statut>
+        <nom>Recup</nom>
+        <valeur>-</valeur>
+    </statut>
+    <statut>
+        <nom>Cefa</nom>
+        <valeur>$</valeur>
+    </statut>
+    <statut>
+        <nom>Debriefing_ateliers</nom>
+        <valeur>+</valeur>
+    </statut>
+    <statut>
+        <nom>Gestion_Collective</nom>
+        <valeur>+</valeur>
+    </statut>
+    <statut>
+        <nom>Suivi_individuel</nom>
+        <valeur>+</valeur>
+    </statut>
+    <statut>
+        <nom>Animations_thematiques</nom>
+        <valeur>@</valeur>
+    </statut>
+    <statut>
+        <nom>alpha</nom>
+        <valeur>@</valeur>
+    </statut>
+    <statut>
+        <nom>Convocation</nom>
+        <valeur>/</valeur>
+    </statut>
+    <statut>
+        <nom>Alpha-EXT</nom>
+        <valeur>%</valeur>
+    </statut>
+    <statut>
+        <nom>Travail</nom>
+        <valeur>+</valeur>
+    </statut>
+    <statut>
+        <nom>Stage</nom>
+        <valeur>=</valeur>
+    </statut>
+</prestation>

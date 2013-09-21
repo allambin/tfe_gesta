@@ -1,0 +1,30 @@
+body {
+    margin-top: 50px;
+    height: 100%;
+
+}
+
+footer {
+    background-color: #F5F5F5;
+    border-top: 1px solid #E5E5E5;
+    margin-top: 70px;
+    padding: 70px 0;
+}
+
+.pull-center {
+    text-align: center;
+}
+
+.table-top {
+    margin-top: 20px;
+}
+
+div.jGrowl div.jGrowl-notification.success {
+    background: #bed733;
+    border: 0px;
+    color: black;
+}
+
+.go-right {
+    text-align: right !important;
+}

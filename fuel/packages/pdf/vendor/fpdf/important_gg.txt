@@ -1,0 +1,1 @@
+Lors de la migration, j'ai intégrer les focntions de textbox.php directement dans la classe fpdf.php

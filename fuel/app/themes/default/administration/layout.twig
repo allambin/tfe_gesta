@@ -1,0 +1,17 @@
+{% extends './base.twig' %}
+
+{% block content %}
+
+<h2>Administration {% if subtitle is not null %}<small>{{ subtitle }}</small>{% endif %}</h2>
+
+{% block list %}
+{% endblock list %}
+{% block form %}
+{% endblock form %}
+
+{% if back is not null %}
+<a class="btn pull-right" href="{{ back }}"><i class="icon-step-backward"></i> Retour</a>
+<div class="clear"></div>
+{% endif %}
+
+{% endblock content %}

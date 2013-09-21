@@ -1,0 +1,483 @@
+/*================================================================== GENERAL */
+
+html
+{
+    position: relative;
+}
+
+body
+{
+    font: 11px Verdana, Arial, Helvetica, sans-serif;
+    background-color: #efefef;
+   /* margin:1px;
+    padding:0px;*/
+
+}
+
+/*================================================================== TEMPLATE */
+
+h2,.titre-fiche {
+    font:bold 12px/14px verdana, arial, helvetica, sans-serif;
+    margin:5px 0px 5px 0px;
+    padding:0px;
+}
+
+a
+{
+    color: #6d2e5b;
+    font-weight: bold;
+}
+
+a:hover
+{
+    text-decoration: none;
+}
+
+p.right
+{
+    text-align: right;
+}
+
+p.center
+{
+    text-align: center;
+}
+
+ul.ui-menu
+{
+    width: 350px!important;
+    list-style: none;
+    padding-left: 5px;
+}
+
+#header
+{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    position: relative;
+    z-index: 1;
+}
+
+#header h1
+{
+    font-size: 0px;
+    /*background: url("../img/logo_reducted.jpg") no-repeat white;*/
+    width: 197px;
+    height: 71px;
+}
+
+#header ul
+{
+    margin-left: auto;
+    margin-top: -20px;
+    text-align: right;
+}
+
+#header ul li
+{
+    display: inline;
+    list-style: none;
+}
+
+#menu
+{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+    padding: 5px;
+    border: 1px solid #cccccc;
+    margin-top: 0px;
+    background-color: white;
+    position: relative;
+    z-index: 2;
+}
+
+#menu ul li
+{
+    display: inline;
+    list-style: none;
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#menu a
+{
+    padding: 2px 0 2px 20px;
+}
+
+#menu a#link_home
+{
+    background: url('../img/home.png') no-repeat;
+}
+
+#menu a#link_participant
+{
+    background: url('../img/participant.png') no-repeat;
+}
+
+#menu a#link_contrat
+{
+    background: url('../img/contrat.png') no-repeat;
+}
+
+#menu a#link_heures
+{
+    background: url('../img/heures.png') no-repeat;
+}
+
+#menu a#link_admin
+{
+    background: url('../img/admin.png') no-repeat;
+}
+#menu a#link_tableau
+{
+    background: url('../img/clock.png') no-repeat;
+}
+#menu a#link_document
+{
+    background: url('../img/print.png') no-repeat;
+}
+#menu a#link_liste
+{
+    background: url('../img/list.png') no-repeat;
+}
+
+
+
+
+#content
+{
+    width: 95%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+    border: 1px solid #cccccc;
+    margin-top: 20px;
+    background-color: white;
+    position: relative;
+    z-index: 3;
+}
+
+#footer
+{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 5px;
+    border: 1px solid #cccccc;
+    margin-top: 20px;
+    text-align: right;
+    background-color: white;
+}
+
+#deco
+{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    height: 110px;
+    background-color: white;
+    z-index: 0;
+}
+
+#content h1
+{
+    font-size: 14px;
+    text-shadow:1px 1px 2px #999;
+    margin-bottom: 20px;
+    margin-left: 10px;
+}
+
+#content h1 .tableau
+{
+    font-size: 14px;
+    text-shadow:1px 1px 2px #999;
+    /*margin-bottom: -20px;*/
+    /*margin-left: 10px;*/
+}
+
+#content form label
+{
+    display: block;
+    width: 300px;
+    background-color: #B9ED5D;
+    float: left;
+    text-align: right;
+    line-height: 2.1em;
+    padding: 0 0.8em 0 0;
+    margin-right: 3px;
+}
+
+#content form input
+{
+    border: 1px solid #cccccc;
+    width: 250px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+}
+
+#content form input:active, #content form input:hover
+{
+    border: 1px solid #cee25d;
+}
+
+#content form input[type=submit]
+{
+    font-weight: bold;
+    margin: 10px;
+}
+
+#content form input[type=checkbox]
+{
+    display: inline;
+    width: 15px;
+}
+
+#dialog-contact label, #dialog-adresse label
+{
+    display: block;
+    width: 345px;
+    background-color: #cee25d;
+    text-align: left;
+    line-height: 2.1em;
+    padding: 0 0.8em 0 0.5em;
+    margin-right: 3px;
+    margin-bottom: 5px;
+}
+
+#dialog-contact input, #dialog-adresse input
+{
+    border: 1px solid #cccccc;
+    width: 345px;
+    -webkit-border-radius:3px;
+    -moz-border-radius:3px;
+    border-radius:3px;
+}
+
+#dialog-adresse input[type=checkbox]
+{
+    display: inline;
+    width: 15px;
+}
+
+button
+{
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+.sous_menu
+{
+    padding-left: 20px;
+}
+
+/*================================================================== SPECIFICS */
+table
+{
+    width:100%;
+}
+
+table th
+{
+    background-color: #B9ED5D;
+    height: 30px;
+}
+
+table td
+{
+    padding: 2px;
+}
+
+table tr:nth-child(odd)
+{
+    background-color: #e2e2e2;
+}
+
+table td.del, table td.mod, table thead td.del
+{
+    width: 20px;
+}
+
+table td.valeur
+{
+    width: 300px;
+}
+
+table td.denomination
+{
+    width: 400px;
+}
+
+table td.default
+{
+    text-align: center;
+}
+
+p.date
+{
+    text-align: right;
+}
+
+div.jGrowl div.jGrowl-notification.success
+{
+    background: #bed733;
+    border: 0px;
+    color: black;
+}
+
+/*fieldset
+{
+    border: 1px solid gray;
+    padding-top: 30px;
+    margin-bottom: 15px;
+}
+
+legend
+{
+    color:gray;
+    font-size: 14px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+fieldset table
+{
+    margin-top: 20px;
+}*/
+
+#content form.form_heures
+{
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#content form.form_heures label
+{
+    display: inline;
+    width: auto;
+    background: none;
+    float: none;
+    text-align: right;
+    line-height: 0em;
+    padding: 0 0 0 0;
+    margin-right: 0px;
+}
+
+#content form.form_heures input
+{
+    display: inline;
+    width: auto!important;
+}
+
+#content form.form_heures input[type=checkbox], #content form.form_heures input[type=radio]
+{
+    display: inline;
+    width: 10px;
+}
+
+#content .right
+{
+    float: right;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#content .left
+{
+    float: left;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+
+#content .legende
+{
+    float: left;
+    margin-bottom: 30px;
+    margin-top: 30px;
+}
+
+table.table_heures
+{
+    width: 30%;
+    float: left;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+
+table.table_heures_details
+{
+    width: 30%;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 15px;
+}
+.wrapper
+{
+    clear: left;
+}
+
+table.tableau
+{
+    width:100%;
+}
+
+table.tableau th
+{
+    background-color: #bed733;
+    height: 30px;
+}
+
+table.tableau td
+{
+    padding: 2px;
+}
+
+table.tableau tr:nth-child(odd)
+{
+    background-color: #e2e2e2;
+}
+
+table.tableau td.del, table td.mod, table thead td.del
+{
+    width: 20px;
+}
+
+table.tableau td.valeur
+{
+    width: 300px;
+}
+
+table td.denomination
+{
+    width: 400px;
+}
+
+table td.wk
+{
+    background-color: #90EE90;
+}
+
+table td.default
+{
+    text-align: center;
+}
+
+
+.bloc_a, .bloc_b { /* on défini une largeur identique pour bloc_a et bloc_b */
+    width: 80%;
+}
+
+.bloc_a {
+    float: left;
+}
+
+.bloc_b {
+    float: right;
+}

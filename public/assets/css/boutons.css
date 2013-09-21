@@ -1,0 +1,117 @@
+a.button{
+	background:url(../img/button.gif);
+	display:block;
+	color:#555555;
+	font-weight:bold;
+	height:30px;
+	line-height:29px;
+	margin-bottom:14px;
+	text-decoration:none;
+	width:191px;
+}
+a:hover.button{
+	color:#0066CC;
+}
+
+/* -------------------- */
+/* CLASSES				*/
+/* -------------------- */
+.add{
+		background:url(../img/add.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.delete{
+		background:url(../img/remove.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.calendar{
+		background:url(../img/calendar.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.clock{
+		background:url(../img/clock.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.user{
+		background:url(../images/icones/user.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.alert{
+		background:url(../images/icones/alert.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.msg{
+		background:url(../images/icones/msg.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.download{
+		background:url(../images/icones/download.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+
+.lens{
+		background:url(../images/icones/lens.gif) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.info{
+		background:url(../img/info.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+.printer{
+		background:url(../img/printer.png) no-repeat 10px 8px;
+		text-indent:30px;
+		display:block;
+}
+
+span[class = new]{
+	background:url('../img/add.png') no-repeat 10px 8px;
+	text-indent:30px;
+	display:block;
+
+}
+span[class = del]{
+	background: url('../img/remove.png') no-repeat 10px 8px;
+	text-indent:30px;
+		display:block;
+
+}
+span[class = modif]{
+	background:url('../img/update.png') no-repeat 10px 8px;
+	text-indent:30px;
+		display:block;
+
+}
+span[class = pdf]{
+    background:url('../img/pdf.png') no-repeat 10px 8px;
+    text-indent:30px;
+    display:block;
+
+}
+
+span[class = edit]{
+	background:url('../images/icones/edit.png') no-repeat 10px 8px;
+	text-indent:30px;
+		display:block;
+
+}
+
+span[class = recherche]{
+	background:url('../images/icones/recherche.png') no-repeat 10px 8px;
+	text-indent:30px;
+		display:block;
+
+}
+
+ul[class='inscriptions']{
+	list-style: none;
+}

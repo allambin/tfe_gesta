@@ -1,0 +1,1 @@
+<h2>Administration <small>Gestion des diplômes et types d'études</small></h2>

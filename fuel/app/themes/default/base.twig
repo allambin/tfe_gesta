@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+    <head>
+	<meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Ateliers de Pontaury - {{ title }}</title>
+        <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+        {{ asset_css('bootstrap.min.css') }}
+        {{ asset_css('bootstrap-responsive.css') }}
+        {{ asset_css('gesta.css') }}
+        {% block css %}
+        {% endblock css %}
+    </head>
+
+    <body data-spy="scroll" data-target=".navbar">
+
+        <div class="navbar navbar-inverse navbar-fixed-top">
+            <div class="navbar-inner">
+                <div class="container">
+
+                    <a class="brand" href="{{ uri_create('/') }}">Ateliers de Pontaury</a>
+                    <div class="nav-collapse collapse">
+                        <p class="navbar-text pull-right">
+                            {% if current_user is not null %}
+                                {{ screen_name() }} | {{ html_anchor('users/logout','Quitter') }}
+                            {% else %}
+                                {{ html_anchor('users/login','Connexion') }}
+                            {% endif %}
+                            | {{ "now"|date("d M Y") }}
+                        </p>
+                        <ul class="nav" role="navigation">
+                            <li class="dropdown hidden-phone">
+                                <a href="#" role="button" class="dropdown-toggle" data-toggle="dropdown">Participant <b class="caret"></b></a>
+                                <ul class="dropdown-menu" role="menu">
+                                    <li>{{ html_anchor('participant/index','Gérer') }}</li>
+                                    <li>{{ html_anchor('participant/ajouter','Ajouter') }}</li>
+                                    <li>{{ html_anchor('listeattente','Liste Candidat') }}</li>
+                                </ul>
+                            </li>
+                            <li class="hidden-phone">{{ html_anchor('administration','Admin', {'id':'link_admin'}) }}</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="content">
+        {% block content %}
+        {% endblock content %}
+        </div>
+
+        <div id="footer">
+            <div class="pull-center"><a href="{{ uri_create('/') }}">Gesta v3.0</a> &#169; Ateliers de Pontaury</div>
+	</div>
+    
+        <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
+        {{ asset_js('jquery-1.7.1.min.js') }}
+        {{ asset_js('bootstrap-dropdown.js') }}
+        {{ asset_js('bootstrap-collapse.js') }}
+        {% block javascript %}
+        {% endblock javascript %}
+    </body>
+</html>

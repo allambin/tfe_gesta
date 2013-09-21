@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<root>
+    <ressource>
+        <name>Allocation Chomage</name>
+        <name>RIS</name>
+        <name>Allocation Hadicape</name>
+        <name>Mutuelle</name>
+        <name>Sans revenu</name>        
+    </ressource>
+    <connaissance>
+        <name>Conseiller Forem</name>
+        <name>Publicite Journaux</name>
+        <name>Relation</name>
+        <name>Assistante Cpas</name>
+        <name>Internet</name>
+        <name>T.V</name>
+    </connaissance>
+    
+</root>
+
