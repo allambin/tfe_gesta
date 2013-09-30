@@ -1,0 +1,188 @@
+<table class="form">
+    <tr>
+        <td>
+            <table class="form_left">
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Nom*', 't_nom', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_nom', input_post('t_nom', participant.t_nom)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Prénom*', 't_prenom', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_prenom', input_post('t_prenom', participant.t_prenom)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Date de naissance', 'd_date_naissance', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('d_date_naissance', input_post('d_date_naissance', (participant.d_date_naissance != NULL) ? date('d-m-Y', strtotime(participant.d_date_naissance)) : ''), {placeholder: 'dd-mm-yyyy'}) }}
+                            <span id="age"></span>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Lieu de naissance', 't_lieu_naissance', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_lieu_naissance', input_post('t_lieu_naissance', participant.t_lieu_naissance)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Sexe', 't_sexe', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_select('t_sexe', input_post('t_nom', participant.t_sexe), {'': '', 'M': 'Homme', 'F': 'Femme'}) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Nationalité', 't_nationalite', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_select('t_nationalite', input_post('t_nationalite', participant.t_nationalite), pays) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Email', 't_email', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_email', input_post('t_email', participant.t_email)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('GSM', 't_gsm', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_gsm', input_post('t_gsm', participant.t_gsm)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+        <td>
+            <table class="form_right">
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('GSM2', 't_gsm2', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_gsm2', input_post('t_gsm2', participant.t_gsm2)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Etat civil', 't_etat_civil', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_select('t_etat_civil', input_post('t_etat_civil', participant.t_etat_civil), {'': '', 'Célibataire': 'Célibataire', 'Marié(e)': 'Marié(e)', 'Veuf(ve)': 'Veuf(ve)'}) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Registre national', 't_registre_national', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_registre_national', input_post('t_registre_national', participant.t_registre_national)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Compte bancaire', 't_compte_bancaire', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_compte_bancaire', input_post('t_compte_bancaire', participant.t_compte_bancaire)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Moyen de transport', 't_moyen_transport', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_select('t_moyen_transport', input_post('t_moyen_transport', participant.t_moyen_transport), {'': '', 'TEC': 'Transports en commun', 'Voiture/scooter/vélo': 'Voiture/scooter/vélo', 'Rien': 'Rien'}) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Pointure', 't_pointure', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_pointure', input_post('t_pointure', participant.t_pointure)) }}
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div class="control-group">
+                            {{ form_label('Taille (cm)', 't_taille', {class: 'control-label'}) }}
+                            <div class="controls">
+                            {{ form_input('t_taille', input_post('t_taille', participant.t_taille)) }}
+                            </div>  
+                        </div>
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+
+{% block javascript_footer %}
+<script type="text/javascript">
+function getAge(dateString) 
+{
+    dateString = dateString.split('-');
+    dateString = dateString[2]+","+dateString[1]+","+dateString[0];
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+$(document).ready(function() 
+{
+    var date_string = $('#form_d_date_naissance').val();
+
+    var age = getAge(date_string);
+    $('#age').text(age+" ans");
+});
+</script>
+{% endblock javascript_footer %}

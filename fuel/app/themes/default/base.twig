@@ -8,6 +8,9 @@
         {{ asset_css('bootstrap.min.css') }}
         {{ asset_css('bootstrap-responsive.css') }}
         {{ asset_css('gesta.css') }}
+        {{ asset_js('jquery-1.7.1.min.js') }}        
+        {% block javascript_header %}
+        {% endblock javascript_header %}
         {% block css %}
         {% endblock css %}
     </head>
@@ -54,10 +57,11 @@
 	</div>
     
         <script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script>
-        {{ asset_js('jquery-1.7.1.min.js') }}
         {{ asset_js('bootstrap-dropdown.js') }}
         {{ asset_js('bootstrap-collapse.js') }}
-        {% block javascript %}
-        {% endblock javascript %}
+        <!-- JAVASCRIPT -->
+        {% block javascript_footer %}
+        {% endblock javascript_footer %}
+        <!-- END JAVASCRIPT -->
     </body>
 </html>

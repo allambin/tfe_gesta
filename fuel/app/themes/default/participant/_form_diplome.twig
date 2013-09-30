@@ -1,0 +1,34 @@
+<div class="control-group">
+    {{ form_label('Type enseignement', 't_type_etude', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_select('t_type_etude', input_post('t_type_etude', participant.t_type_etude), types) }}
+    </div>
+</div>      
+<div class="control-group">
+    {{ form_label('Diplôme', 't_diplome', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_select('t_diplome', input_post('t_diplome', participant.t_diplome), diplomes) }}
+    </div>
+</div>      
+<div class="control-group">
+    {{ form_label('Année étude', 't_annee_etude', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_select('t_annee_etude', input_post('t_annee_etude', participant.t_annee_etude), annees) }}
+    </div>
+</div>      
+<div class="control-group">
+    {{ form_label('Date fin étude', 'd_fin_etude', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('d_fin_etude', input_post('d_fin_etude', (participant.d_fin_etude is not null) ? date('d-m-Y', strtotime(participant.d_fin_etude)) : '')) }}
+    </div>
+</div>      
+<div class="control-group">
+    {{ form_label('Attestation non réussite', 'b_attestation_reussite', {class: 'control-label'}) }}
+    {% if participant.b_attestation_reussite == 1 %}
+        {{ form_checkbox('b_attestation_reussite', '1', {checked: 'checked'}) }}
+    {% else %}
+        {{ form_checkbox('b_attestation_reussite', '1') }}
+    {% endif %}
+    <div class="controls">
+    </div>
+</div>

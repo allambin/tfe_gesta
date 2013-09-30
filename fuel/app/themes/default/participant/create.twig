@@ -1,0 +1,118 @@
+{% extends './layout.twig' %}
+
+{% block css %}
+{{ parent() }}
+{{ asset_css('jquery.css') }}
+{{ asset_css('jquery-ui-1.10.3.custom.min.css') }}
+{% endblock css %}
+
+{% block javascript_header %}
+{{ asset_js('jquery-ui-1.10.3.custom.min.js') }}
+{% endblock javascript_header %}
+
+{% block form %}
+
+{{ form_open({class: 'form-horizontal'}) }}
+
+    <fieldset>
+
+        <legend>Ajouter un participant</legend>
+
+        <div class="control-group">
+            {{ form_label('Nom*', 't_nom', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_input('t_nom', input_post('t_nom', participant.t_nom)) }}
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('Prénom*', 't_prenom', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_input('t_prenom', input_post('t_prenom', participant.t_prenom)) }}
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('Date de naissance', 'd_date_naissance', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_input('d_date_naissance', input_post('d_date_naissance', (participant.d_date_naissance != NULL) ? date('d-m-Y', strtotime(participant.d_date_naissance)) : ''), {placeholder: 'dd-mm-yyyy'}) }}
+            <span id="age"></span>
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('Lieu de naissance', 't_lieu_naissance', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_input('t_lieu_naissance', input_post('t_lieu_naissance', participant.t_lieu_naissance)) }}
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('Sexe', 't_sexe', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_select('t_sexe', input_post('t_nom', participant.t_sexe), {'': '', 'M': 'Homme', 'F': 'Femme'}) }}
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('Nationalité', 't_nationalite', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_select('t_nationalite', input_post('t_nationalite', participant.t_nationalite), pays) }}
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('Email', 't_email', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_input('t_email', input_post('t_email', participant.t_email)) }}
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('GSM', 't_gsm', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_input('t_gsm', input_post('t_gsm', participant.t_gsm)) }}
+            </div>
+        </div>
+        
+        <div class="control-group">
+            {{ form_label('GSM2', 't_gsm2', {class: 'control-label'}) }}
+            <div class="controls">
+            {{ form_input('t_gsm2', input_post('t_gsm2', participant.t_gsm2)) }}
+            </div>
+        </div>
+    
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">Ajouter le participant</button>
+        </div>
+
+    </fieldset>
+
+{{ form_close() }}
+
+{% endblock form %}
+
+{% block javascript_footer %}
+{{ parent() }}
+
+<script>
+    
+$( document ).ready(function() {
+    
+    $.datepicker.setDefaults({
+        dateFormat: 'dd-mm-yy',
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+        firstDay: 1
+    });
+    
+    $('#form_d_date_naissance').datepicker({
+        yearRange: '-100:+10'
+    });
+    
+});
+
+</script>
+{% endblock javascript_footer %}

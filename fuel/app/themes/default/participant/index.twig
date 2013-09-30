@@ -23,12 +23,15 @@
 
 {% endblock list %}
 
-{% block javascript %}
+{% block javascript_header %}
+{{ parent() }}
 {{ asset_js('jquery.dataTables.min.js') }}
+{% endblock javascript_header %}
+
+{% block javascript_footer %}
+
 <script type="text/javascript">
 $(document).ready(function() {
-    
-    
     $('.table').dataTable({
         "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
         "oLanguage": {
@@ -86,7 +89,7 @@ $(document).ready(function() {
     });
 } );
 </script>
-{% endblock javascript %}
+{% endblock javascript_footer %}
 
 {% block css %}
 {{ asset_css('jquery.dataTables.css') }}

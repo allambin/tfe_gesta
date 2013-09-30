@@ -1,0 +1,11 @@
+{% for section in checklist_model %}
+    <h2>{{ section.t_nom }}</h2>
+    {% for valeur in section.valeurs %}
+        {% if current_checklist[valeur.id_checklist_valeur] is not null %}
+            {{ form_checkbox('liste[]', valeur.id_checklist_valeur, {checked: 'checked'}) }} 
+        {% else %}
+            {{ form_checkbox('liste[]', valeur.id_checklist_valeur) }} 
+        {% endif %}
+        {{ valeur.t_nom }}<br />
+    {% endfor %}
+{% endfor %}

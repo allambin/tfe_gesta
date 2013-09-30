@@ -27,9 +27,9 @@ class Model_Checklist extends Orm\Model
     protected static $_many_many = array(
         'valeurs' => array(
             'key_from' => 'id_checklist',
-            'key_through_from' => 'checklist_id', // column 1 from the table in between, should match a posts.id
-            'table_through' => 'checklist_rel_valeur', // both models plural without prefix in alphabetical order
-            'key_through_to' => 'valeur_id', // column 2 from the table in between, should match a users.id
+            'key_through_from' => 'checklist_id',
+            'table_through' => 'checklist_rel_valeur',
+            'key_through_to' => 'valeur_id',
             'model_to' => 'Model_Checklist_Valeur',
             'key_to' => 'id_checklist_valeur',
             'cascade_save' => true,

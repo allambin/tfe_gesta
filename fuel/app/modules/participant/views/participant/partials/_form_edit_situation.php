@@ -167,14 +167,14 @@ function disabledPhoneInput()
 
 function hide_children()
 {
-        if($('#form_t_enfants_charge').val() == '' || $('#form_t_enfants_charge').val() == 'Non')
-        {
-            $('#children').hide();
-        }
-        if($('#form_t_enfants_charge').val() == 'Oui')
-        {
-            $('#children').show();
-        }
+    if($('#form_t_enfants_charge').val() == '' || $('#form_t_enfants_charge').val() == 'Non')
+    {
+        $('#children').hide();
+    }
+    if($('#form_t_enfants_charge').val() == 'Oui')
+    {
+        $('#children').show();
+    }
 }
 
 function get_children_age()

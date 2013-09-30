@@ -1,0 +1,14 @@
+{% extends './layout.twig' %}
+
+{% block form %}
+
+{{ form_open('participant/modifier_contact/'~contact.id_contact, {'class': 'form-horizontal'}) }}
+
+{% include '_partial_form_contact.twig' %}
+
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Créer le contact</button>
+</div>
+{{ form_close() }}
+
+{% endblock form %}

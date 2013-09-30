@@ -1,5 +1,8 @@
 <?php
 
+/**
+ * @todo : centraliser les appels à DB::insert dans une classe
+ */
 class Observer_Logging extends Orm\Observer
 {
 

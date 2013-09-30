@@ -2,6 +2,8 @@
 
 namespace Participant;
 use Fuel\Core\Input;
+use Fuel\Core\Session;
+use Fuel\Core\Response;
 
 /**
  * Controller gérant toute la partie "Participant".
@@ -52,10 +54,8 @@ class Controller_Participant extends \Controller_Main
                              't_lieu_naissance', 'd_date_naissance', 't_registre_national',
                              't_numero_inscription_onem', 'b_is_actif');
         
-        $where = array();
         if (isset($_GET['sSearch']) && $_GET['sSearch'] != "")
         {
-            $where = array('where' => array());
             for ($i = 0; $i < count($columns); $i++)
             {
                 if($columns[$i] != ' ')
@@ -65,17 +65,14 @@ class Controller_Participant extends \Controller_Main
         
         $tempTotal = $entry->count();
         
-        $limit = array();
         if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1')
         {
             $entry->limit(intval($_GET['iDisplayLength']));
             $entry->offset(intval($_GET['iDisplayStart']));
         }
-
-        $order = array();
+        
         if (isset($_GET['iSortCol_0']))
         {
-            $order = array('order_by' => array());
             for ($i = 0; $i < intval($_GET['iSortingCols']); $i++)
             {
                 if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true")
@@ -131,84 +128,44 @@ class Controller_Participant extends \Controller_Main
      * 
      * @todo fieldset, twig, etc
      */
-//    public function action_ajouter($id = NULL)
-//    {
-//
-//        $this->template->title = 'Gestion des participants - Nouvelle inscription';
-//        
-//        if (\Input::method() == 'POST')
-//	{
-//            // Validation des champs
-//            $val = \Model_Participant::validate('create_participant');
-//            
-//            // Transformation de la date de naissance
-//            $dob = (\Input::post('d_date_naissance') != NULL) ? date('Y/m/d', strtotime(\Input::post('d_date_naissance'))) : NULL;
-//            // Transformation du nom
-//            $nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents(\Input::post('t_nom'))));
-//            // Transformation du prenom
-//            $prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_prenom')));
-//            
-//            // On vérifie si ce membre existe déjà, en se basant sur les nom, prénom et date de naissance (participants actifs)
-//            $exists = \Model_Participant::exists($nom, $prenom, $dob, 1);
-//			
-//            // si la validation ne renvoie aucune erreur et si le participant n'existe pas
-//            if ($val->run() and !$exists)
-//            {
-//                // On vérifie si ce participant n'avait pas été "supprimé"
-//                $reactivate = \Model_Participant::exists($nom, $prenom, $dob, 0);
-//            
-//                // Auquel cas, on propose de le réactiver
-//                if($reactivate)
-//                {
-//                    // On recupère les infos liées à ce participant dans la db
-//                    $participant = \Model_Participant::find()->where(array(
-//                        't_nom' => $nom,
-//                        't_prenom' => $prenom,
-//                        'd_date_naissance' => $dob
-//                         ))->get_one();
-//                              
-//                    // Et on redirige le tout
-//                    \Response::redirect($this->view_dir . 'reactiver/'.$participant->id_participant);
-//                }
-//                else // Sinon, on l'ajoute en db
-//                {
-//                    // On forge un objet participant
-//                    $participant = \Model_Participant::forge(array(
-//                        't_nom' => $nom,
-//                        't_prenom' => $prenom,
-//                        't_nationalite' => \Input::post('t_nationalite'),
-//                        't_lieu_naissance' => \Cranberry\MySanitarization::ucFirstAndToLower(\Input::post('t_lieu_naissance')),
-//                        'd_date_naissance' => $dob,
-//                        't_sexe' => \Input::post('t_sexe'),
-//                        't_gsm' => \Input::post('t_gsm'),
-//                        't_gsm2' => \Input::post('t_gsm2'),
-//                        'b_is_actif' => 1
-//                    ));
-//
-//                    // On save si c'est bon
-//                    if ($participant and $participant->save())
-//                    {
-//                        $message[] = "Le participant a bien été ajouté.";
-//                        \Session::set_flash('success', $message);
-//                        \Response::redirect($this->view_dir . 'modifier/'.$participant->id_participant);
-//                    }
-//                    else // sinon on affiche les erreurs
-//                    {
-//                        $message[] = 'Impossible de sauver le participant.';
-//                        \Session::set_flash('error', $message);
-//                    }
-//                }
-//            }
-//            else // si la validation a échoué
-//            {
-//                $message[] = $val->show_errors();
-//                if($exists) $message[] = 'Ce participant existe déjà';
-//                \Session::set_flash('error', $message);
-//            }
-//        }
-//        
-//        $this->template->content = \View::forge($this->view_dir . '/ajouter', $this->data);
-//    }
+    public function action_ajouter()
+    {
+        $participant = new \Model_Participant();
+        
+        if (\Input::method() == 'POST')
+	{
+            // Validation des champs
+            $val = \Model_Participant::validate('create_participant');
+			
+            // si la validation ne renvoie aucune erreur et si le participant n'existe pas
+            if ($val->run())
+            {
+                // On forge un objet participant
+                $participant->set_massive_assigment(\Input::post());
+                $participant->b_is_actif = 1;
+
+                // On save si c'est bon
+                if ($participant->save())
+                {
+                    Session::set_flash('success', "Le participant a bien été ajouté.");
+                    Response::redirect($this->dir . 'modifier/'.$participant->id_participant);
+                }
+                else // sinon on affiche les erreurs
+                {
+                    Session::set_flash('error', "Impossible de sauver le participant.");
+                }
+            }
+            else // si la validation a échoué
+            {
+                Session::set_flash('error', $val->show_errors());
+            }
+        }
+        
+        $this->data['title'] = $this->title . ' - Nouvelle inscription';
+        $this->data['participant'] = $participant;
+        $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+        return $this->theme->view($this->dir.'create', $this->data);
+    }
     
     /**
      * Permet de réactiver un participant précédemment "supprimé"
@@ -216,41 +173,38 @@ class Controller_Participant extends \Controller_Main
      * @param type $id
      * @param type $confirmation 
      */
-    public function action_reactiver($id)
-    {
-        // On récupère le participant
-        $participant = \Model_Participant::find($id);
-        
-        if(!is_object($participant))
-        {
-            \Session::set_flash('error', 'Impossible de trouver le participant.');
-            \Response::redirect($this->dir . 'index');
-        }
-        
-        $participant->b_is_actif = 1;
-        
-        if($participant->save())
-        {
-            \Session::set_flash('success', 'Le participant a bien été réactivé.');
-            \Response::redirect($this->dir . 'index');
-        }
-        else
-        {
-            \Session::set_flash('error', 'Impossible de réactiver le participant.');
-            \Response::redirect($this->dir . 'index');
-        }
-    }
+//    public function action_reactiver($id)
+//    {
+//        // On récupère le participant
+//        $participant = \Model_Participant::find($id);
+//        
+//        if(!is_object($participant))
+//        {
+//            \Session::set_flash('error', 'Impossible de trouver le participant.');
+//            \Response::redirect($this->dir . 'index');
+//        }
+//        
+//        $participant->b_is_actif = 1;
+//        
+//        if($participant->save())
+//        {
+//            \Session::set_flash('success', 'Le participant a bien été réactivé.');
+//            \Response::redirect($this->dir . 'index');
+//        }
+//        else
+//        {
+//            \Session::set_flash('error', 'Impossible de réactiver le participant.');
+//            \Response::redirect($this->dir . 'index');
+//        }
+//    }
    
     /**
      * Modifie un participant selon l'id passé en paramètre.
      * 
      * @param type $id 
      */
-    public function action_modifier($id = null) // todo
+    public function action_modifier($id)
     {
-        die("toto");
-        $this->template->title = "Gestion des participants - Modifier une inscription";
-
         // On récupère le participant dont l'id est passé en paramètres.
         $participant = \Model_Participant::find($id, array(
                     'related' => array(
@@ -258,114 +212,57 @@ class Controller_Participant extends \Controller_Main
                         'contacts' => array(
                             'related' => 'adresse'
                         ),
-                        'checklist'
+                        'checklist' => array(
+                            'related' => 'valeurs'
+                        )
                     )
                 ));
         
         if(!is_object($participant) || $id === null )
         {
-            $message[] = 'Impossible de trouver le participant.';
-            \Session::set_flash('error', $message);
-            \Response::redirect('/');
+            Session::set_flash('error', 'Impossible de trouver le participant.');
+            Response::redirect('/');
         }
         
         // on vérifie si le participant possède déjà une adresse par défaut
         // sinon, on ajoute la checkbox, si oui on ne la met pas
-        $alreadyDefault = \Model_Adresse::find()->where(array('t_courrier' => 1, 'participant_id' => $id))->get();
+        $already_default = \Model_Adresse::find()->where(array('t_courrier' => 1, 'participant_id' => $id))->get();
 
         // Validation
         $val = \Model_Participant::validate('edit');
 
         if ($val->run()) 
         {
-            $children = \Input::post('t_children');
-            if(\Input::post('t_enfants_charge') == 'Non' || \Input::post('t_enfants_charge') == '')
-                $children = "";
-            if(!empty($children))
-                $children = implode (";", $children);
-            // Transformation de la date de naissance
-            $dob = (\Input::post('d_date_naissance') != NULL) ? date('Y/m/d', strtotime(\Input::post('d_date_naissance'))) : NULL;
-            // Transformation de la date de fin d'études
-            $dfe = (\Input::post('d_fin_etude') != NULL) ? date('Y/m/d', strtotime(\Input::post('d_fin_etude'))) : NULL;
-            // Transformation de la date du permis théorique
-            $dpt = (\Input::post('d_date_permis_theorique') != NULL) ? date('Y/m/d', strtotime(\Input::post('d_date_permis_theorique'))) : NULL;
-            // Transformation du permis
-            $permis = \Input::post('t_permis');
-            if (!empty($permis))
-                $permis = implode(',', \Input::post('t_permis'));
-            // Transformation du registre national
-            $registre = \Input::post('t_registre_national');
-            if (!empty($registre) || $registre != null)
-                $registre = \Cranberry\MySanitarization::filterRegistreNational($registre);
-            // Transformation du compte bancaire
-            $compte = \Input::post('t_compte_bancaire');
-            if (!empty($compte) || $compte != null)
-                $compte = \Cranberry\MySanitarization::filterCompteBancaire($compte);
-
-            $checklist = $participant->checklist;
-            if(!is_object($checklist))
-                $checklist = new \Model_Checklist();
-            $checklist->t_liste = is_array(\Input::post('liste')) ? implode(",", \Input::post('liste')) : null;
-            $participant->checklist = $checklist;
-            
-            // Modification des attributs de l'objet participant
-            $participant->t_nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents(\Input::post('t_nom'))));
-            $participant->t_prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_prenom')));
-            $participant->t_nationalite = \Input::post('t_nationalite');
-            $participant->t_lieu_naissance = \Cranberry\MySanitarization::ucFirstAndToLower(\Input::post('t_lieu_naissance'));
-            $participant->d_date_naissance = $dob;
-            $participant->t_sexe = \Input::post('t_sexe');
-            $participant->t_type_etude = \Input::post('t_type_etude');
-            $participant->t_diplome = \Input::post('t_diplome');
-            $participant->d_fin_etude = $dfe;
-            $participant->t_annee_etude = \Input::post('t_annee_etude');
-            $participant->t_etat_civil = \Input::post('t_etat_civil');
-            $participant->t_registre_national = $registre;
-            $participant->t_compte_bancaire = $compte;
-            $participant->t_pointure = \Input::post('t_pointure');
-            $participant->t_taille = \Input::post('t_taille');
-            $participant->t_enfants_charge = \Input::post('t_enfants_charge');
-            $participant->t_mutuelle = \Input::post('t_mutuelle');
-            $participant->t_organisme_paiement = \Input::post('t_organisme_paiement');
-            $participant->t_organisme_paiement_phone = \Input::post('t_organisme_paiement_phone');
-            $participant->t_permis = $permis;
-            $participant->t_moyen_transport = \Input::post('t_moyen_transport');
-            $participant->t_gsm = \Input::post('t_gsm');
-            $participant->t_gsm2 = \Input::post('t_gsm2');
-            $participant->b_attestation_reussite = \Input::post('b_attestation_reussite');
-            $participant->d_date_permis_theorique = $dpt;
-            $participant->t_email = \Input::post('t_email');
-            $participant->t_children = $children;
+            $participant->set_massive_assigment(\Input::post(), 'update');
             
             if ($participant->save()) 
-            {                
-                $message[] = 'Le participant a bien été mis à jour.';
-                \Session::set_flash('success', $message);
-                \Response::redirect($this->view_dir . 'modifier/' . $id .'#'.\Input::post('tab'));
-            } 
-            else 
             {
-                $message[] = 'Impossible de mettre à jour le participant.';
-                \Session::set_flash('error', $message);
-            }
+                \Session::set_flash('success', 'Le participant a bien été mis à jour.');
+                \Response::redirect($this->dir . 'modifier/' . $id);
+            } 
+            else
+                \Session::set_flash('error', 'Impossible de mettre à jour le participant.');
         } 
         else 
-        {
             if (\Input::method() == 'POST') 
-            {
-                $message[] = $val->show_errors();
-                \Session::set_flash('error', $message);
-            }
-        }
+                \Session::set_flash('error', $val->show_errors());
 
+        // création du formulaire adresse
+        $fs_adresse = \Fieldset::forge('new_address')->add_model('Model_Adresse')->repopulate();
+        $form_adresse = $fs_adresse->form();
+        $form_adresse->add('submit', '', array('type' => 'submit', 'value' => 'Ajouter', 'class' => 'btn medium primary'));
+                
         // Transformation du string en array
         $participant->t_permis = explode(",", $participant->t_permis);
         
-        // On passe tout ça dans la vue
-        $checklist_sections = \Model_Checklist_Section::find('all', array('related' => 'valeurs'));
-        $checklist = array();
-        if(isset($participant->checklist) && isset($participant->checklist->t_liste))
-            $checklist = explode(",", $participant->checklist->t_liste);
+        // On récupère les valeurs et sections de la checklist
+        $checklist_model = \Model_Checklist_Section::find('all', array('related' => 'valeurs', 'order_by' => 't_nom'));
+        $current_checklist = array();
+        if(is_array($participant->checklist))
+        {
+            foreach ($participant->checklist->valeurs as $value)
+                $current_checklist[$value->id_checklist_valeur] = $value->id_checklist_valeur;
+        }
         
         
         $types_enseignement = \Model_Type_Enseignement::find('all', array('order_by' => array('t_nom' => 'ASC'), 'related' => array('enseignements' => array('order_by' => array('i_position' => 'ASC')))));
@@ -387,36 +284,42 @@ class Controller_Participant extends \Controller_Main
             }
         }
         
-        $this->template->set_global('checklist', $checklist, false);
-        $this->template->set_global('checklist_sections', $checklist_sections, false);
-        $this->template->set_global('alreadyDefault', $alreadyDefault, false);
-        $this->template->set_global('participant', $participant, false);
-        $this->template->set_global('types', $types, false);
-        $this->template->set_global('diplomes', $diplomes, false);
-        $this->template->content = \View::forge($this->view_dir . 'modifier', $this->data, false);
+        // Transformation des children en array
+        $children = explode(';', $participant->t_children);
+        $participant->t_children = !empty($participant->t_children) ? array_chunk($children, 3) : 0;
+        
+        $this->data['title'] = $this->title;
+        $this->data['current_checklist'] = $current_checklist;
+        $this->data['checklist_model'] = $checklist_model;
+        $this->data['already_default'] = $already_default;
+        $this->data['participant'] = $participant;
+        $this->data['types'] = $types;
+        $this->data['diplomes'] = $diplomes;
+        $this->data['annees'] = \Cranberry\MyXML::get_annee_etude();
+        $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+        $this->data['form_adresse'] = $form_adresse->build(\Uri::create($this->dir.'/ajouter_adresse/'.$participant->id_participant));
+        return $this->theme->view($this->dir.'update', $this->data);
     }
-    
-    public function action_supprimer($id = null)
+        
+    /**
+     * Supprimer un participant (le rendre inactif)
+     * @param type $id
+     */
+    public function action_supprimer($id)
     {
         $participant = \Model_Participant::find($id);
         
-        if(!is_object($participant) || $id === null)
-        {
-            \Session::set_flash('error', 'Impossible de trouver le participant.');
-        }
+        if(!is_object($participant))
+            Session::set_flash('error', 'Impossible de trouver le participant.');
         
         $participant->b_is_actif = 0;
         
         if ($participant->save())
-	{
-            \Session::set_flash('success', 'Le participant a bien été supprimé.');
-	}
+            Session::set_flash('success', 'Le participant a bien été supprimé.');
         else
-	{
-            \Session::set_flash('error', 'Impossible de supprimer le participant.');
-	}
+            Session::set_flash('error', 'Impossible de supprimer le participant.');
         
-        \Response::redirect($this->dir . 'index');
+        Response::redirect($this->dir . 'index');
     }
     
     /**
@@ -424,51 +327,32 @@ class Controller_Participant extends \Controller_Main
      *
      * @param type $id 
      */
-    public function action_ajouter_adresse($id = NULL)
+    public function action_ajouter_adresse($id)
     {
         $participant = \Model_Participant::find($id);
         
+        $fieldset = \Fieldset::forge('new')->add_model('Model_Adresse')->repopulate();
+        
         if (\Input::method() == 'POST')
 	{
-            // Validation
-            $val = \Model_Adresse::validate('create');
-            
-            if ($val->run())
+            if ($fieldset->validation()->run() == true)
             {
-                // On forge un objet adresse
-                $adresse = \Model_Adresse::forge(array(
-                    't_nom_rue' => \Input::post('t_nom_rue'),
-                    't_bte' => \Input::post('t_bte'),
-                    't_code_postal' => \Input::post('t_code_postal'),
-                    't_commune' => \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_commune'))),
-                    't_telephone' => \Input::post('t_telephone'),
-                    't_courrier' => (\Input::post('t_courrier') != NULL) ? \Input::post('t_courrier'): 0,
-                    't_type' => \Input::post('t_type'),
-		));
-                
-                // On lie l'adresse au participant
+                $fields = $fieldset->validated();
+
+                $adresse = new \Model_Adresse();
+                $adresse->set_massive_assigment($fields);
                 $participant->adresses[] = $adresse;
 
-                // On sauvegarde
-		if ($participant->save())
-		{
-                    $message[] = 'L\'adresse a bien été créée.';
-                    \Session::set_flash('success', $message);
-                    \Response::redirect($this->view_dir . 'modifier/'.$id.'#adresse');
-		}
-                else
-		{
-                    $message[] = 'Impossible de créer l\'adresse';
-                    \Session::set_flash('error', $message);
-		}
+                if ($participant->save())
+                    Session::set_flash('success', "L'adresse a bien été créée.");
             }
             else
             {
-                $message[] = $val->show_errors();
-                \Session::set_flash('error', $message);
-                \Response::redirect($this->view_dir . 'modifier/'.$id.'#adresse');
+                Session::set_flash('error', $fieldset->validation()->show_errors());
             }
 	}
+        
+        Response::redirect($this->dir.'modifier/'.$id);
     }
     
     /**
@@ -476,62 +360,45 @@ class Controller_Participant extends \Controller_Main
      *
      * @param type $id 
      */
-    public function action_modifier_adresse($id = NULL)
+    public function action_modifier_adresse($id)
     {
         // On va chercher l'adresse via son id.
         $adresse = \Model_Adresse::find($id);
-        $this->template->set_global('adresse', $adresse);
         
         if(!is_object($adresse))
         {
-            $message[] = 'Impossible de trouver l\'adresse.';
-            \Session::set_flash('error', $message);
-            \Response::redirect($this->view_dir);
+            Session::set_flash('error', "Impossible de trouver l'adresse.");
+            Response::redirect($this->dir);
         }
-        
-        // Validation
-	$val = \Model_Adresse::validate('edit');
-        
-        if ($val->run())
-	{
-            // On modifie l'objet adresse
-            $adresse->t_nom_rue = \Input::post('t_nom_rue');
-            $adresse->t_bte = \Input::post('t_bte');
-            $adresse->t_code_postal = \Input::post('t_code_postal');
-            $adresse->t_commune = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_commune')));
-            $adresse->t_telephone = \Input::post('t_telephone');
-            $adresse->t_type = \Input::post('t_type');
-            $adresse->t_courrier = (\Input::post('t_courrier') != NULL) ? \Input::post('t_courrier'): 0;
-	
-            // On sauvegarde
-            if ($adresse->save())
+
+        $fieldset = \Fieldset::forge('update')->add_model('Model_Adresse')->populate($adresse);
+        $form = $fieldset->form();
+        $form->add('submit', '', array('type' => 'submit', 'value' => 'Sauvegarder', 'class' => 'btn medium primary'));
+
+        if (Input::method() == 'POST')
+        {
+            if ($fieldset->validation()->run() == true)
             {
-                // Si l'adresse est cochée comme étant l'adresse par défaut,
-                // on modifie les autres adresses liées au participant.
-                if($adresse->t_courrier == 1)
-                    \Model_Adresse::updateDefaultAddress($adresse->participant_id, $adresse->id_adresse);
-                
-                $message[] = "L'adresse a bien été modifiée.";
-                \Session::set_flash('success', $message);
-                \Response::redirect($this->view_dir . 'modifier/'.$adresse->participant_id.'#adresse');
+                $fields = $fieldset->validated();
+
+                $adresse->set_massive_assigment($fields);
+
+                if ($adresse->save())
+                {
+                    Session::set_flash('success', "L'adresse a bien été mise à jour.");
+                    Response::redirect($this->dir.'modifier/'.$adresse->participant_id);
+                }
             }
             else
             {
-                $message = "Impossible de mettre à jour l'adresse.";
-                \Session::set_flash('error', $message);
+                Session::set_flash('error', $fieldset->validation()->show_errors());
             }
-	}
-        else
-	{
-            if (\Input::method() == 'POST')
-            {
-                $message[] = $val->show_errors();
-		\Session::set_flash('error', $message);
-            }
-	}
-
-	$this->template->title = "Gestion des participants - Modifier l'adresse";
-	$this->template->content = \View::forge($this->view_dir . 'edit_address', $this->data);
+        }
+        
+        $this->data['form'] = $form->build();
+        $this->data['title'] = $this->title . " - Modifier l'adresse";
+        $this->data['subtitle'] = " Modifier l'adresse";
+        return $this->theme->view($this->dir.'adresse', $this->data);
     }
 
     /**
@@ -539,10 +406,10 @@ class Controller_Participant extends \Controller_Main
      * 
      * @param type $id 
      */
-    public function action_ajouter_contact($id = NULL)
+    public function action_ajouter_contact($id)
     {
         $participant = \Model_Participant::find($id);
-        
+                
         if (\Input::method() == 'POST')
 	{
             // Validation du contact
@@ -553,59 +420,20 @@ class Controller_Participant extends \Controller_Main
 			
             if ($val->run() & $val_adresse->run())
             {
-                $cb = \Input::post('t_cb_type');
-                if (!empty($cb))
-                    $cb = implode(',', \Input::post('t_cb_type'));
-                
-                // On forge un objet contact
-                $contact = \Model_Contact::forge(array(
-                    't_civilite' => \Input::post('t_civilite'),
-                    't_type' => \Input::post('t_type'),
-                    't_cb_type' => $cb,
-                    't_civilite' => \Input::post('t_civilite'),
-                    't_nom' => strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents(\Input::post('t_nom')))),
-                    't_prenom' => \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_prenom'))),
-		));
-                
-                // On forge un objet adresse
-                $adresse = \Model_Adresse::forge(array(
-                    't_nom_rue' => \Input::post('t_nom_rue'),
-                    't_bte' => \Input::post('t_bte'),
-                    't_code_postal' => \Input::post('t_code_postal'),
-                    't_commune' => \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_commune'))),
-                    't_telephone' => \Input::post('t_telephone'),
-                    't_courrier' => 0
-		));
-                
-                $contact->stage = NULL;
-                
-                // On lie l'adresse au participant
-                $contact->adresse = $adresse;
+                $contact = new \Model_Contact();
+                $contact->set_massive_assigment(\Input::post());
                 $participant->contacts[] = $contact;
-                
-                // On sauvegarde
-		if ($participant->save())
-		{                    
-                    $message[] = 'Le contact a bien été créé.';
-                    \Session::set_flash('success', $message);
-                    \Response::redirect($this->view_dir . 'modifier/'.$id.'#personne_contact');
-		}
-                else
-		{
-                    $message[] = 'Impossible de sauver le contact.';
-                    \Session::set_flash('error', $message);
-                    \Response::redirect($this->view_dir . 'modifier/'.$id.'#personne_contact');
-		}
+
+                if ($participant->save())
+                    Session::set_flash('success', "L'adresse a bien été créée.");
             }
             else
             {
-                $message[] = $val->show_errors();
-                $message[] = $val_adresse->show_errors();
-                
-                \Session::set_flash('error', $message);
-                \Response::redirect($this->view_dir . 'modifier/'.$id.'#personne_contact');
+                Session::set_flash('error', $val->show_errors());
             }
 	}
+        
+        Response::redirect($this->dir.'modifier/'.$id);
     }
 
     /**
@@ -615,18 +443,21 @@ class Controller_Participant extends \Controller_Main
      */
     public function action_modifier_contact($id = NULL)
     {
-        // On récupère le contact grâce à son id
-        $contact = \Model_Contact::find($id, array('related' => 'adresse'));
-                
+        // On va chercher l'adresse via son id.
+        $contact = \Model_Contact::find($id, array(
+                    'related' => array(
+                        'adresse'
+                    )
+                ));
+        
         if(!is_object($contact))
         {
-            $message[] = 'Impossible de trouver le contact.';
-            \Session::set_flash('error', $message);
-            \Response::redirect('participant');
-        }        
-                
-        if (\Input::method() == 'POST')
-	{
+            Session::set_flash('error', "Impossible de trouver le contact.");
+            Response::redirect($this->dir);
+        }
+
+        if (Input::method() == 'POST')
+        {
             // Validation du contact
             $val = \Model_Contact::validate('create');
             
@@ -635,55 +466,32 @@ class Controller_Participant extends \Controller_Main
 
             if ($val->run() & $val_adresse->run())
             {
-                $cb = \Input::post('t_cb_type');
-                if (!empty($cb))
-                    $cb = implode(',', \Input::post('t_cb_type'));
-                // On modifie le contact
-		$contact->t_civilite = \Input::post('t_civilite');
-		$contact->t_type = \Input::post('t_type');
-		$contact->t_cb_type = $cb;
-		$contact->t_civilite = \Input::post('t_civilite');
-		$contact->t_nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents(\Input::post('t_nom'))));
-		$contact->t_prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_prenom')));
-		
-                // On modifie l'adresse
-                $contact->adresse->t_nom_rue = \Input::post('t_nom_rue');
-		$contact->adresse->t_bte = \Input::post('t_bte');
-		$contact->adresse->t_code_postal = \Input::post('t_code_postal');
-		$contact->adresse->t_commune = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_commune')));
-		$contact->adresse->t_telephone = \Input::post('t_telephone');
+                $contact->set_massive_assigment(Input::post());
 
-                // On met à jour
                 if ($contact->save())
                 {
-                    $message[] = 'Le contact a bien été modifié.';
-                    \Session::set_flash('success', $message);
-                    \Response::redirect($this->view_dir . 'modifier/'.$contact->participant_id.'#personne_contact');
-                }
-                else
-                {
-                    $message[] = 'Impossible de modifier le contact.';
-                    \Session::set_flash('error', $message);
-                    \Response::redirect($this->view_dir . 'modifier/'.$contact->participant_id.'#personne_contact');
+                    Session::set_flash('success', "Le contact a bien été mis à jour.");
+                    Response::redirect($this->dir.'modifier/'.$contact->participant_id);
                 }
             }
             else
             {
-                $message[] = $val->show_errors();
-                $message[] = $val_adresse->show_errors();
-                
-                \Session::set_flash('error', $message);
+                $separator = "";
+                $contact_errors = $val->show_errors();
+                $adresse_errors = $val_adresse->show_errors();
+                if($contact_errors && $adresse_errors)
+                    $separator = "<br />";
+                Session::set_flash('error', $contact_errors.$separator.$adresse_errors);
             }
         }
         
         // Transformation du string en array
         $contact->t_cb_type = explode(",", $contact->t_cb_type);
         
-        // On passe tout ça dans la view
-        $this->template->set_global('contact', $contact, false);
-        
-        $this->template->title = "Gestion des participants - Modifier le contact";
-	$this->template->content = \View::forge($this->view_dir . 'edit_contact', $this->data);
+        $this->data['title'] = $this->title . " - Modifier le contact";
+        $this->data['subtitle'] = " Modifier le contact";
+        $this->data['contact'] = $contact;
+        return $this->theme->view($this->dir.'contact', $this->data);
     }
     
     /**
@@ -691,16 +499,15 @@ class Controller_Participant extends \Controller_Main
      * 
      * @param type $id 
      */
-    public function action_supprimer_adresse($id = NULL)
+    public function action_supprimer_adresse($id)
     {
         // On récupère l'adresse via son id.
         $adresse = \Model_Adresse::find($id);
         
         if(!is_object($adresse))
         {
-            $message[] = 'Impossible de trouver l\'adresse.';
-            \Session::set_flash('error', $message);
-            \Response::redirect('gesta/choisir/modifier');
+            Session::set_flash('error', "Impossible de trouver l'adresse.");
+            Response::redirect($this->dir);
         }
         
         // On récupère l'id du participant lié à l'adresse.
@@ -710,17 +517,14 @@ class Controller_Participant extends \Controller_Main
 	{
             // On supprime l'adresse
             $adresse->delete();
-            
-            $message[] = 'L\'adresse a bien été supprimée.';
-            \Session::set_flash('success', $message);
+            Session::set_flash('success', "L'adresse a bien été supprimée.");
 	}
         else
 	{
-            $message[] = 'Impossible de trouver l\'adresse sélectionnée.';
-            \Session::set_flash('error', $message);
+            Session::set_flash('error', "Impossible de trouver l'adresse sélectionnée.");
 	}
-
-	\Response::redirect($this->view_dir . 'modifier/'.$id_participant.'#adresse');
+        
+	Response::redirect($this->dir.'modifier/'.$id_participant);
     }
 
     /**
@@ -728,7 +532,7 @@ class Controller_Participant extends \Controller_Main
      * 
      * @param type $id 
      */
-    public function action_supprimer_contact($id = NULL)
+    public function action_supprimer_contact($id)
     {
         // On récupère le contact
         $contact = \Model_Contact::find($id, array('related' => 'adresse'));
@@ -737,23 +541,15 @@ class Controller_Participant extends \Controller_Main
         
         if(!is_object($contact))
         {
-            $message[] = 'Impossible de trouver le contact.';
-            \Session::set_flash('error', $message);
-            \Response::redirect($this->view_dir . 'modifier/'.$id_participant.'#personne_contact');
+            Session::set_flash('error', "Impossible de trouver le contact.");
+            Response::redirect($this->dir);
         }
         
-        if ($contact->adresse->delete() && $contact->delete())
-	{
-            $message[] = 'Le contact a bien été supprimé.';
-            
-            \Session::set_flash('success', $message);
-	}
+        if ($contact->delete())
+            Session::set_flash('success', "Le contact a bien été supprimé.");
         else
-	{
-            $message[] = 'Impossible de trouver le contact sélectionné.';
-            \Session::set_flash('error', $message);
-	}
+            Session::set_flash('error', "Impossible de trouver le contact sélectionné.");
         
-	\Response::redirect($this->view_dir . 'modifier/'.$id_participant.'#personne_contact');
+	Response::redirect($this->dir.'modifier/'.$id_participant);
     }
 }

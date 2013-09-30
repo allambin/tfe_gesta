@@ -38,15 +38,60 @@ class Model_Adresse extends Orm\Model
     
     protected static $_properties = array(
         'id_adresse',
-        't_nom_rue',
-        't_bte',
-        't_code_postal',
-        't_commune',
-        't_telephone',
-        't_courrier',
-        'participant_id',
-        'contact_id',
-        't_type',
+        't_nom_rue' => array(
+            'data_type' => 'text',
+            'label' => 'Nom de la rue',
+            'validation' => array('max_length'=>array(255))
+        ),
+        't_bte' => array(
+            'data_type' => 'text',
+            'label' => 'Boite',
+            'validation' => array('max_length'=>array(255))
+        ),
+        't_code_postal' => array(
+            'data_type' => 'text',
+            'label' => 'Code postal',
+            'validation' => array('exact_length'=>array(4))
+        ),
+        't_commune' => array(
+            'data_type' => 'text',
+            'label' => 'Commune',
+            'validation' => array('max_length'=>array(255))
+        ),
+        't_telephone' => array(
+            'data_type' => 'text',
+            'label' => 'Téléphone',
+            'validation' => array('exact_length'=>array(9))
+        ),
+        't_courrier' => array(
+            'data_type' => 'text',
+            'label' => 'Défaut',
+            'validation' => array('max_length'=>array(255)),
+            'form' => array(
+                'type' => 'checkbox'
+            )
+        ),
+        'participant_id' => array(
+            'data_type' => 'text',
+            'label' => 'Participant',
+            'validation' => array(),
+            'form' => array(
+                'type' => false, // this prevents this field from being rendered on a form
+            ),
+        ),
+        'contact_id' => array(
+            'data_type' => 'text',
+            'label' => 'Défaut',
+            'validation' => array(),
+            'form' => array(
+                'type' => false, // this prevents this field from being rendered on a form
+            ),
+        ),
+        't_type' => array(
+            'data_type' => 'text',
+            'label' => 'Type',
+            'validation' => array('max_length'=>array(255))
+        ),
     );
 
     public static function validate($factory) 
@@ -63,6 +108,23 @@ class Model_Adresse extends Orm\Model
         $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
         
         return $val;
+    }
+    
+    public function set_massive_assigment($fields, $origin = null)
+    {
+        $this->t_nom_rue = $fields['t_nom_rue'];
+        $this->t_bte = $fields['t_bte'];
+        $this->t_code_postal = $fields['t_code_postal'];
+        $this->t_commune = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha($fields['t_commune']));
+        $this->t_telephone = $fields['t_telephone'];
+        $this->t_courrier = isset($fields['t_courrier']) ? (int)$fields['t_courrier']: 0;
+        $this->t_type = $fields['t_type'];
+        
+        if($origin == 'contact')
+        {
+            $this->t_courrier = 0;
+            $this->t_type = '';
+        }
     }
 
     /**

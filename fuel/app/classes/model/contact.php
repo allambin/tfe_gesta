@@ -25,17 +25,58 @@ class Model_Contact extends Orm\Model
             'cascade_delete' => true,
         )
     );
+    
     protected static $_properties = array(
         'id_contact',
-        't_civilite',
-        't_nom',
-        't_prenom',
-        'participant_id',
-        'stage_id',
-        't_type',
-        't_cb_type',
+        't_civilite' => array(
+            'data_type' => 'text',
+            'label' => 'Civilité',
+            'validation' => array()
+        ),
+        't_nom' => array(
+            'data_type' => 'text',
+            'label' => 'Nom',
+            'validation' => array('required', 'max_length'=>array(50))
+        ),
+        't_prenom' => array(
+            'data_type' => 'text',
+            'label' => 'Prénom',
+            'validation' => array('required', 'max_length'=>array(50))
+        ),
+        'participant_id' => array(
+            'data_type' => 'text',
+            'label' => 'Téléphone',
+            'validation' => array(),
+            'form' => array(
+                'type' => false, 
+            ),
+        ),
+        'stage_id' => array(
+            'data_type' => 'text',
+            'label' => 'Téléphone',
+            'validation' => array(),
+            'form' => array(
+                'type' => false,
+            ),
+        ),
+        't_type' => array(
+            'data_type' => 'text',
+            'label' => 'Type',
+            'validation' => array()
+        ),
+        't_cb_type' => array(
+            'data_type' => 'text',
+            'label' => 'Type',
+            'validation' => array()
+        ),
     );
 
+    protected static $_observers = array(
+        'Observer_Delete' => array(
+            'events' => array('before_delete'), 
+        )
+    );
+    
     public static function validate($factory) 
     {
         $val = Validation::forge($factory);
@@ -50,6 +91,27 @@ class Model_Contact extends Orm\Model
         
         return $val;
     }
+    
+    public function set_massive_assigment($fields)
+    {
+        $adresse = new Model_Adresse();
+        $adresse->set_massive_assigment($fields, 'contact');
+        
+        $cb = '';
+        if(isset($fields['t_cb_type']))
+        {
+            $cb = $fields['t_cb_type'];
+            $cb = implode(',', $cb);
+        }
+        
+        $this->t_civilite = $fields['t_civilite'];
+        $this->t_type = $fields['t_type'];
+        $this->t_cb_type = $cb;
+        $this->t_nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents($fields['t_nom'])));
+        $this->t_prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha($fields['t_prenom']));
+        
+        $this->adresse = $adresse;
+    }
 
     /**
      * Renvoie l'id de l'adresse liée au contact.
@@ -57,10 +119,10 @@ class Model_Contact extends Orm\Model
      * @param type $id
      * @return type 
      */
-    public static function getIdAddress($id) 
-    {
-        return DB::select('adresse')->from('contact')
-                        ->where('contact.id_contact', $id)->execute()->as_array();
-    }
+//    public static function getIdAddress($id) 
+//    {
+//        return DB::select('adresse')->from('contact')
+//                        ->where('contact.id_contact', $id)->execute()->as_array();
+//    }
 
 }

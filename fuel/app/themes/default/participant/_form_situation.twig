@@ -1,0 +1,140 @@
+<div class="control-group">
+    {{ form_label('Mutuelle', 't_mutuelle', {class: 'control-label'}) }} 
+    <div class="controls">
+    {{ form_input('t_mutuelle', input_post('t_mutuelle', participant.t_mutuelle)) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Org. de paiement', 't_organisme_paiement', {class: 'control-label'})}}
+    <div class="controls">
+    {{ form_select('t_organisme_paiement', input_post('t_organisme_paiement', participant.t_organisme_paiement), {'': '', 'CAPAC': 'CAPAC', 'FGTB': 'FGTB', 'CSC': 'CSC', 'CGLSB': 'CGLSB'}) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Téléphone de l\'organisme', 't_organisme_paiement_phone', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_organisme_paiement_phone', input_post('t_organisme_paiement_phone', participant.t_organisme_paiement_phone)) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Enfants à charge', 't_enfants_charge', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_select('t_enfants_charge', input_post('t_enfants_charge', participant.t_enfants_charge), {'': '', 'Oui': 'Oui', 'Non': 'Non'}) }}
+    </div>
+</div>
+
+<div id="children" {% if participant.t_children == 0 %}style="display: none;"{% endif %}>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Date de naissance</th>
+                <th>Age</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for child in participant.t_children %}
+            <tr>
+            {% for i in 0..2 %}
+                <td {% if i == 2 %}class="child_dob"{% endif %}>{{ child[i] }}</td>
+            {% endfor %}
+                <td class="child_age"></td>
+                <td><a class="btn btn-mini btn-danger remove_child" href="#"><i class="icon-remove-sign icon-white"></i></a></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <button class="btn btn-success pull-right" id="add_child"><i class="icon-user icon-white"></i> Ajouter un enfant</button>
+    <div class="clear"></div>
+</div>
+
+<div class="control-group">
+    {{ form_label('Permis de conduire', 't_permis', {class: 'control-label'}) }}
+    <div class="controls">
+        {% set t = {a: 'A', b: 'B', c: 'C', d: 'D', e: 'E', thq: 'Théorique', lic: 'License'} %}
+        {% for key, value in t %}
+            {% set a = {} %}
+            {% for p in participant.t_permis %}
+                {% if(p == key) %}
+                    {% set a = {checked: 'checked'} %}
+                {% endif %}
+            {% endfor %}            
+            {{ value }} {{ form_checkbox('t_permis[]', key, a) }}
+        {% endfor %}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Date du théorique', 'd_date_permis_theorique', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('d_date_permis_theorique', input_post('d_date_permis_theorique', (participant.d_date_permis_theorique is not null) ? date('d-m-Y', strtotime(participant.d_date_permis_theorique)) : '')) }}
+    </div>
+</div>
+
+{% block javascript_footer %}
+<script type="text/javascript">
+$(document).ready(function() 
+{
+    $( "#add_child" ).click(function() 
+    {
+        $('#children table > tbody').append('<tr><td><input type="text" name="t_children[]" /></td><td><input type="text" name="t_children[]" /></td><td><input type="text" name="t_children[]" class="dp" /></td><td></td><td><a class="btn btn-mini btn-danger remove_child" href="#"><i class="icon-remove-sign icon-white"></i></a></td></tr>');
+        $('.dp').datepicker({
+            yearRange: '-100:+10'
+        }).attr("readonly","readonly");
+        remove_children();
+        return false; 
+    });
+    
+    $.each($('#children td.child_dob'), function(index, value) 
+    {
+        var age = getAge($(this).html()); 
+        $(this).parent().parent().find("td.child_age").text(age);
+    });
+    
+    hide_children();
+    $('#form_t_enfants_charge').change(function()
+    {
+        hide_children();
+    });
+    
+    remove_children();
+});
+
+function remove_children()
+{
+    $(".remove_child").click(function()
+    {
+        $(this).closest('tr').remove();
+        return false;
+    });
+}
+
+function hide_children()
+{
+    if($('#form_t_enfants_charge').val() == '' || $('#form_t_enfants_charge').val() == 'Non')
+    {
+        $('#children').hide();
+    }
+    if($('#form_t_enfants_charge').val() == 'Oui')
+    {
+        $('#children').show();
+    }
+}
+
+function getAge(dateString) 
+{
+    dateString = dateString.split('-');
+    dateString = dateString[2]+","+dateString[1]+","+dateString[0];
+    var today = new Date();
+    var birthDate = new Date(dateString);
+    var age = today.getFullYear() - birthDate.getFullYear();
+    var m = today.getMonth() - birthDate.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+    }
+    return age;
+}
+
+</script>
+{% endblock javascript_footer %}

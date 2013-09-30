@@ -1,0 +1,9 @@
+{{ form_open('participant/ajouter_contact/'~participant.id_participant, {'class': 'form-horizontal'}) }}
+
+{% include '_partial_form_contact.twig' %}
+
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Créer le contact</button>
+</div>
+
+{{ form_close() }}

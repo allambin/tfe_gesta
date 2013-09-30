@@ -24,6 +24,11 @@ class Twig_Fuel_Extension extends \Parser\Twig_Fuel_Extension
         $functions = parent::getFunctions();
         $new_functions = array(
             'print_r' => new Twig_Function_Function('print_r'),
+            'date' => new Twig_Function_Function('date'),
+            'strtotime' => new Twig_Function_Function('strtotime'),
+            'explode' => new Twig_Function_Function('explode'),
+            'count' => new Twig_Function_Function('count'),
+            'in_array' => new Twig_Function_Function('in_array'),
             'uri_create' => new Twig_Function_Function('Uri::create'),
             'html_anchor' => new Twig_Function_Function('Html::anchor'),
             'screen_name' => new Twig_Function_Function('Auth::instance()->get_screen_name'),

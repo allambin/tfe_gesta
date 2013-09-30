@@ -1,0 +1,129 @@
+{% extends './layout.twig' %}
+
+{% block css %}
+{{ parent() }}
+{{ asset_css('jquery.css') }}
+{{ asset_css('jquery-ui-1.10.3.custom.min.css') }}
+{% endblock css %}
+
+{% block javascript_header %}
+{{ asset_js('jquery-ui-1.10.3.custom.min.js') }}
+{% endblock javascript_header %}
+
+{% block form %}
+
+{{ form_open({class: 'form-horizontal'}) }}
+
+    <fieldset>
+
+    <legend>Modifier le participant {{ participant.t_nom }} {{ participant.t_prenom }}</legend>
+
+        <div id="tabs">
+
+            <ul class="nav nav-pills">
+                <li class="active"><a href="#signaletique" data-toggle="tab">Signalétique</a></li>
+                <li><a href="#adresse" data-toggle="tab">Adresse</a></li>
+                <li><a href="#situation" data-toggle="tab">Situation</a></li>
+                <li><a href="#contact" data-toggle="tab">Personne contact</a></li>
+                <li><a href="#diplome" data-toggle="tab">Diplôme</a></li>
+                <li><a href="#checklist" data-toggle="tab">Checklist</a></li>
+                <!--<li><a href="#employabilite" data-toggle="tab">Employabilité</a></li>
+                <li><a href="#checklist" data-toggle="tab">Checklist</a></li>-->
+            </ul>
+
+                <div id="signaletique">
+                    {% include '_form_signaletique.twig' %}
+                </div>
+                <div id="adresse">
+                    {% include '_list_adresse.twig' %}
+                </div>
+                <div id="situation">
+                    {% include '_form_situation.twig' %}
+                </div>
+                <div id="contact">
+                    {% include '_list_contact.twig' %}
+                </div>
+                <div id="diplome">
+                    {% include '_form_diplome.twig' %}
+                </div>
+                <div id="checklist">
+                    {% include '_form_checklist.twig' %}
+                </div>
+            </div>
+        
+        <input type="hidden" name="tab" value="" />
+        <div class="form-actions">
+            <button type="submit" class="btn btn-success">Modifier le participant</button>
+        </div>
+
+    </fieldset>
+
+{{ form_close() }}
+
+<div id="dialog-adresse">
+    {% include '_form_adresse.twig' %}
+</div>
+
+<div id="dialog-contact">
+    {% include '_form_contact.twig' %}
+</div>
+
+{% endblock form %}
+
+{% block javascript_footer %}
+{{ parent() }}
+
+<script>
+    
+$( document ).ready(function() {
+    $( "#tabs" ).tabs();
+    
+    $.datepicker.setDefaults({
+        dateFormat: 'dd-mm-yy',
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+        firstDay: 1
+    });
+    
+    $('#form_d_date_naissance').datepicker({
+        yearRange: '-100:+10'
+    });
+    
+    $('#form_d_date_permis_theorique').datepicker({
+        yearRange: '-100:+0'
+    }).attr("readonly","readonly");
+    
+    $('#form_d_fin_etude').datepicker({
+        yearRange: '-100:+0'
+    }).attr("readonly","readonly");
+    
+    $("#dialog-adresse").dialog({
+        autoOpen: false,
+        height: 500,
+        width: 400,
+        modal: true,
+        draggable: false
+    });
+    
+    $('#create-adresse').click(function() {
+        $('#dialog-adresse').dialog('open');
+        return false;
+    });
+    
+    $("#dialog-contact").dialog({
+        autoOpen: false,
+        height: 500,
+        width: 450,
+        modal: true
+    });
+
+    $('#create-contact').click(function() {
+        $('#dialog-contact').dialog('open');
+        return false;
+    });
+});
+
+</script>
+{% endblock javascript_footer %}
