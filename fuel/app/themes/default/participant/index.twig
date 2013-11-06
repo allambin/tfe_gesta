@@ -76,11 +76,11 @@ $(document).ready(function() {
                 var actif = full[8];
                 if(actif === '1')
                 {
-                    return '<td><a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('participant/modifier/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a title="Désactiver" class="btn btn-mini btn-inverse" href="{{ uri_create('participant/desactiver/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir supprimer cet item ?\')"><i class="icon-off icon-white"></i></a>';
+                    return '<td><a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('participant/modifier/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a title="Désactiver" class="btn btn-mini btn-inverse" href="{{ uri_create('participant/desactiver/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir désactiver cet item ?\')"><i class="icon-off icon-white"></i></a></td>';
                 }
                 else
                 {
-                    return '<td><a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('participant/modifier/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a title="Réactiver" class="btn btn-mini btn-success" href="{{ uri_create('participant/reactiver/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir réactiver cet item ?\')"><i class="icon-repeat icon-white"></i></a>';
+                    return '<td><a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('participant/modifier/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a title="Réactiver" class="btn btn-mini btn-success" href="{{ uri_create('participant/reactiver/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir réactiver cet item ?\')"><i class="icon-repeat icon-white"></i></a></td>';
                 }
                 
             }
