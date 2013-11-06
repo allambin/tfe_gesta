@@ -1,0 +1,111 @@
+{% extends './layout.twig' %}
+
+{% block list %}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Date de naissance</th>
+            <th>Lieu de naissance</th>
+            <th>Nationalité</th>
+            <th>Registre national</th>
+            <th>ONEM</th>
+            <th class="no_sorting actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for p in participants %}
+        <tr>
+            <td>{{ p.t_nom }}</td>
+            <td>{{ p.t_prenom }}</td>
+            <td>{{ p.d_date_naissance }}</td>
+            <td>{{ p.t_lieu_naissance }}</td>
+            <td>{{ p.t_nationalite }}</td>
+            <td>{{ p.t_registre_national }}</td>
+            <td>{{ p.t_numero_inscription_onem }}</td>
+            <td>
+                <a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('participant/modifier/'~p.id_participant) }}"><i class="icon-edit icon-white"></i></a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ form_open({class: 'form-horizontal'}) }}
+{{ form_hidden('t_nom', input_post('t_nom', participant.t_nom)) }}
+{{ form_hidden('t_prenom', input_post('t_prenom', participant.t_prenom)) }}
+{{ form_hidden('d_date_naissance', input_post('d_date_naissance', (participant.d_date_naissance != NULL) ? date('d-m-Y', strtotime(participant.d_date_naissance)) : ''), {placeholder: 'dd-mm-yyyy'}) }}
+{{ form_hidden('t_lieu_naissance', input_post('t_lieu_naissance', participant.t_lieu_naissance)) }}
+{{ form_hidden('t_sexe', input_post('t_nom', participant.t_sexe), {'': '', 'M': 'Homme', 'F': 'Femme'}) }}
+{{ form_hidden('t_nationalite', input_post('t_nationalite', participant.t_nationalite), pays) }}
+{{ form_hidden('t_email', input_post('t_email', participant.t_email)) }}
+{{ form_hidden('t_gsm', input_post('t_gsm', participant.t_gsm)) }}
+{{ form_hidden('t_gsm2', input_post('t_gsm2', participant.t_gsm2)) }}
+{{ form_hidden('t_etat_civil', input_post('t_etat_civil', participant.t_etat_civil), {'': '', 'Célibataire': 'Célibataire', 'Marié(e)': 'Marié(e)', 'Veuf(ve)': 'Veuf(ve)'}) }}
+{{ form_hidden('t_registre_national', input_post('t_registre_national', participant.t_registre_national)) }}
+{{ form_hidden('t_compte_bancaire', input_post('t_compte_bancaire', participant.t_compte_bancaire)) }}
+{{ form_hidden('t_moyen_transport', input_post('t_moyen_transport', participant.t_moyen_transport), {'': '', 'TEC': 'Transports en commun', 'Voiture/scooter/vélo': 'Voiture/scooter/vélo', 'Rien': 'Rien'}) }}
+{{ form_hidden('t_pointure', input_post('t_pointure', participant.t_pointure)) }}
+{{ form_hidden('t_taille', input_post('t_taille', participant.t_taille)) }}
+{{ form_hidden('checked', '1') }}
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Valider l'ajout</button>
+    <a href="{{ uri_create('participant/index') }}" class="btn btn-danger">Annuler</a>
+</div>
+{{ form_close() }}
+
+{% endblock list %}
+
+{% block javascript_header %}
+{{ parent() }}
+{{ asset_js('jquery.dataTables.min.js') }}
+{% endblock javascript_header %}
+
+{% block javascript_footer %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.table').dataTable({
+        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        "oLanguage": {
+            "sProcessing":     "Traitement en cours...",
+            "sSearch":         "Rechercher&nbsp;:",
+            "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+            "sInfo":           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            "sInfoEmpty":      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+            "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            "sInfoPostFix":    "",
+            "sLoadingRecords": "Chargement en cours...",
+            "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            "sEmptyTable":     "Aucune donnée disponible dans le tableau",
+            "oPaginate": {
+                "sFirst":      "Premier",
+                "sPrevious":   "Pr&eacute;c&eacute;dent",
+                "sNext":       "Suivant",
+                "sLast":       "Dernier"
+            },
+            "oAria": {
+                "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+            }
+        },
+        "sPaginationType": "full_numbers",
+        "aoColumnDefs" : [ {
+            "bSortable" : false,
+            "aTargets" : [ "no_sorting" ]
+        },
+        {
+            "bSortable" : false,
+            "aTargets" : [ "no_showing" ],
+            "bVisible" : false
+        } ],
+    });
+});
+</script>
+{% endblock javascript_footer %}
+
+{% block css %}
+{{ asset_css('jquery.dataTables.css') }}
+{% endblock css %}

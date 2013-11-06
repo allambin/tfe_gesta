@@ -143,7 +143,23 @@ class Controller_Participant extends \Controller_Main
                 // On forge un objet participant
                 $participant->set_massive_assigment(\Input::post());
                 $participant->b_is_actif = 1;
-
+                
+                // On vérifie qu'un/des participant(s) ayant le même tryptique n'existe(nt) pas déjà
+                $participants = \Model_Participant::query()
+                                ->where('t_nom', $participant->t_nom)
+                                ->where('t_prenom', $participant->t_prenom)
+                                ->where('d_date_naissance', $participant->d_date_naissance)
+                                ->where('b_is_actif', $participant->b_is_actif)
+                                ->get();
+                if(!empty($participants) && \Input::post('checked') != '1')
+                {
+                    $this->data['title'] = $this->title . ' - Vérification';
+                    $this->data['participant'] = $participant;
+                    $this->data['participants'] = $participants;
+                    $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+                    return $this->theme->view($this->dir.'check', $this->data);
+                }
+                
                 // On save si c'est bon
                 if ($participant->save())
                 {
