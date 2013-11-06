@@ -302,10 +302,10 @@ class Controller_Participant extends \Controller_Main
     }
         
     /**
-     * Supprimer un participant (le rendre inactif)
+     * Désactiver un participant
      * @param type $id
      */
-    public function action_supprimer($id)
+    public function action_desactiver($id)
     {
         $participant = \Model_Participant::find($id);
         
@@ -315,9 +315,9 @@ class Controller_Participant extends \Controller_Main
         $participant->b_is_actif = 0;
         
         if ($participant->save())
-            Session::set_flash('success', 'Le participant a bien été supprimé.');
+            Session::set_flash('success', 'Le participant a bien été désactivé.');
         else
-            Session::set_flash('error', 'Impossible de supprimer le participant.');
+            Session::set_flash('error', 'Impossible de désactiver le participant.');
         
         Response::redirect($this->dir . 'index');
     }
