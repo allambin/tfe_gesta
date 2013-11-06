@@ -35,6 +35,7 @@ class Twig_Fuel_Extension extends \Parser\Twig_Fuel_Extension
             'form_open' => new Twig_Function_Function('Form::open'),
             'form_label' => new Twig_Function_Function('Form::label'),
             'form_input' => new Twig_Function_Function('Form::input'),
+            'form_hidden' => new Twig_Function_Function('Form::hidden'),
             'form_select' => new Twig_Function_Function('Form::select'),
             'form_checkbox' => new Twig_Function_Function('Form::checkbox'),
             'form_submit' => new Twig_Function_Function('Form::submit'),
