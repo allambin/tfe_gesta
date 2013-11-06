@@ -19,8 +19,8 @@
                 {% endfor %}
                 <td class="actions"></td>
                 <td class="text-right">
-                    <a class="btn btn-mini btn-warning" href="{{ uri_create('administration/modifier_'~key~'/'~attribute(item, primary_key)) }}"><i class="icon-edit icon-white"></i></a>
-                    <a class="btn btn-mini btn-danger" href="{{ uri_create('administration/supprimer_'~key~'/'~attribute(item, primary_key)) }}" onclick="return confirm('Etes-vous sûr de vouloir supprimer cet item ?')"><i class="icon-remove-sign icon-white"></i></a>
+                    <a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('administration/modifier_'~key~'/'~attribute(item, primary_key)) }}"><i class="icon-edit icon-white"></i></a>
+                    <a title="Supprimer" class="btn btn-mini btn-danger" href="{{ uri_create('administration/supprimer_'~key~'/'~attribute(item, primary_key)) }}" onclick="return confirm('Etes-vous sûr de vouloir supprimer cet item ?')"><i class="icon-remove-sign icon-white"></i></a>
                 </td>
             </tr>    
             {% endfor %}
