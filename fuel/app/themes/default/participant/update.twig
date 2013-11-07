@@ -54,6 +54,7 @@
         <input type="hidden" name="tab" value="" />
         <div class="form-actions">
             <button type="submit" class="btn btn-success">Modifier le participant</button>
+            <a href="{{ uri_create('participant/desactiver/'~participant.id_participant) }}" class="btn btn-danger">Désactiver</a>
             <a href="{{ uri_create('participant/index') }}" class="btn btn-danger">Annuler</a>
         </div>
 

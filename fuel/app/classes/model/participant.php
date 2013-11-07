@@ -357,7 +357,7 @@ class Model_Participant extends Orm\Model
 
         $val->add_field('t_nom', 'Nom', 'required|max_length[50]');
         $val->add_field('t_prenom', 'Prénom', 'required|max_length[50]');
-        $val->add_field('t_registre_national', 'Registre national', 'registreNational');
+        $val->add_field('t_registre_national', 'Registre national', 'registreNational|unique_registre_national');
         $val->add_field('t_compte_bancaire', 'Compte bancaire', 'compteBancaire');
         $val->add_field('t_gsm', 'GSM', 'exact_length[10]|valid_string[numeric]');
         $val->add_field('t_gsm2', 'GSM', 'exact_length[10]|valid_string[numeric]');

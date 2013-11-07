@@ -178,6 +178,28 @@ class MyValidation
 
             return ! ($result->count() > 0);
         }
+        
+        /**
+         * Vérifie l'unicité du nom d'une activité
+         * @param type $val
+         * @return type
+         */
+        public static function _validation_unique_registre_national($val)
+        {
+            $val = trim($val);
+            if(empty($val))
+                return true;
+            
+            $field = 't_registre_national';
+
+            $result = DB::select("LOWER (\"$field\")")
+                ->where($field, '=', \Str::lower($val))
+                ->from('participant')->execute();
+
+            \Validation::active()->set_message('unique_registre_national', 'Ce registre national existe déjà.');
+
+            return ! ($result->count() > 0);
+        }
 
 }
 
