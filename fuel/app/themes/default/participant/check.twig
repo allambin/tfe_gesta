@@ -26,7 +26,7 @@
             <td>{{ p.t_registre_national }}</td>
             <td>{{ p.t_numero_inscription_onem }}</td>
             <td>
-                <a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('participant/modifier/'~p.id_participant) }}"><i class="icon-edit icon-white"></i></a>
+                <a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('participant/modifier/'~p.id_participant) }}"><i class="icon-edit icon-white"></i></a>{% if p.b_is_actif == 0 %}<a title="Réactiver" class="btn btn-mini btn-success" href="{{ uri_create('participant/reactiver/'~p.id_participant) }}" onclick="return confirm(\'Etes-vous sûr de vouloir réactiver cet item ?\')"><i class="icon-repeat icon-white"></i></a>{% endif %}
             </td>
         </tr>
         {% endfor %}

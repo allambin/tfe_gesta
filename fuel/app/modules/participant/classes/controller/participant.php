@@ -53,6 +53,7 @@ class Controller_Participant extends \Controller_Main
         $entry = \Model_Participant::query()->select('id_participant', 't_nom', 't_prenom', 't_nationalite', 
                              't_lieu_naissance', 'd_date_naissance', 't_registre_national',
                              't_numero_inscription_onem', 'b_is_actif');
+        $entry->where('b_is_actif', '=', '1');
         
         if (isset($_GET['sSearch']) && $_GET['sSearch'] != "")
         {
@@ -149,7 +150,6 @@ class Controller_Participant extends \Controller_Main
                                 ->where('t_nom', $participant->t_nom)
                                 ->where('t_prenom', $participant->t_prenom)
                                 ->where('d_date_naissance', $participant->d_date_naissance)
-                                ->where('b_is_actif', $participant->b_is_actif)
                                 ->get();
                 if(!empty($participants) && \Input::post('checked') != '1')
                 {
@@ -189,30 +189,30 @@ class Controller_Participant extends \Controller_Main
      * @param type $id
      * @param type $confirmation 
      */
-//    public function action_reactiver($id)
-//    {
-//        // On récupère le participant
-//        $participant = \Model_Participant::find($id);
-//        
-//        if(!is_object($participant))
-//        {
-//            \Session::set_flash('error', 'Impossible de trouver le participant.');
-//            \Response::redirect($this->dir . 'index');
-//        }
-//        
-//        $participant->b_is_actif = 1;
-//        
-//        if($participant->save())
-//        {
-//            \Session::set_flash('success', 'Le participant a bien été réactivé.');
-//            \Response::redirect($this->dir . 'index');
-//        }
-//        else
-//        {
-//            \Session::set_flash('error', 'Impossible de réactiver le participant.');
-//            \Response::redirect($this->dir . 'index');
-//        }
-//    }
+    public function action_reactiver($id)
+    {
+        // On récupère le participant
+        $participant = \Model_Participant::find($id);
+        
+        if(!is_object($participant))
+        {
+            \Session::set_flash('error', 'Impossible de trouver le participant.');
+            \Response::redirect($this->dir . 'index');
+        }
+        
+        $participant->b_is_actif = 1;
+        
+        if($participant->save())
+        {
+            \Session::set_flash('success', 'Le participant a bien été réactivé.');
+            Response::redirect($this->dir.'modifier/'.$id);
+        }
+        else
+        {
+            \Session::set_flash('error', 'Impossible de réactiver le participant.');
+            \Response::redirect($this->dir . 'index');
+        }
+    }
    
     /**
      * Modifie un participant selon l'id passé en paramètre.
@@ -454,7 +454,7 @@ class Controller_Participant extends \Controller_Main
 
     /**
      * Modifier un contact selon son id passé en paramètre.
-     *
+     *c
      * @param type $id 
      */
     public function action_modifier_contact($id = NULL)

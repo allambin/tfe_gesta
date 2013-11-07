@@ -53,8 +53,8 @@
         
         <input type="hidden" name="tab" value="" />
         <div class="form-actions">
-            <button type="submit" class="btn btn-success">Modifier le participant</button>
-            <a href="{{ uri_create('participant/desactiver/'~participant.id_participant) }}" class="btn btn-danger">Désactiver</a>
+            <button type="submit" class="btn btn-success">Valider</button>
+            {% if participant.b_is_actif == 1 %}<a href="{{ uri_create('participant/desactiver/'~participant.id_participant) }}" class="btn btn-inverse">Désactiver</a>{% endif %}
             <a href="{{ uri_create('participant/index') }}" class="btn btn-danger">Annuler</a>
         </div>
 
