@@ -1,0 +1,31 @@
+{% extends 'layout.twig' %}
+
+{% block form %}
+
+{{ form_open() }}
+
+<fieldset>
+    <legend>Editer un item</legend>
+
+    <div class="control-group">
+        {{ form_label('Nom', 'nom', {'class': 'control-label'}) }}
+        <div class="controls">
+        {{ form_input('nom', nom) }}
+        </div>
+    </div>
+    <div class="control-group">
+        {{ form_label('Valeur', 'valeur', {'class': 'control-label'}) }}
+        <div class="controls">
+        {{ item }}
+        </div>
+    </div>
+
+</fieldset>
+
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Modifier le photogramme</button>
+</div>
+
+{{ form_close() }}
+
+{% endblock form %}

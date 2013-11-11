@@ -91,6 +91,30 @@ class Controller_Administration extends \Controller_Main
             'layout' => 'multiple',
             'model' => 'Model_Statut_Entree'
         ),
+        'centre' => array(
+            'name' => array(
+                'single' => 'centre',
+                'plural' => 'centres'
+            ),
+            'layout' => 'simple',
+            'model' => 'Model_Centre'
+        ),
+        'fin_formation' => array(
+            'name' => array(
+                'single' => 'fin de formation',
+                'plural' => 'fins de formation'
+            ),
+            'layout' => 'multiple',
+            'model' => 'Model_Fin_Formation'
+        ),
+        'type_formation' => array(
+            'name' => array(
+                'single' => 'type de formation',
+                'plural' => 'types de formation'
+            ),
+            'layout' => 'simple',
+            'model' => 'Model_Type_Formation'
+        )
     );
 
     /**
@@ -322,7 +346,6 @@ class Controller_Administration extends \Controller_Main
         $params['parent_primary_key'] = \Model_Type_Enseignement::get_primary_key_name();
         $params['parent_display_key'] = 't_nom';
 
-
         return $this->_list('enseignement', $params);
     }
 
@@ -505,6 +528,122 @@ class Controller_Administration extends \Controller_Main
     public function action_supprimer_statut_entree($id)
     {
         return $this->_delete('statut_entree', $id);
+    }
+    
+    public function action_liste_centre()
+    {
+        return $this->_list('centre');
+    }
+
+    public function action_ajouter_centre()
+    {
+        return $this->_create('centre');
+    }
+
+    public function action_modifier_centre($id)
+    {
+        return $this->_update('centre', $id);
+    }
+
+    public function action_supprimer_centre($id)
+    {
+        return $this->_delete('centre', $id);
+    }
+    
+    public function action_photogramme_xml()
+    {
+        $this->data['title'] = $this->title . ' - Photogramme';
+
+        $photogramme = \Cranberry\MyXML::getXML('photogramme');
+
+        $this->data['photogramme'] = $photogramme;
+        $this->data['back'] = 'index';
+        return $this->theme->view($this->dir.'photogramme', $this->data);
+    }
+
+    /**
+     * Modifier le photogramme item par item.
+     *
+     * @param type $item
+     */
+    public function action_modifier_photogramme_xml($item)
+    {
+        $this->data['title'] = $this->title . ' - Modifier les items du photogramme';
+        
+        if (\Input::method() == 'POST') {
+            $val = \Validation::forge();
+            $val->add_field('nom', 'Nom', 'required');
+
+            $val->set_message('required', 'Veuillez remplir le champ :label.');
+
+            if ($val->run()) {
+                \Cranberry\MyXML::editXMLItem('photogramme', $item, \Input::post('nom'));
+
+                $message[] = "Le photogramme a bien été édité.";
+                Session::set_flash('success', $message);
+
+                Response::redirect($this->dir.'photogramme_xml');
+            } else {
+                $message[] = $val->show_errors();
+                Session::set_flash('error', $message);
+            }
+        }
+
+        // On récupère le nom de l'item qu'on veut modifier
+        $nom = \Cranberry\MyXML::getXMLItem('photogramme', $item);
+
+        $this->data['nom'] = $nom;
+        $this->data['item'] = $item;
+        $this->data['back'] = '/administration/photogramme_xml';
+        return $this->theme->view($this->dir.'form_photogramme', $this->data);
+    }
+    
+    public function action_liste_fin_formation()
+    {
+        $params = array();
+        $params['conditions'] = array('order_by' => array('i_position' => 'ASC', 'type_formation_id' => 'ASC'), 'related' => array('type_formation' => array('order_by' => array('t_nom' => 'ASC'))));
+        $params['parents'] = \Model_Type_Formation::find('all', array('order_by' => array('t_nom' => 'ASC')));
+        $params['foreign_key'] = 'type_formation_id';
+
+        $params['parent_primary_key'] = \Model_Type_Formation::get_primary_key_name();
+        $params['parent_display_key'] = 't_nom';
+
+        return $this->_list('fin_formation', $params);
+    }
+
+    public function action_ajouter_fin_formation()
+    {
+        return $this->_create('fin_formation');
+    }
+
+    public function action_modifier_fin_formation($id)
+    {
+        return $this->_update('fin_formation', $id);
+    }
+
+    public function action_supprimer_fin_formation($id)
+    {
+        return $this->_delete('fin_formation', $id);
+    }
+    
+    public function action_liste_type_formation()
+    {
+        return $this->_list('type_formation');
+    }
+
+    public function action_ajouter_type_formation()
+    {
+        return $this->_create('type_formation');
+    }
+
+    public function action_modifier_type_formation($id)
+    {
+        return $this->_update('type_formation', $id);
+    }
+
+    public function action_supprimer_type_formation($id)
+    {
+        return $this->_delete('type_formation', $id);
     }
 
 }
