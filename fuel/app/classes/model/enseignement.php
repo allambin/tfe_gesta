@@ -50,12 +50,10 @@ class Model_Enseignement extends Model
 
     public static function _init()
     {
-        $types = Model_Type_Enseignement::find('all');
+        $types = DB::select()->from('type_enseignement')->as_object()->execute();
 
         foreach ($types as $t)
-        {
             $data[$t->id_type_enseignement] = $t->t_nom;
-        }
 
         static::$_properties['type_enseignement_id']['form']['options'] = $data;
     }

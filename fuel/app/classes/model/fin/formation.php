@@ -62,12 +62,10 @@ class Model_Fin_Formation extends Model
     
     public static function _init()
     {
-        $types = Model_Type_Formation::find('all');
+        $types = DB::select()->from('type_formation')->as_object()->execute();
 
         foreach ($types as $t)
-        {
             $data[$t->id_type_formation] = $t->t_nom;
-        }
 
         static::$_properties['type_formation_id']['form']['options'] = $data;
     }
