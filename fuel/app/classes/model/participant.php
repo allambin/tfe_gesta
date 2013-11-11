@@ -219,7 +219,7 @@ class Model_Participant extends Orm\Model
         ),
         'b_is_actif' => array(
             'data_type' => 'text',
-            'label' => 'Nom',
+            'label' => 'Est actif',
             'validation' => array('required', 'max_length'=>array(255)),
             'form' => array(
                 'type' => false, // this prevents this field from being rendered on a form
