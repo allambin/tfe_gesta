@@ -93,6 +93,12 @@ class Model_Adresse extends Orm\Model
             'validation' => array('max_length'=>array(255))
         ),
     );
+    
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
 
     public static function validate($factory) 
     {

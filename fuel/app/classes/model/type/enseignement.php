@@ -33,6 +33,12 @@ class Model_Type_Enseignement extends Model
         )
     );
     
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
     public static function get_list_properties()
     {
         $to_return = array();

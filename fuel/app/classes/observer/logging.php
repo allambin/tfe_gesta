@@ -57,12 +57,6 @@ class Observer_Logging extends Orm\Observer
                 ->execute();
     }
 
-//    public static function orm_notify($instance, $event)
-//    {
-//        die("GREEEEUH");
-//        \Log::info('I was notified of the event ' . $event . ' on a Model of class ' . get_class($model));
-//    }
-
 }
 
 ?>

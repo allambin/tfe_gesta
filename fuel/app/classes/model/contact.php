@@ -26,6 +26,12 @@ class Model_Contact extends Orm\Model
         )
     );
     
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
     protected static $_properties = array(
         'id_contact',
         't_civilite' => array(

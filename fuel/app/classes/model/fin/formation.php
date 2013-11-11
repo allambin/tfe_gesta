@@ -46,6 +46,12 @@ class Model_Fin_Formation extends Model
         ),
     );
     
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];

@@ -89,6 +89,12 @@ class Model_User extends \Orm\Model
             'cascade_delete' => true,
         )
     );
+    
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
 
     public static function get_primary_key_name()
     {
