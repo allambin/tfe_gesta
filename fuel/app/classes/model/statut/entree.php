@@ -54,7 +54,7 @@ class Model_Statut_Entree extends Model
     {
         return self::$_primary_key[0];
     }
-
+    
     public static function _init()
     {
         // doit faire ça pour éviter le bug du "FrozenObject"

@@ -42,7 +42,7 @@ class Model_Type_Enseignement extends Model
         return $to_return;
     }
     
-    public function set_massive_assigments($fields)
+    public function set_massive_assigment($fields)
     {
         $this->t_nom = $fields['t_nom'];
     }

@@ -30,7 +30,7 @@ class Model_Type_Formation extends Model
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
-    }    
+    }
     
     public static function validate($factory)
     {
@@ -53,8 +53,6 @@ class Model_Type_Formation extends Model
     
     public function set_massive_assigment($fields)
     {
-//        die("toto");
-//        die(print_r($fields));
         $this->t_nom = $fields['t_nom'];
     }
     

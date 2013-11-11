@@ -47,7 +47,7 @@ class Model_Enseignement extends Model
     {
         return self::$_primary_key[0];
     }
-
+    
     public static function _init()
     {
         $types = DB::select()->from('type_enseignement')->as_object()->execute();
