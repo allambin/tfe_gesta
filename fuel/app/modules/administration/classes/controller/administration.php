@@ -301,16 +301,16 @@ class Controller_Administration extends \Controller_Main
             try
             {
                 $object->delete();
-                Session::set_flash('success', 'L\'objet a bien été supprimé.');
+                Session::set_flash('success', "L'objet a bien été supprimé.");
             }
             catch (Exception $e)
             {
-                Session::set_flash('error', 'Impossible de supprimer l\'objet');
+                Session::set_flash('error', "Impossible de supprimer l'objet");
             }
         }
         else
         {
-            Session::set_flash('error', 'Impossible de trouver l\'objet');
+            Session::set_flash('error', "Impossible de trouver l'objet");
         }
 
         \Response::redirect($this->dir.'liste_' . $key);
@@ -333,6 +333,12 @@ class Controller_Administration extends \Controller_Main
 
     public function action_supprimer_type_enseignement($id)
     {
+        $children = \DB::select('*')->from('enseignement')->where('type_enseignement_id', $id)->execute();
+        if(count($children) > 0)
+        {
+            Session::set_flash('error', "Impossible de supprimer le type d'enseignement : des objets (enseignement) lui sont associés.");
+            Response::redirect($this->dir.'liste_type_enseignement');
+        }
         return $this->_delete('type_enseignement', $id);
     }
 
@@ -499,6 +505,12 @@ class Controller_Administration extends \Controller_Main
 
     public function action_supprimer_type_statut($id)
     {
+        $children = \DB::select('*')->from('statut_entree')->where('type_statut_id', $id)->execute();
+        if(count($children) > 0)
+        {
+            Session::set_flash('error', "Impossible de supprimer le type de statut : des objets (statut) lui sont associés.");
+            Response::redirect($this->dir.'liste_type_statut');
+        }
         return $this->_delete('type_statut', $id);
     }
 
@@ -643,6 +655,12 @@ class Controller_Administration extends \Controller_Main
 
     public function action_supprimer_type_formation($id)
     {
+        $children = \DB::select('*')->from('fin_formation')->where('type_formation_id', $id)->execute();
+        if(count($children) > 0)
+        {
+            Session::set_flash('error', "Impossible de supprimer le type de formation : des objets (fin de formation) lui sont associés.");
+            Response::redirect($this->dir.'liste_type_formation');
+        }
         return $this->_delete('type_formation', $id);
     }
 
