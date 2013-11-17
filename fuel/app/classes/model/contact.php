@@ -32,6 +32,11 @@ class Model_Contact extends Orm\Model
         )
     );
     
+    public static function get_primary_key_name()
+    {
+        return self::$_primary_key[0];
+    }
+    
     protected static $_properties = array(
         'id_contact',
         't_civilite' => array(
@@ -75,12 +80,6 @@ class Model_Contact extends Orm\Model
             'label' => 'Type',
             'validation' => array()
         ),
-    );
-
-    protected static $_observers = array(
-        'Observer_Delete' => array(
-            'events' => array('before_delete'), 
-        )
     );
     
     public static function validate($factory) 

@@ -37,6 +37,16 @@ class Model_Participant extends Orm\Model
             'cascade_delete' => true,
         )
     );
+    
+    /**
+     * Voir si ça peut pas devenir une fonction normale
+     * @return type
+     */
+    public static function get_primary_key_name()
+    {
+        return self::$_primary_key[0];
+    }
+    
     protected static $_properties = array(
         'id_participant',
         't_nom' => array(

@@ -114,6 +114,22 @@ class Controller_Administration extends \Controller_Main
             ),
             'layout' => 'simple',
             'model' => 'Model_Type_Formation'
+        ),
+        'checklist_section' => array(
+            'name' => array(
+                'single' => 'section de la checklist',
+                'plural' => 'sections de la checklist'
+            ),
+            'layout' => 'simple',
+            'model' => 'Model_Checklist_Section'
+        ),
+        'checklist_valeur' => array(
+            'name' => array(
+                'single' => 'valeur de la checklist',
+                'plural' => 'valeurs de la checklist'
+            ),
+            'layout' => 'multiple',
+            'model' => 'Model_Checklist_Valeur'
         )
     );
 
@@ -123,7 +139,6 @@ class Controller_Administration extends \Controller_Main
     public function before()
     {
         parent::before();
-
 
 //        if (!\Auth::member(100)) {
 //            \Session::set('direction', '/administration');
@@ -662,6 +677,59 @@ class Controller_Administration extends \Controller_Main
             Response::redirect($this->dir.'liste_type_formation');
         }
         return $this->_delete('type_formation', $id);
+    }
+    
+    public function action_liste_checklist_section()
+    {
+        return $this->_list('checklist_section');
+    }
+
+    public function action_ajouter_checklist_section()
+    {
+        return $this->_create('checklist_section');
+    }
+
+    public function action_modifier_checklist_section($id)
+    {
+        return $this->_update('checklist_section', $id);
+    }
+
+    public function action_supprimer_checklist_section($id)
+    {
+        $children = \DB::select('*')->from('checklist_valeur')->where('section_id', $id)->execute();
+        if(count($children) > 0)
+        {
+            Session::set_flash('error', "Impossible de supprimer la section : des objets (valeurs) lui sont associés.");
+            Response::redirect($this->dir.'liste_checklist_section');
+        }
+        return $this->_delete('checklist_section', $id);
+    }
+    
+    public function action_liste_checklist_valeur()
+    {
+        $params = array();
+        $params['conditions'] = array('order_by' => array('t_nom' => 'ASC', 'section_id' => 'ASC'), 'related' => array('section' => array('order_by' => array('t_nom' => 'ASC'))));
+        $params['parents'] = \Model_Checklist_Section::find('all', array('order_by' => array('t_nom' => 'ASC')));
+        $params['foreign_key'] = 'section_id';
+
+        $params['parent_primary_key'] = \Model_Checklist_Section::get_primary_key_name();
+        $params['parent_display_key'] = 't_nom';
+        return $this->_list('checklist_valeur', $params);
+    }
+
+    public function action_ajouter_checklist_valeur()
+    {
+        return $this->_create('checklist_valeur');
+    }
+
+    public function action_modifier_checklist_valeur($id)
+    {
+        return $this->_update('checklist_valeur', $id);
+    }
+
+    public function action_supprimer_checklist_valeur($id)
+    {
+        return $this->_delete('checklist_valeur', $id);
     }
 
 }

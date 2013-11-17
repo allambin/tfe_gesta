@@ -5,11 +5,16 @@ use Orm\Model;
 class Model_Checklist_Section extends Model
 {
 
+    protected static $list_properties = array('t_nom');
     protected static $_primary_key = array('id_checklist_section');
     
     protected static $_properties = array(
         'id_checklist_section',
-        't_nom',
+        't_nom' => array(
+            'data_type' => 'text',
+            'label' => 'Nom',
+            'validation' => array('required', 'max_length'=>array(255)) //validation rules
+        ),
     );
     protected static $_table_name = 'checklist_section';
 
@@ -23,15 +28,34 @@ class Model_Checklist_Section extends Model
         )
     );
     
-    public static function validate($factory)
+    public static function get_primary_key_name()
     {
-        $val = Validation::forge($factory);
-        $val->add_field('t_nom', 'Nom', 'required|max_length[255]');
-
-        $val->set_message('required', 'Veuillez remplir le champ :label.');
-        
-        return $val;
+        return self::$_primary_key[0];
     }
+    
+    public static function get_list_properties()
+    {
+        $to_return = array();
+        foreach (self::$list_properties as $value)
+            $to_return[$value] = self::$_properties[$value];
+        
+        return $to_return;
+    }
+    
+    public function set_massive_assigment($fields)
+    {
+        $this->t_nom = $fields['t_nom'];
+    }
+    
+//    public static function validate($factory)
+//    {
+//        $val = Validation::forge($factory);
+//        $val->add_field('t_nom', 'Nom', 'required|max_length[255]');
+//
+//        $val->set_message('required', 'Veuillez remplir le champ :label.');
+//        
+//        return $val;
+//    }
     
     public static function getAsSelect()
     {
