@@ -42,6 +42,20 @@ class Model_Contrat extends Orm\Model
         'participant_id',
         'type_contrat_id'
     );
+    
+    public static function get_primary_key_name()
+    {
+        return self::$_primary_key[0];
+    }
+    
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        ),
+        'Observer_Delete' => array(
+            'events' => array('before_delete'), 
+        )
+    );
 
     public static function validate($factory)
     {
