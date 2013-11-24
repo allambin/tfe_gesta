@@ -26,16 +26,13 @@ class Controller_Participant extends \Controller_Main
 
 //        if ($this->current_user == NULL)
 //        {
-//            \Session::set('direction', '/participant');
-//            \Response::redirect('users/login');
+//            Session::set('direction', '/participant');
+//            Response::redirect('users/login');
 //        }
 //        else if (!\Auth::member(100))
 //        {
-//            \Response::redirect('users/no_rights');
+//            Response::redirect('users/no_rights');
 //        }
-//
-//        $this->data['view_dir'] = $this->view_dir;
-//        $this->data['partial_dir'] = $this->partial_dir;
     }
     
     public function action_index()
@@ -53,11 +50,12 @@ class Controller_Participant extends \Controller_Main
         $entry = \Model_Participant::query()->select('id_participant', 't_nom', 't_prenom', 't_nationalite', 
                              't_lieu_naissance', 'd_date_naissance', 't_registre_national',
                              't_numero_inscription_onem', 'b_is_actif');
-        $entry->where('b_is_actif', '=', '1');
+//        $entry->where('b_is_actif', '=', '1');
         
         if (isset($_GET['sSearch']) && $_GET['sSearch'] != "")
         {
-            for ($i = 0; $i < count($columns); $i++)
+            $count = count($columns);
+            for ($i = 0; $i < $count; $i++)
             {
                 if($columns[$i] != ' ')
                     $entry->or_where($columns[$i], 'LIKE', '%' . $_GET['sSearch'] . '%');
@@ -102,6 +100,8 @@ class Controller_Participant extends \Controller_Main
         $return->iTotalDisplayRecords = $tempTotal;
         $return->aaData = array();
         
+        $can_delete = \Auth::member(100) ? true : false;
+        
         foreach ($participants as $participant)
         {
             $t = array(
@@ -114,6 +114,7 @@ class Controller_Participant extends \Controller_Main
                 $participant->t_registre_national,
                 $participant->t_numero_inscription_onem,
                 $participant->b_is_actif,
+                $can_delete,
                 ''
             );
             array_push($return->aaData, $t);
@@ -336,6 +337,32 @@ class Controller_Participant extends \Controller_Main
             Session::set_flash('error', 'Impossible de désactiver le participant.');
         
         Response::redirect($this->dir . 'index');
+    }
+    
+    
+
+    /**
+     * Suppression d'un contact selon son id.
+     * 
+     * @param type $id 
+     */
+    public function action_supprimer($id)
+    {
+        // On récupère le contact
+        $participant = \Model_Participant::find($id, array('related' => array('adresses', 'contacts')));
+                
+        if(!is_object($participant))
+        {
+            Session::set_flash('error', "Impossible de trouver le participant.");
+            Response::redirect($this->dir);
+        }
+        
+        if ($participant->delete())
+            Session::set_flash('success', "Le participant a bien été supprimé.");
+        else
+            Session::set_flash('error', "Impossible de supprimer le participant sélectionné.");
+        
+	Response::redirect($this->dir.'index');
     }
     
     /**

@@ -258,6 +258,9 @@ class Model_Participant extends Orm\Model
     protected static $_observers = array(
         'Observer_Logging' => array(
             'events' => array('after_insert', 'after_update', 'after_delete'), 
+        ),
+        'Observer_Delete' => array(
+            'events' => array('before_delete'), 
         )
     );
     
