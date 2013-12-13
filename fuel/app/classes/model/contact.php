@@ -59,7 +59,7 @@ class Model_Contact extends Orm\Model
         ),
         'participant_id' => array(
             'data_type' => 'text',
-            'label' => 'Téléphone',
+            'label' => 'Participant',
             'validation' => array(),
             'form' => array(
                 'type' => false, 
@@ -67,7 +67,7 @@ class Model_Contact extends Orm\Model
         ),
         'stage_id' => array(
             'data_type' => 'text',
-            'label' => 'Téléphone',
+            'label' => 'Stage',
             'validation' => array(),
             'form' => array(
                 'type' => false,

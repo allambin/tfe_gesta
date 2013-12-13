@@ -2,6 +2,9 @@
 
 use Orm\Model;
 
+/**
+ * @todo : delete
+ */
 class Model_Checklist extends Orm\Model
 {
 

@@ -28,14 +28,28 @@ class Model_Participant extends Orm\Model
             'cascade_delete' => true,
         )
     );
-    protected static $_has_one = array(
+    
+    protected static $_many_many = array(
         'checklist' => array(
             'key_from' => 'id_participant',
-            'model_to' => 'Model_Checklist',
-            'key_to' => 'participant_id',
+            'key_through_from' => 'participant_id',
+            'table_through' => 'checklist',
+            'key_through_to' => 'valeur_id',
+            'model_to' => 'Model_Checklist_Valeur',
+            'key_to' => 'id_checklist_valeur',
             'cascade_save' => true,
-            'cascade_delete' => true,
+            'cascade_delete' => false,
         )
+    );
+    
+    protected static $_has_one = array(
+//        'checklist' => array(
+//            'key_from' => 'id_participant',
+//            'model_to' => 'Model_Checklist',
+//            'key_to' => 'participant_id',
+//            'cascade_save' => true,
+//            'cascade_delete' => true,
+//        )
     );
     
     /**
@@ -305,7 +319,7 @@ class Model_Participant extends Orm\Model
         $this->t_gsm = $fields['t_gsm'];
         $this->t_gsm2 = $fields['t_gsm2'];
         $this->t_email = $fields['t_email'];
-        
+//        die(print_r($fields));
         if($scenario == 'update')
         {
             $children = isset($fields['t_children']) ? $fields['t_children'] : '' ;
@@ -348,13 +362,13 @@ class Model_Participant extends Orm\Model
             $this->t_organisme_paiement_phone = $fields['t_organisme_paiement_phone'];
             $this->t_permis = $permis;
             $this->t_moyen_transport = $fields['t_moyen_transport'];
-            $this->b_attestation_reussite = $fields['b_attestation_reussite'];
+            if(isset($fields['b_attestation_reussite']))
+                $this->b_attestation_reussite = $fields['b_attestation_reussite'];
             $this->d_date_permis_theorique = $dpt;
             $this->t_children = $children;
 
             // checklist
-            if(isset($this->checklist->id_checklist))
-                \DB::delete('checklist_rel_valeur')->where('checklist_id', '=', $this->checklist->id_checklist)->execute();
+            \DB::delete('checklist')->where('participant_id', '=', $this->id_participant)->execute();
 
             if(isset($fields['liste']))
             {
@@ -362,13 +376,13 @@ class Model_Participant extends Orm\Model
                 foreach ($checklist as $value)
                 {
                     $v = \Model_Checklist_Valeur::find($value);
-                    $this->checklist->valeurs[] = $v;
+                    $this->checklist[] = $v;
                 }
             }
         }
     }
     
-    public static function validate($factory) 
+    public static function validate($factory, $id_participant) 
     {
         $val = Validation::forge($factory);
 
@@ -376,7 +390,7 @@ class Model_Participant extends Orm\Model
 
         $val->add_field('t_nom', 'Nom', 'required|max_length[50]');
         $val->add_field('t_prenom', 'Prénom', 'required|max_length[50]');
-        $val->add_field('t_registre_national', 'Registre national', 'registreNational|unique_registre_national');
+        $val->add_field('t_registre_national', 'Registre national', 'registreNational|unique_registre_national['.$id_participant.']');
         $val->add_field('t_compte_bancaire', 'Compte bancaire', 'compteBancaire');
         $val->add_field('t_gsm', 'GSM', 'exact_length[10]|valid_string[numeric]');
         $val->add_field('t_gsm2', 'GSM', 'exact_length[10]|valid_string[numeric]');

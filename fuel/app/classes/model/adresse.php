@@ -85,7 +85,7 @@ class Model_Adresse extends Orm\Model
         ),
         'contact_id' => array(
             'data_type' => 'text',
-            'label' => 'Défaut',
+            'label' => 'Contact',
             'validation' => array(),
             'form' => array(
                 'type' => false, // this prevents this field from being rendered on a form
