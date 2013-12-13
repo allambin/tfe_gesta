@@ -229,9 +229,7 @@ class Controller_Participant extends \Controller_Main
                         'contacts' => array(
                             'related' => 'adresse'
                         ),
-                        'checklist' => array(
-                            'related' => 'valeurs'
-                        )
+                        'checklist'
                     )
                 ));
         
@@ -246,10 +244,15 @@ class Controller_Participant extends \Controller_Main
         $already_default = \Model_Adresse::find()->where(array('t_courrier' => 1, 'participant_id' => $id))->get();
 
         // Validation
-        $val = \Model_Participant::validate('edit');
+        $val = \Model_Participant::validate('edit', $id);
 
         if ($val->run()) 
         {
+            foreach ($participant->checklist as $key => $value)
+            {
+                unset($participant->checklist[$key]);
+                $participant->save();
+            }
             $participant->set_massive_assigment(\Input::post(), 'update');
             
             if ($participant->save()) 
@@ -277,7 +280,7 @@ class Controller_Participant extends \Controller_Main
         $current_checklist = array();
         if(is_array($participant->checklist))
         {
-            foreach ($participant->checklist->valeurs as $value)
+            foreach ($participant->checklist as $value)
                 $current_checklist[$value->id_checklist_valeur] = $value->id_checklist_valeur;
         }
         
@@ -465,6 +468,11 @@ class Controller_Participant extends \Controller_Main
             {
                 $contact = new \Model_Contact();
                 $contact->set_massive_assigment(\Input::post());
+                
+                $adresse = new \Model_Adresse();
+                $adresse->set_massive_assigment(\Input::post());
+                $contact->adresse = $adresse;
+                
                 $participant->contacts[] = $contact;
 
                 if ($participant->save())
