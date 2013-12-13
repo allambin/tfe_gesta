@@ -1,13 +1,19 @@
 <?php
 
 namespace Listeattente;
+use Fuel\Core\Input;
+use Fuel\Core\Session;
+use Fuel\Core\Response;
 
 class Controller_Listeattente extends \Controller_Main
 {
-    public $title = "Gestion de la liste d'attente";
+//    public $title = "Gestion de la liste d'attente";
+//    public $data = array();
+//    private $view_dir = 'listeattente/';
+//    private $partial_dir = 'listeattente/partials/';
+    public $title = 'Gestion de la liste d\'attente';
     public $data = array();
-    private $view_dir = 'listeattente/';
-    private $partial_dir = 'listeattente/partials/';
+    private $dir = 'listeattente/';
     
     /**
      * Redirige toute personne non membre du groupe "100"
@@ -16,125 +22,160 @@ class Controller_Listeattente extends \Controller_Main
     {
         parent::before();
 
-        if (!\Auth::member(100)) {
-            \Session::set('direction', '/listeattente');
-            \Response::redirect('users/login');
+//        if (!\Auth::member(100)) {
+//            \Session::set('direction', '/listeattente');
+//            \Response::redirect('users/login');
+//        }
+//        
+//        $this->data['view_dir'] = $this->view_dir;
+//        $this->data['partial_dir'] = $this->partial_dir;
+    }
+    
+    public function action_ajax_liste()
+    {        
+        $columns = array('id_liste_attente', 't_nom', 't_prenom', 't_nom', 'd_date_naissance', 'd_date_entretien', 'b_is_actif', ' ');
+        
+        $entry = \Model_Listeattente::query()->select('id_liste_attente', 't_nom', 't_prenom', 'groupe_id', 'd_date_naissance', 'd_date_entretien', 'b_is_actif');
+        $entry->related(array('groupe' => array('select' => array('t_nom'))));
+//        $entry->where('b_is_actif', '=', '1');
+        
+        if (isset($_GET['sSearch']) && $_GET['sSearch'] != "")
+        {
+            $count = count($columns);
+            for ($i = 0; $i < $count; $i++)
+            {
+                if($columns[$i] != ' ')
+                    $entry->or_where($columns[$i], 'LIKE', '%' . $_GET['sSearch'] . '%');
+            }
         }
         
-        $this->data['view_dir'] = $this->view_dir;
-        $this->data['partial_dir'] = $this->partial_dir;
+        $tempTotal = $entry->count();
+        
+        if (isset($_GET['iDisplayStart']) && $_GET['iDisplayLength'] != '-1')
+        {
+            $entry->limit(intval($_GET['iDisplayLength']));
+            $entry->offset(intval($_GET['iDisplayStart']));
+        }
+        
+        if (isset($_GET['iSortCol_0']))
+        {
+            for ($i = 0; $i < intval($_GET['iSortingCols']); $i++)
+            {
+                if ($_GET['bSortable_' . intval($_GET['iSortCol_' . $i])] == "true")
+                {
+                    if($columns[intval($_GET['iSortCol_' . $i])]  != ' ')
+                        $entry->order_by($columns[intval($_GET['iSortCol_' . $i])], $_GET['sSortDir_' . $i] === 'asc' ? 'asc' : 'desc');
+                }
+            }
+        }
+
+        /* Individual column filtering */
+        for ($i = 0; $i < count($columns); $i++)
+        {
+            if (isset($_GET['bSearchable_' . $i]) && $_GET['bSearchable_' . $i] == "true" && $_GET['sSearch_' . $i] != '')
+            {
+                if($columns[$i] != ' ')
+                    $entry->or_where($columns[$i], 'LIKE', '%' . $_GET['sSearch_' . $i] . '%');
+            }
+        }
+        
+        $stagiaires = $entry->get();
+        
+        $return = new \stdClass();
+        $return->sEcho = intval($_GET['sEcho']);
+        $return->iTotalRecords = $tempTotal;
+        $return->iTotalDisplayRecords = $tempTotal;
+        $return->aaData = array();
+        
+        $can_delete = \Auth::member(100) ? true : false;
+        
+        foreach ($stagiaires as $stagiaire)
+        {
+            $t = array(
+                $stagiaire->id_liste_attente,
+                $stagiaire->t_nom,
+                $stagiaire->t_prenom,
+                $stagiaire->groupe->t_nom,
+                $stagiaire->d_date_naissance,
+                $stagiaire->d_date_entretien,
+                $stagiaire->b_is_actif,
+                $can_delete,
+                ''
+            );
+            array_push($return->aaData, $t);
+        }
+        
+        return json_encode($return);
     }
     
     public function action_index()
     {
-        $this->template->title = $this->title;
-        
-        $stagiaires = \Model_Listeattente::find('all', 
-                array(
-                    'where' => array(array('b_is_actif', 1)), 
-                    'related' => array('adresse', 'groupe'),
-                    'order_by' => array('d_date_entretien' => 'desc')
-                ));
-
-        $this->data['stagiaires'] = $stagiaires;
-        $this->template->content = \View::forge($this->view_dir . 'index', $this->data);
+        $this->data['title'] = $this->title;
+        return $this->theme->view($this->dir.'index', $this->data);
     }
 
     public function action_ajouter()
     {
-        $this->template->title = 'Nouveau stagiaire';
+        $this->data['title'] = $this->title . ' - Nouveau stagiaire';
 
+        $object = new \Model_Listeattente();
+        $fieldset = \Fieldset::forge('new')->add_model('Model_Listeattente')->repopulate();
+        $form = $fieldset->form();
+        
+        // création du formulaire adresse
+        $fs_adresse = \Fieldset::forge('new_address')->add_model('Model_Adresse')->repopulate();
+        $form->add($fs_adresse);
+        
+        $form->add('submit', '', array('type' => 'submit', 'value' => 'Ajouter', 'class' => 'btn medium primary'));
+        
         $groupes = \Model_Groupe::getAsArray();
 
         if (\Input::method() == 'POST')
         {
-            // Validation des champs
-            $val = \Model_Listeattente::validate('create_stagiaire');
-
-            // Validation
-            $val_adresse = \Model_Adresse::validate('create');
-
-            if ($val->run() & $val_adresse->run())
+            if ($fieldset->validation()->run() == true)
             {
-                // Transformation du nom
-                $nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents(\Input::post('t_nom'))));
-                // Transformation du prenom
-                $prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha(\Input::post('t_prenom')));
+                $fields = $fieldset->validated();
 
-                // Transformation de la date de naissance
-                $dob = (\Input::post('d_date_naissance') != NULL) ? date('Y/m/d', strtotime(\Input::post('d_date_naissance'))) : NULL;
-                // Transformation de la date d'entretien
-                $doe = (\Input::post('d_date_entretien') != NULL) ? date('Y/m/d', strtotime(\Input::post('d_date_entretien'))) : NULL;
-
-                $existing_stagiaire = \Model_Listeattente::find('first', array(
-                            'where' => array(
-                                array(
-                                    't_nom' => $nom,
-                                    't_prenom' => $prenom,
-                                    'd_date_naissance' => $dob,
-                                    'groupe_id' => \Input::post('groupe_id'),
-                                )
-                            ),
-                        ));
-
-                if (is_object($existing_stagiaire))
+                $object->set_massive_assigment($fields);
+                
+                $adresse = new \Model_Adresse();
+                $adresse->set_massive_assigment($fields);
+                
+                $object->adresse = $adresse;
+                
+                // On vérifie qu'un/des participant(s) ayant le même tryptique n'existe(nt) pas déjà
+                $stagiaires = \Model_Listeattente::query()
+                                ->where('t_nom', $object->t_nom)
+                                ->where('t_prenom', $object->t_prenom)
+                                ->where('d_date_naissance', $object->d_date_naissance)
+                                ->get();
+                if(!empty($stagiaires) && \Input::post('checked') != '1')
                 {
-                    $existing_stagiaire->b_is_actif = 1;
-                    $existing_stagiaire->save();
-                    $message[] = "Le stagiaire a bien réactivé.";
-                    \Session::set_flash('success', $message);
-
-                    \Response::redirect($this->view_dir);
+                    $this->data['title'] = $this->title . ' - Vérification';
+                    $this->data['$object'] = $object;
+                    $this->data['stagiaires'] = $stagiaires;
+                    return $this->theme->view($this->dir.'check', $this->data);
                 }
-                else
+
+                if ($object->save())
                 {
-                    $liste = new \Model_Listeattente();
-                    $liste->t_nom = $nom;
-                    $liste->t_prenom = $prenom;
-                    $liste->d_date_naissance = $dob;
-                    $liste->d_date_entretien = $doe;
-                    $liste->t_contact = \Input::post('t_contact');
-                    $liste->groupe_id = \Input::post('groupe_id');
-                    $liste->b_is_actif = 1;
-
-                    $adresse = \Model_Adresse::forge(array(
-                                't_nom_rue' => \Input::post('t_nom_rue'),
-                                't_bte' => \Input::post('t_bte'),
-                                't_code_postal' => \Input::post('t_code_postal'),
-                                't_commune' => \Input::post('t_commune'),
-                                't_telephone' => \Input::post('t_telephone'),
-                                't_courrier' => 0,
-                            ));
-                    
-                    $liste->adresse = $adresse;
-                    
-                    if ($liste->save())
-                    {
-                        $message[] = "Le stagiaire a bien été ajouté.";
-                        \Session::set_flash('success', $message);
-
-                        \Response::redirect($this->view_dir);
-                    }
-                    else
-                    {
-                        $message[] = "Impossible de sauver le stagiaire.";
-                        \Session::set_flash('error', $message);
-                    }
+                    Session::set_flash('success', "Le stagiaire a bien été créé.");
+                    Response::redirect($this->dir.'index');
                 }
             }
             else
             {
-                $message[] = $val->show_errors();
-                $message[] = $val_adresse->show_errors();
-                \Session::set_flash('error', $message);
+                Session::set_flash('error', $fieldset->validation()->show_errors());
             }
         }
 
-        $this->template->set_global('groupes', $groupes, false);
-        $this->template->content = \View::forge($this->view_dir . '/ajouter', $this->data);
+        $this->data['form'] = $form->build();
+//        $this->data['form_adresse'] = $form_adresse->build();
+        $this->data['groupes'] = $groupes;
+        return $this->theme->view($this->dir.'create', $this->data);
     }
 
-    public function action_supprimer($id)
+    public function action_desactiver($id)
     {
         if ($stagiaire = \Model_Listeattente::find($id))
         {
@@ -153,34 +194,34 @@ class Controller_Listeattente extends \Controller_Main
             {
                 $stagiaire->b_is_actif = 0;
                 $stagiaire->save();
+                $message[] = "Le stagiaire a bien été désactivé.";
             }
             else
             {
                 $stagiaire->delete();
+                $message[] = "Le stagiaire a bien été supprimé.";
             }
 
-            $message[] = "Le stagiaire a bien été supprimé.";
             \Session::set_flash('success', $message);
-            \Response::redirect($this->view_dir);
         }
         else
         {
             $message[] = "Impossible de trouver le stagiaire sélectionné.";
             \Session::set_flash('error', $message);
-            \Response::redirect($this->view_dir);
         }
+        
+        Response::redirect($this->dir . 'index');
     }
 
     public function action_confirmer($id)
     {
-        $this->template->title = 'Confirmer le stagiaire';
         $stagiaire = \Model_Listeattente::find($id);
 
-        $checklist = \Model_Checklist::find('first', array(
-            'where' => array(
-                'stagiaire' => $id
-            )
-        ));
+//        $checklist = \Model_Checklist::find('first', array(
+//            'where' => array(
+//                'stagiaire' => $id
+//            )
+//        ));
         
         if (is_object($stagiaire))
         {
@@ -198,17 +239,16 @@ class Controller_Listeattente extends \Controller_Main
 
             if (is_object($participant))
             {
-                $participant->is_actif = 1;
+                $participant->b_is_actif = 1;
                 $participant->save();
 
                 $stagiaire->b_is_actif = 0;
                 $stagiaire->save();
                 
-                \Model_Checklist::saveParticipant($stagiaire->id, $participant->idparticipant);
+//                \Model_Checklist::saveParticipant($stagiaire->id, $participant->idparticipant);
 
-                $message[] = "Le participant a bien été réactivé.";
-                \Session::set_flash('success', $message);
-                \Response::redirect($this->view_dir);
+                \Session::set_flash('success', "Le participant a bien été réactivé.");
+                Response::redirect('participant/modifier/' . $participant->id_participant);
             }
             else
             {
@@ -218,326 +258,95 @@ class Controller_Listeattente extends \Controller_Main
                 $new_participant->d_date_naissance = $stagiaire->d_date_naissance;
                 $new_participant->is_actif = 1;
 
-                $adresse = \Model_Adresse::find($stagiaire->adresse);
-                $new_adresse = new \Model_Adresse();
-                $new_adresse->t_nom_centre = $adresse->t_nom_centre;
-                $new_adresse->t_bte = $adresse->t_bte;
-                $new_adresse->t_code_postal = $adresse->t_code_postal;
-                $new_adresse->t_commune = $adresse->t_commune;
-                $new_adresse->t_telephone = $adresse->t_telephone;
-                $new_adresse->t_courrier = 0;
+//                $adresse = \Model_Adresse::find($stagiaire->adresse);
+//                $new_adresse = new \Model_Adresse();
+//                $new_adresse->t_nom_centre = $adresse->t_nom_centre;
+//                $new_adresse->t_bte = $adresse->t_bte;
+//                $new_adresse->t_code_postal = $adresse->t_code_postal;
+//                $new_adresse->t_commune = $adresse->t_commune;
+//                $new_adresse->t_telephone = $adresse->t_telephone;
+//                $new_adresse->t_courrier = 0;
 
                 if ($new_participant->save())
                 {
-                    \Model_Checklist::saveParticipant($id, $new_participant->idparticipant);
+//                    \Model_Checklist::saveParticipant($id, $new_participant->idparticipant);
                     
-                    $new_adresse->participant = $new_participant->idparticipant;
-                    $new_adresse->save();
+//                    $new_adresse->participant = $new_participant->id_participant;
+//                    $new_adresse->save();
 
                     $stagiaire->b_is_actif = 0;
                     $stagiaire->save();
 
-                    $message[] = "Le participant a bien été sauvé.";
-                    \Session::set_flash('success', $message);
-                    \Response::redirect('participant/modifier/' . $new_participant->idparticipant);
+                    \Session::set_flash('success', "Le participant a bien été sauvé.");
+                    \Response::redirect('participant/modifier/' . $new_participant->id_participant);
                 }
                 else
-                {
-                    $message[] = "Impossible de sauver le participant.";
-                    \Session::set_flash('error', $message);
-                }
+                    \Session::set_flash('error', "Impossible de sauver le participant.");
             }
         }
         else
-        {
-            $message[] = "Impossible de trouver le stagiaire.";
-            \Session::set_flash('error', $message);
-            \Response::redirect($this->view_dir);
-        }
-
-        $this->template->content = '';
+            \Session::set_flash('error', "Impossible de trouver le stagiaire.");
+        
+        Response::redirect($this->dir . 'index');
     }
 
     public function action_checklist($id)
     {
-        $this->template->title = 'Checklist';
+        $this->data['title'] = $this->title . ' - Checklist';
 
-        $checklist_valeurs = \Model_Checklist_Valeur::find('all');
-        $checklist_sections = \Model_Checklist_Section::getAsArray();
-        $checklist = \Model_Checklist::find('first', array(
-            'where' => array(
-                'stagiaire_id' => $id
-            )
-        ));
-
-        $liste = \Model_Checklist::getList($id);
+        $stagiaire = \Model_Listeattente::find($id, array('related' => array('checklist')));
         
-        if(!empty($liste))
-            $liste = explode(",", $liste);
-        
+        $checklist_model = \Model_Checklist_Section::find('all', array('related' => 'valeurs', 'order_by' => 't_nom'));
+        $current_checklist = array();
+        if(count($stagiaire->checklist) > 0)
+        {
+            foreach ($stagiaire->checklist as $value)
+                $current_checklist[$value->id_checklist_valeur] = $value->id_checklist_valeur;
+        }
+                
         if (\Input::method() == 'POST')
         {
-            $all = \Input::all();
-            $input_liste = empty($all['list']) ? 0 : $all['list'];
-            
-            if(!$checklist)
-                $checklist = new \Model_Checklist();
-            
-            $checklist->stagiaire = $id;
-            $checklist->tliste = is_array($input_liste) ? implode(",", $input_liste) : null;
-            
-            if ($checklist->save())
+            $fields = \Input::all();
+            foreach ($stagiaire->checklist as $key => $value)
             {
-                $message[] = "La liste a bien été sauvée.";
-                \Session::set_flash('success', $message);
-
-                \Response::redirect($this->view_dir);
+                unset($stagiaire->checklist[$key]);
+                $stagiaire->save();
+            }
+            if(isset($fields['liste']))
+            {
+                $checklist = $fields['liste'];
+                foreach ($checklist as $value)
+                    $stagiaire->checklist[] = \Model_Checklist_Valeur::find($value);
+            }
+            
+            if ($stagiaire->save())
+            {
+                \Session::set_flash('success', "La liste a bien été sauvée.");
+                \Response::redirect($this->dir);
             }
             else
-            {
-                $message[] = "Impossible de sauver la liste.";
-                \Session::set_flash('error', $message);
-            }
+                \Session::set_flash('error', "Impossible de sauver la liste.");
         }
 
-        $this->template->set_global('checklist_valeurs', $checklist_valeurs, false);
-        $this->template->set_global('checklist_sections', $checklist_sections, false);
-        $this->template->set_global('checklist', $liste, false);
-        $this->template->content = \View::forge($this->view_dir . '/checklist');
+        $this->data['current_checklist'] = $current_checklist;
+        $this->data['checklist_model'] = $checklist_model;
+        return $this->theme->view($this->dir.'checklist', $this->data);
     }
 
-    public function action_section()
+    public function action_print_checklist($id)
     {
-        $this->data['checklist_sections'] = \Model_Checklist_Section::find('all');
-        $this->template->title = "Gestion des sections de la liste d'attente";
-        $this->template->content = \View::forge($this->view_dir . '/section', $this->data);
-    }
+        $this->data['title'] = $this->title . ' - Checklist';
+        \Maitrepylos\Pdf\Checklist::pdf($id);
+//        $this->template->title = 'Gestion des documents';
+//        $this->template->content = \View::forge('test');
+        $response = new Response();
+        $response->set_header('Content-Type', 'application/pdf');
+        \Maitrepylos\Pdf\Checklist::pdf($id);
 
-    public function action_ajouter_section()
-    {
-        $this->template->title = "Sections de la liste d'attente";
-        
-        if (\Input::method() == 'POST')
-        {
-            $val = \Model_Checklist_Section::validate('create');            
-
-            if ($val->run())
-            {
-                $checklist_section = \Model_Checklist_Section::forge(array(
-                            't_nom' => \Input::post('t_nom'),
-                        ));
-
-                if ($checklist_section->save())
-                {
-                    $message[] = "La section a bien été sauvée.";
-                    \Session::set_flash('success', $message);
-
-                    \Response::redirect($this->view_dir . 'section');
-                }
-                else
-                {
-                    $message[] = "Impossible de sauver la section.";
-                    \Session::set_flash('error', $message);
-                }
-            }
-            else
-            {
-                $message[] = $val->show_errors();
-                \Session::set_flash('error', $message);
-            }
-        }
-        
-        $this->template->set_global('action', 'Ajouter', false);
-        $this->template->content = \View::forge($this->view_dir . 'ajouter_section', $this->data);
-    }
-
-    public function action_modifier_section($id = null)
-    {
-        $this->template->title = "Sections de la liste d'attente";
-        
-        $checklist_section = \Model_Checklist_Section::find($id);
-
-        if (\Input::method() == 'POST')
-        {
-            $val = \Model_Checklist_Section::validate('edit');
-            
-            if ($val->run())
-            {
-                $checklist_section->t_nom = \Input::post('t_nom');
-
-                if ($checklist_section->save())
-                {
-                    $message[] = 'Section mise à jour.';
-                    \Session::set_flash('success', $message);
-
-                    \Response::redirect($this->view_dir . 'section');
-                }
-                else
-                {
-                    $message[] = 'Impossible de mettre à jour la section';
-                    \Session::set_flash('error', $message);
-                }
-            }
-        }
-
-        $this->template->set_global('action', 'Modifier', false);
-        $this->template->content = \View::forge($this->view_dir . 'modifier_section', $this->data);
-    }
-
-    public function action_supprimer_section($id = null)
-    {
-        if ($checklist_section = \Model_Checklist_Section::find($id))
-        {
-            $valeurs_sections = \Model_Checklist_Valeur::getCount($id);
-            if($valeurs_sections)
-            {
-                $message[] = "Impossible de supprimer la section, elle est sans doute liée à des valeurs.";
-                \Session::set_flash('error', $message);
-            }
-            else
-            {
-                $checklist_section->delete();
-                $message[] = 'Section supprimée.';
-                \Session::set_flash('success', $message);
-            }
-            }
-        else
-        {
-            $message[] = 'Impossible de supprimer la section.';
-            \Session::set_flash('error', $message);
-        }
-
-        \Response::redirect($this->view_dir . 'section');
-    }
-
-    public function action_valeur()
-    {
-        $this->template->title = "Valeurs de la liste d'attente";
-        $this->data['valeurs'] = \Model_Checklist_Valeur::find('all', array('order_by' => 'section_id', 'related' => array('section')));
-        $this->template->set_global('action', 'Modifier', false);
-        $this->template->content = \View::forge($this->view_dir . 'valeur', $this->data);
-    }
-
-    public function action_ajouter_valeur()
-    {
-        $this->template->title = "Valeurs de la liste d'attente";
-        
-        $sections = \Model_Checklist_Section::getAsSelect();
-
-        if (\Input::method() == 'POST')
-        {
-            $val = \Model_Checklist_Valeur::validate('create');
-
-            if ($val->run())
-            {
-                $checklist_valeur = \Model_Checklist_Valeur::forge(array(
-                            't_nom' => \Input::post('t_nom'),
-                            'section_id' => \Input::post('section_id'),
-                        ));
-
-                if ($checklist_valeur and $checklist_valeur->save())
-                {
-                    $message[] = "La valeur a bien été ajoutée.";
-                    \Session::set_flash('success', $message);
-
-                    \Response::redirect($this->view_dir . 'valeur');
-                }
-                else
-                {
-                    $message[] = "Impossible de sauver la valeur";
-                    \Session::set_flash('error', $message);
-                }
-            }
-            else
-            {
-                $message[] = $val->show_errors();
-                \Session::set_flash('error', $message);
-            }
-        }
-
-        $this->template->set_global('sections', $sections, false);
-        $this->template->set_global('action', 'Ajouter', false);
-        $this->template->content = \View::forge($this->view_dir . 'ajouter_valeur', $this->data);
-    }
-
-    public function action_modifier_valeur($id = null)
-    {
-        $sections = \Model_Checklist_Section::getAsSelect();
-        $checklist_valeur = \Model_Checklist_Valeur::find($id);
-        
-        if (\Input::method() == 'POST')
-        {
-            $val = \Model_Checklist_Valeur::validate('edit');
-            
-            if ($val->run())
-            {
-                $checklist_valeur->t_nom = \Input::post('t_nom');
-                $checklist_valeur->section_id = \Input::post('section_id');
-
-                if ($checklist_valeur->save())
-                {
-                    $message[] = "Valeur mise à jour.";
-                    \Session::set_flash('success', $message);
-
-                    \Response::redirect($this->view_dir . 'valeur');
-                }
-                else
-                {
-                    $message[] = "Impossible de mettre la valeur à jour.";
-                    \Session::set_flash('error', $message);
-                }
-            }
-        }
-
-        $this->template->set_global('checklist_valeur', $checklist_valeur, false);
-        $this->template->set_global('sections', $sections, false);
-        $this->template->title = "Valeurs de la liste d'attente";
-        $this->template->set_global('action', 'Modifier', false);
-        $this->template->content = \View::forge($this->view_dir . 'modifier_valeur', $this->data);
-    }
-
-    public function action_supprimer_valeur($id = null)
-    {
-        if ($checklist_valeur = \Model_Checklist_Valeur::find($id))
-        {
-            $checklist_valeur->delete();
-
-            $message[] = "La valeur a bien été supprimée.";
-            \Session::set_flash('success', $message);
-        }
-        else
-        {
-            $message[] = "Impossible de supprimer la valeur.";
-            \Session::set_flash('error', $message);
-        }
-
-        \Response::redirect($this->view_dir . 'valeur');
-    }
-
-    public function action_print_checklist($id){
-
-        //$participant = \Model_Participant::find($id);
-
-        $checklist_valeurs = \Model_Checklist_Valeur::find('all');
-        $checklist_sections = \Model_Checklist_Section::getAsArray();
-        $checklist = \Model_Checklist::find('first', array(
-            'where' => array(
-                'stagiaire' => $id
-            )
-        ));
-
-        $liste = \Model_Checklist::getList($id);
-
-        if(!empty($liste))
-            $liste = explode(",", $liste);
-
-        //\Debug::dump($participant);
-
-        \Maitrepylos\Pdf\Checklist::pdf($checklist_valeurs,$checklist_sections,$liste);
-        $this->template->title = 'Gestion des documents';
-        $this->template->content = \View::forge('test');
-
-
+// This will be a NOT FOUND response
+//$response->set_status(303);
+return $response;
+        return $this->theme->view($this->dir.'checklist', $this->data);
     }
 
 }

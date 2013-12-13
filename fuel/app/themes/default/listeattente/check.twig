@@ -1,0 +1,110 @@
+{% extends './layout.twig' %}
+
+{% block list %}
+
+<div class="well">
+    <p>Des stagiaires ayant les mêmes nom - prénom - date de naissance ont été trouvés dans le système.<br />
+       Cette page vous permet de vérifier leurs informations afin de ne pas créer de doublons et, le cas échéant, de réactiver un compte désactivé.</p>
+    <p>Si vous voulez ajouter le nouveau stagiaire, cliquez sur "Valider l'ajout".</p>
+</div>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Date de naissance</th>
+            <th class="no_sorting actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in stagiaires %}
+        <tr>
+            <td>{{ s.t_nom }}</td>
+            <td>{{ s.t_prenom }}</td>
+            <td>{{ s.d_date_naissance }}</td>
+            <td>
+                <a title="Modifier" class="btn btn-mini btn-warning" href="{{ uri_create('listeattente/modifier/'~s.id_liste_attente) }}"><i class="icon-edit icon-white"></i></a>{% if s.b_is_actif == 0 %}<a title="Réactiver" class="btn btn-mini btn-success" href="{{ uri_create('listeattente/reactiver/'~s.id_liste_attente) }}" onclick="return confirm(\'Etes-vous sûr de vouloir réactiver cet item ?\')"><i class="icon-repeat icon-white"></i></a>{% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{{ form_open({class: 'form-horizontal'}) }}
+{{ form_hidden('t_nom', input_post('t_nom', object.t_nom)) }}
+{{ form_hidden('t_prenom', input_post('t_prenom', object.t_prenom)) }}
+{{ form_hidden('d_date_naissance', input_post('d_date_naissance', (object.d_date_naissance != NULL) ? date('d-m-Y', strtotime(object.d_date_naissance)) : ''), {placeholder: 'dd-mm-yyyy'}) }}
+{{ form_hidden('d_date_entretien', input_post('d_date_entretien', (object.d_date_entretien != NULL) ? date('d-m-Y', strtotime(object.d_date_entretien)) : ''), {placeholder: 'dd-mm-yyyy'}) }}
+{{ form_hidden('t_contact', input_post('t_contact', object.t_contact)) }}
+{{ form_hidden('groupe_id', input_post('groupe_id', object.groupe_id)) }}
+
+
+{{ form_hidden('t_nom_rue', input_post('t_nom_rue', object.adresse.t_nom_rue)) }}
+{{ form_hidden('t_bte', input_post('t_bte', object.adresse.t_bte)) }}
+{{ form_hidden('t_code_postal', input_post('t_code_postal', object.adresse.t_code_postal)) }}
+{{ form_hidden('t_commune', input_post('t_commune', object.adresse.t_commune)) }}
+{{ form_hidden('t_telephone', input_post('t_telephone', object.adresse.t_telephone)) }}
+
+
+
+{{ form_hidden('checked', '1') }}
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Valider l'ajout</button>
+    <a href="{{ uri_create('listeattente/index') }}" class="btn btn-danger">Annuler</a>
+</div>
+{{ form_close() }}
+
+{% endblock list %}
+
+{% block javascript_header %}
+{{ parent() }}
+{{ asset_js('jquery.dataTables.min.js') }}
+{% endblock javascript_header %}
+
+{% block javascript_footer %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.table').dataTable({
+        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        "oLanguage": {
+            "sProcessing":     "Traitement en cours...",
+            "sSearch":         "Rechercher&nbsp;:",
+            "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+            "sInfo":           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            "sInfoEmpty":      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+            "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            "sInfoPostFix":    "",
+            "sLoadingRecords": "Chargement en cours...",
+            "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            "sEmptyTable":     "Aucune donnée disponible dans le tableau",
+            "oPaginate": {
+                "sFirst":      "Premier",
+                "sPrevious":   "Pr&eacute;c&eacute;dent",
+                "sNext":       "Suivant",
+                "sLast":       "Dernier"
+            },
+            "oAria": {
+                "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+            }
+        },
+        "sPaginationType": "full_numbers",
+        "aoColumnDefs" : [ {
+            "bSortable" : false,
+            "aTargets" : [ "no_sorting" ]
+        },
+        {
+            "bSortable" : false,
+            "aTargets" : [ "no_showing" ],
+            "bVisible" : false
+        } ],
+    });
+});
+</script>
+{% endblock javascript_footer %}
+
+{% block css %}
+{{ asset_css('jquery.dataTables.css') }}
+{% endblock css %}

@@ -1,0 +1,107 @@
+{% extends './layout.twig' %}
+
+{% block list %}
+
+<a href="listeattente/ajouter" class="btn btn-success pull-right"><i class="icon-user icon-white"></i> Ajouter un stagiaire</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th class="no_sorting"></th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Groupe</th>
+            <th>Date naissance</th>
+            <th>Date entretien</th>
+            <th class="no_showing">Actif</th>
+            <th class="no_showing"></th>
+            <th class="no_sorting actions">Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+{% endblock list %}
+
+{% block javascript_header %}
+{{ parent() }}
+{{ asset_js('jquery.dataTables.min.js') }}
+{% endblock javascript_header %}
+
+{% block javascript_footer %}
+
+<script type="text/javascript">
+$(document).ready(function() {
+    $('.table').dataTable({
+        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        "oLanguage": {
+            "sProcessing":     "Traitement en cours...",
+            "sSearch":         "Rechercher&nbsp;:",
+            "sLengthMenu":     "Afficher _MENU_ &eacute;l&eacute;ments",
+            "sInfo":           "Affichage de l'&eacute;lement _START_ &agrave; _END_ sur _TOTAL_ &eacute;l&eacute;ments",
+            "sInfoEmpty":      "Affichage de l'&eacute;lement 0 &agrave; 0 sur 0 &eacute;l&eacute;ments",
+            "sInfoFiltered":   "(filtr&eacute; de _MAX_ &eacute;l&eacute;ments au total)",
+            "sInfoPostFix":    "",
+            "sLoadingRecords": "Chargement en cours...",
+            "sZeroRecords":    "Aucun &eacute;l&eacute;ment &agrave; afficher",
+            "sEmptyTable":     "Aucune donnée disponible dans le tableau",
+            "oPaginate": {
+                "sFirst":      "Premier",
+                "sPrevious":   "Pr&eacute;c&eacute;dent",
+                "sNext":       "Suivant",
+                "sLast":       "Dernier"
+            },
+            "oAria": {
+                "sSortAscending":  ": activer pour trier la colonne par ordre croissant",
+                "sSortDescending": ": activer pour trier la colonne par ordre décroissant"
+            }
+        },
+        "sPaginationType": "full_numbers",
+        "aoColumnDefs" : [ {
+            "bSortable" : false,
+            "aTargets" : [ "no_sorting" ]
+        },
+        {
+            "bSortable" : false,
+            "aTargets" : [ "no_showing" ],
+            "bVisible" : false
+        },
+        {
+            "bSortable" : false,
+            "aTargets" : [ "actions" ],
+            "mRender": function( data, type, full) {
+                var id = full[0];
+                var actif = full[6];
+                var can_delete = full[7];
+                var links = '<td>';
+                var links = links+'<a class="btn btn-mini btn-success" title="Valider le stagiaire" href="{{ uri_create('listeattente/confirmer/') }}'+id+'"><i class="icon-ok icon-white"></i></a><a class="btn btn-mini btn-info" title="Editer la checklist" href="{{ uri_create('listeattente/checklist/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a class="btn btn-mini btn-warning" title="Imprimer la checklist" href="{{ uri_create('listeattente/print_checklist/') }}'+id+'"><i class="icon-print icon-white"></i></a>';
+                //var links = links+'<a class="btn btn-mini btn-success" title="Valider le stagiaire" href="{{ uri_create('listeattente/confirmer/') }}'+id+'"><i class="icon-ok icon-white"></i></a>';
+                var delete_link = '<a title="Supprimer" class="btn btn-mini btn-danger" href="{{ uri_create('listeattente/supprimer/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir supprimer cet item ?\')"><i class="icon-remove-sign icon-white"></i></a>';
+                if(actif === '1')
+                {
+                    links = links+'<a title="Désactiver" class="btn btn-mini btn-inverse" href="{{ uri_create('listeattente/desactiver/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir désactiver cet item ?\')"><i class="icon-off icon-white"></i></a>';
+                    if(can_delete)
+                        links = links+delete_link;
+                }
+                else
+                {
+                    links = links+'<a title="Réactiver" class="btn btn-mini btn-success" href="{{ uri_create('listeattente/reactiver/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir réactiver cet item ?\')"><i class="icon-repeat icon-white"></i></a>';
+                    if(can_delete)
+                        links = links+delete_link;
+                }
+                links = links+'<td />';
+                return links;
+            }
+        } ],
+        "bProcessing": true,
+        "bServerSide": true,
+        "sAjaxSource": "listeattente/ajax_liste"
+    });
+} );
+</script>
+{% endblock javascript_footer %}
+
+{% block css %}
+{{ asset_css('jquery.dataTables.css') }}
+{% endblock css %}

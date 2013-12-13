@@ -1,0 +1,125 @@
+{% extends './layout.twig' %}
+
+{% block css %}
+{{ parent() }}
+{{ asset_css('jquery.css') }}
+{{ asset_css('jquery-ui-1.10.3.custom.min.css') }}
+{% endblock css %}
+
+{% block javascript_header %}
+{{ asset_js('jquery-ui-1.10.3.custom.min.js') }}
+{% endblock javascript_header %}
+
+{% block form %}
+
+{{ form_open({'class': 'form-horizontal'}) }}
+<fieldset>
+    <legend>Informations</legend>
+<div class="control-group">
+    {{ form_label('Section', 'groupe_id', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_select('groupe_id', input_post('groupe_id', listeattente.groupe_id), {
+        'none': '',
+        'Section': groupes,
+    }) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Nom', 't_nom', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_nom', input_post('t_nom', listeattente ? listeattente.t_nom : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Prénom', 't_prenom', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_prenom', input_post('t_prenom', listeattente ? listeattente.t_prenom : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Date de naissance', 'd_date_naissance', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('d_date_naissance', input_post('d_date_naissance', listeattente ? listeattente.d_date_naissance : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Date entretien', 'd_date_entretien', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('d_date_entretien', input_post('d_date_entretien', listeattente ? listeattente.d_date_entretien : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Contact', 't_contact', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_contact', input_post('t_contact', listeattente ? listeattente.t_contact : '')) }}
+    </div>
+</div>
+</fieldset>
+<fieldset>
+    <legend>Adresse</legend>
+<div class="control-group">
+    {{ form_label('Rue', 't_nom_rue', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_nom_rue', input_post('t_nom_rue', listeattente ? listeattente.adresse.t_nom_rue : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Boite', 't_bte', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_bte', input_post('t_bte', listeattente ? listeattente.adresse.t_bte : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Code postal', 't_code_postal', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_code_postal', input_post('t_code_postal', listeattente ? listeattente.adresse.t_code_postal : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Commune', 't_commune', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_commune', input_post('t_commune', listeattente ? listeattente.adresse.t_commune : '')) }}
+    </div>
+</div>
+<div class="control-group">
+    {{ form_label('Téléphone', 't_telephone', {'class': 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_telephone', input_post('t_telephone', listeattente ? listeattente.adresse.t_telephone : '')) }}
+    </div>
+</div>
+</fieldset>
+
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Ajouter le stagiaire</button>
+</div>
+{{ form_close() }}
+
+{% endblock form %}
+
+{% block javascript_footer %}
+{{ parent() }}
+
+<script>
+    
+$( document ).ready(function() {
+    
+    $.datepicker.setDefaults({
+        dateFormat: 'dd-mm-yy',
+        selectOtherMonths: true,
+        changeMonth: true,
+        changeYear: true,
+        dayNamesMin: ['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+        firstDay: 1
+    });
+    
+    $('#form_d_date_naissance').datepicker({
+        yearRange: '-100:+10'
+    });
+    
+    $('#form_d_date_entretien').datepicker({
+        yearRange: '-100:+10'
+    });
+});
+
+</script>
+{% endblock javascript_footer %}
