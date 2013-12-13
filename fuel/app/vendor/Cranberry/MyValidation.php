@@ -184,7 +184,7 @@ class MyValidation
          * @param type $val
          * @return type
          */
-        public static function _validation_unique_registre_national($val)
+        public static function _validation_unique_registre_national($val, $id)
         {
             $val = trim($val);
             if(empty($val))
@@ -194,6 +194,7 @@ class MyValidation
 
             $result = DB::select("LOWER (\"$field\")")
                 ->where($field, '=', \Str::lower($val))
+                ->where('id_participant', '<> ', $id)
                 ->from('participant')->execute();
 
             \Validation::active()->set_message('unique_registre_national', 'Ce registre national existe déjà.');
