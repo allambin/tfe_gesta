@@ -4,10 +4,9 @@ namespace Repository;
 
 class Controller_Repository extends \Controller_Main
 {
-    public $title = "Gestion du repository";
+    protected $dir = 'repository/';
+    public $title = 'Repository';
     public $data = array();
-    private $view_dir = 'repository/';
-    private $partial_dir = 'repository/partials/';
     
     /**
      * Redirige toute personne non membre du groupe "100"
@@ -17,12 +16,9 @@ class Controller_Repository extends \Controller_Main
         parent::before();
 
         if (!\Auth::member(100)) {
-            \Session::set('direction', '/administration');
+            \Session::set('direction', '/repository');
             \Response::redirect('users/login');
         }
-        
-        $this->data['view_dir'] = $this->view_dir;
-        $this->data['partial_dir'] = $this->partial_dir;
     }
     
     /**
@@ -30,7 +26,7 @@ class Controller_Repository extends \Controller_Main
      */
     public function action_status()
     {
-        $this->template->title = $this->title;
+        $this->data['title'] = $this->title;
         
         \Config::load('repository');
         $path = \Config::get('path');
@@ -40,8 +36,7 @@ class Controller_Repository extends \Controller_Main
         $portal['modified_files'] = shell_exec("cd $path && git status -s");
         
         $this->data['portal'] = $portal;
-        
-        $this->template->content = \View::forge($this->view_dir . 'status', $this->data);
+        return $this->theme->view($this->dir.'index', $this->data);
     }
     
     /**
