@@ -1,0 +1,35 @@
+{% extends './layout.twig' %}
+
+{% block list %}
+
+{{ form_open({'action': route, 'class': 'form-horizontal'}) }}
+
+<fieldset>
+    <legend>{{ titre }}</legend>
+    
+    <div class="control-group">
+        {{ form_label('Année', 'annee', {'class': 'control-label'}) }}
+        <div class="controls">
+            {{ form_select('annee', '', annee) }}
+        </div>
+    </div>
+    {% if(id == 3) %}
+    <div class="control-group">
+        {{ form_label('Agrement', 'agrement', {'class': 'control-label'}) }}
+        <div class="controls">
+            {{ form_select('agrement', '', agrements) }}
+        </div>
+    </div>
+    {% endif %}
+</fieldset>
+
+<div class="form-actions">
+    <button type="submit" class="btn btn-success">Suivant</button>
+</div>
+
+{{ form_close }}
+{{ html_anchor('statistique', '<i class="icon-arrow-left"></i> Retour', {'class': "btn btn-sucess pull-right"}) }}
+<div class="clear"></div>
+
+
+{% endblock list %}

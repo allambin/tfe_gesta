@@ -381,17 +381,17 @@ class Model_My_Statistique extends \Maitrepylos\db {
      * @param $schema
      * @return int
      */
-    public function getHeuresPrecedente($idParticipant,$date,$schema){
+    public function getHeuresPrecedente($idParticipant,\Datetime $date,$schema){
 
         $sql = "
                 SELECT SUM(h.i_secondes) AS iSum
                 FROM heures AS h
                 WHERE h.participant_id = ?
-                AND EXTRACT(YEAR FROM h.d_date) = ?
+                AND EXTRACT(YEAR FROM h.d_date) < ?
                 AND h.t_schema IN ($schema) ";
 
         $r = $this->_db->prepare($sql);
-        $r->execute(array($idParticipant,$date));
+        $r->execute(array($idParticipant,$date->format('Y')));
         $f =$r->fetch(PDO::FETCH_ASSOC);
         if($f['iSum']==null){
             return 0;
@@ -544,6 +544,13 @@ class Model_My_Statistique extends \Maitrepylos\db {
 
     }
 
+    public function getFinFormation($idContrat){
+
+        $sql  = "SELECT t_fin_formation_suite FROM formation WHERE contrat_id = ?";
+        $r = $this->_db->prepare($sql);
+        $r->execute(array($idContrat));
+        return $r->fetch(PDO::FETCH_ASSOC);
+    }
 
 
 }

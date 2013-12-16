@@ -7,7 +7,7 @@ namespace Maitrepylos\Excel;
 
 class Annexe {
 
-    public static function excel($sheet,$xml,$heures,$cedefop,$filiere,$annee){
+    public static function excel($sheet,$xml,$data,$filiere,$annee,$agrement){
         //définition des tailles de cellules
         $sheet->getColumnDimension('A')->setWidth(12);
         $sheet->getColumnDimension('B')->setWidth(13);
@@ -45,7 +45,7 @@ class Annexe {
         $sheet->setCellValue('A2','Ministère de la Région wallonne');
         $sheet->setCellValue('A3','Direction de la Formation professionnelle');
         $sheet->setCellValue('A3', 'Place de la Wallonie, 1 – Bât. II');
-        $sheet->setCellValue('A4', '5100            JAMBES');
+        $sheet->setCellValue('A4', '5100            JAMBES');
 
         //modification du style de F2
         $styleF2 = $sheet->getStyle('F2');
@@ -83,11 +83,11 @@ class Annexe {
             'borders'=>array(
                 'allborders'=>array(
                     'style'=>\PHPExcel_Style_Border::BORDER_THIN))), 'A14:F16');
-        $sheet->setCellValue('A14','Nom de l’organisme :'.$xml->denomination);
+        $sheet->setCellValue('A14','Nom de l’organisme :'.$xml->t_denomination);
         $sheet->setCellValue('A15', 'Année : '.$annee);
         $sheet->setCellValue('A16', 'Filière de formation : '.$filiere);
-        $sheet->setCellValue('E14', 'N° d\'agrément :  '.$xml->agrement);
-        $sheet->setCellValue('E16', 'C. Cedefop : '.$cedefop);
+        $sheet->setCellValue('E14', 'N° d\'agrément :  '.$agrement);
+        $sheet->setCellValue('E16', 'C. Cedefop : '.$data[0]['i_code_cedefop']);
         //mise en page des cellules A21:F37
         $sheet->duplicateStyleArray(array(
             'borders'=>array(
@@ -117,18 +117,18 @@ Convent.');
         $sheet->setCellValue('C24', ' Gratuit (2)');
         $sheet->setCellValue('D24', 'Payant (3)');
 
-
-        for($i = 0; $i < 12; $i++) {
-            $cellule = (25 + $i);
-            $mois = \Maitrepylos\Utils::mois($i + 1);
+        $cellule = 25;
+        foreach($data['mois'] AS $key=>$value) {
+            $cellule++;
+            $mois = \Maitrepylos\Utils::mois($key);
             $sheet->setCellValueByColumnAndRow(0, $cellule, strtoupper($mois));
-            //$sheet->setCellValueByColumnAndRowExplicit(1,$cellule,$heures[$i]->eft,PHPExcel_Cell_DataType::TYPE_NUMERIC);
-            // $sheet->setCellValueExplicitByColumnAndRow(1,$cellule,$heures[$i]->eft,'h');
-            $sheet->setCellValueByColumnAndRow(1, $cellule, $heures[$i]['eft'] / (24 * 3600));
-            $sheet->setCellValueByColumnAndRow(2, $cellule, $heures[$i]['gratuit'] / (24 * 3600));
-            $sheet->setCellValueByColumnAndRow(3, $cellule, $heures[$i]['payant'] / (24 * 3600));
-            $sheet->setCellValueByColumnAndRow(4, $cellule, $heures[$i]['stage'] / (24 * 3600));
-            $sheet->setCellValueByColumnAndRow(5, $cellule, $heures[$i]['assimile'] / (24 * 3600));
+//            //$sheet->setCellValueByColumnAndRowExplicit(1,$cellule,$heures[$i]->eft,PHPExcel_Cell_DataType::TYPE_NUMERIC);
+//            // $sheet->setCellValueExplicitByColumnAndRow(1,$cellule,$heures[$i]->eft,'h');
+            $sheet->setCellValueByColumnAndRow(1, $cellule, $value['eft'] / (24 * 3600));
+            $sheet->setCellValueByColumnAndRow(2, $cellule, $value['gratuit'] / (24 * 3600));
+            $sheet->setCellValueByColumnAndRow(3, $cellule, $value['payant'] / (24 * 3600));
+            $sheet->setCellValueByColumnAndRow(4, $cellule, $value['stage'] / (24 * 3600));
+            $sheet->setCellValueByColumnAndRow(5, $cellule, $value['assimile'] / (24 * 3600));
 
         }
         $sheet->duplicateStyleArray(array(
@@ -152,5 +152,4 @@ Convent.');
         );
         $sheet->setCellValue('B43', '=TODAY()');
     }
-    //put your code here
 }

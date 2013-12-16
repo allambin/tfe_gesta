@@ -24,42 +24,55 @@ class Checklist
      *@method pdf
      * @return pdf
      */
-    public static function pdf($checklist_valeurs, $checklist_sections, $checklist)
+    public static function pdf($stagiaire_id)
     {
-
+        $stagiaire = \Model_Listeattente::find($stagiaire_id, array('related' => array('checklist')));
+        
+        $checklist_model = \Model_Checklist_Section::find('all', array('related' => 'valeurs', 'order_by' => 't_nom'));
+        $current_checklist = array();
+        if(count($stagiaire->checklist) > 0)
+        {
+            foreach ($stagiaire->checklist as $value)
+                $current_checklist[$value->id_checklist_valeur] = $value->id_checklist_valeur;
+        }
+        
         $pdf = \Pdf::forge('mpdf');
 
 
         $html = '<h1>Checklist</h1>';
 
-        /*<?php echo Form::open(array('class' => 'form-horizontal')); ?>*/
+//        foreach ($checklist_model as $section)
+//        {
+//            $html .= '<h3>' . $section->t_nom . '</h3>';
+//            foreach ($section->valeurs as $valeur)
+//            {
+//
+//                $html .= '<p>';
+//                $html .= $valeur->t_nom;
+//
+//                if ($current_checklist[$valeur->id_checklist_valeur])
+//                {
+//                    $html .= \Form::checkbox('list[]', $valeur->id_checklist_valeur, array('checked' => 'checked'));
+//                }
+//                else
+//                {
+//                    $html .= \Form::checkbox('list[]', $valeur->id_checklist_valeur);
+//                }
+//                $html .= '</p>';
+//            }
+//        }
 
-        foreach ($checklist_sections as $section_id => $section) {
-            $html .= '<h3>' . $section . '</h3>';
-            foreach ($checklist_valeurs as $valeur) {
-
-                if ($valeur->section == $section_id) {
-                    $html .= '<p>';
-                    $html .= $valeur->tnom;
-
-                    if (isset($checklist) && in_array($valeur->id, $checklist)) {
-                        $html .= \Form::checkbox('list[]', $valeur->id, array('checked' => 'checked'));
-                    } else {
-                        $html .= \Form::checkbox('list[]', $valeur->id);
-                    }
-                    $html .= '</p>';
-
-                }
-
-            }
-        }
-
-
-        $pdf->WriteHTML($html);
-
-
-        ob_end_clean();
+        $pdf->WriteHTML($html);die("toto");
+//        ob_end_clean();
         $pdf->Output();
+//die("toto");
+//        exit;
+//        $response = new Response();
+//        // We'll be outputting a PDF
+//        $response->set_header('Content-Type', 'application/pdf');
+//        $response->set_header('Content-Disposition', 'attachment; filename="downloaded.pdf"');
+//
+//        return $response;
     }
 }
 

@@ -4,9 +4,11 @@ namespace Statistique;
 /**
  *Gestion des liens de modification d'un participant.
  */
-class Controller_Statistique extends \Controller_Main
+class Controller_Statistique extends \Controller_Main 
 {
+    public $title = 'Statistiques';
     public $data = array();
+    private $dir = 'statistique/';
 
     /**
      * Redirige toute personne non membre du groupe "100"
@@ -15,19 +17,17 @@ class Controller_Statistique extends \Controller_Main
     {
         parent::before();
 
-        if (!\Auth::member(100)) {
-            \Session::set('direction', '/statistique');
-            \Response::redirect('users/login');
-        }
+//        if (!\Auth::member(100)) {
+//            \Session::set('direction', '/statistique');
+//            \Response::redirect('users/login');
+//        }
 
     }
 
     public function action_index()
     {
-
-
-        $this->template->title = 'Gestion des fichier Excel';
-        $this->template->content = \View::forge('statistique/index');
+        $this->data['title'] = $this->title;
+        return $this->theme->view($this->dir.'index', $this->data);
     }
 
     public function action_l3()
@@ -264,247 +264,156 @@ class Controller_Statistique extends \Controller_Main
 
     public function action_trimestre()
     {
-        //$boucle = 0;
-
-        //$debut_calcul = microtime(true);
-
-        $data = \Input::post();
-
+        $formData = \Input::post();
 
         $date = new \DateTime();
-        $date->setDate((int)$data['annee'], 01, 01);
+        $date->setDate((int)$formData['annee'], 01, 01);
 
-        $annee = $data['annee'];
-        $annee_precedente = $annee - 1;
+        /**
+         * Nous devions récupérer les heures de l'année précedente.
+         * Maintenant nous devons récupérer toutes les heures antérieur à l'année en cours
+         * Je laisse pour historique et si jamais nous devons de nouveau changer.
+         * L'utilisation en état faite dans $db->getHeuresPrecedente
+         */
+        //$anneePrecedente = ((int)$formData['annee'] - 1);
+
 
         $db = new \Model_My_Statistique();
 
-        $path = \Asset::find_file('coordonnees.xml', 'xml');
-        $xml = simplexml_load_file($path);
-        $data['xml'] = $xml;
 
-        $cedefop = $db->getGroupe($date);
+        /**
+         * Récupération des contrat par filière et par dérogation
+         */
+        $formData['annexe1'][1] = $db->getCountContratFiliere($date);
+        $formData['annexe1'][2] = $db->getCountContratFiliereDerogation($date);
+        $formData['xml'] = \Model_Centre::find('first');
 
-
-        foreach($cedefop as $value) {
-            list ($nom) = explode('-', $value['t_nom']);
-            $nom_groupe[] = $nom;
-            //$boucle++;
-        }
-
-        $nom_groupe = array_unique($nom_groupe);
-        $data['cedefop'] = $cedefop;
-
-
-        $data['annexe1'][1] = $db->getCountGroupe($annee.'-01-01');
-        $data['annexe1'][2] = $db->getcountDerogationRw($annee.'-01-01');
-
-     //   \Maitrepylos\Debug::dump($cedefop[0]['t_nom']);
-
-        $count = count($data['annexe1'][1]);
+        $count = count($formData['annexe1'][1]);
         $derogation = NULL;
         $result = NULL;
 
-        for($i = 0; $i < $count; $i++) {
-            //$boucle++;
-            //$result = NULL;
-            foreach($data['annexe1'][2] as $compteur) {
+
+        for ($i = 0; $i < $count; $i++) {
+            foreach ($formData['annexe1'][2] as $compteur) {
                 //$boucle++;
 
-                if ($data['annexe1'][1][$i]['t_nom'] == $compteur['t_nom']) {
+                if ($formData['annexe1'][1][$i]['t_nom'] == $compteur['t_nom']) {
                     $derogation = $compteur['compteur'];
-                    $result = ((int)$data['annexe1'][1][$i]['compteur']) - ((int)$compteur['compteur']);
+                    $result = ((int)$formData['annexe1'][1][$i]['compteur']) - ((int)$compteur['compteur']);
 
                 }
-
-//                foreach($cedefop as $nom) {
-//                    //$boucle++ ;
-//                    if ($data['annexe1'][1][$i]['t_nom'] === (string)$nom['t_nom']) {
-//                        $nom_cedefop = (string)$nom['t_nom'];
-//                    }
-                }
-                foreach($cedefop as $nom) {
-                    //$boucle++ ;
-                    if ($data['annexe1'][1][$i]['t_nom'] === (string)$nom['t_nom']) {
-                        $nom_cedefop = (string)$nom['t_nom'];
-                    }
-
-                $data['annexe1'][1][$i]['cedefop'] = $nom_cedefop;
-                $data['annexe1'][1][$i]['derogation'] = $derogation;
-                $data['annexe1'][1][$i]['resultat'] = (int)$result;
             }
+
+            $formData['annexe1'][1][$i]['derogation'] = $derogation;
+            $formData['annexe1'][1][$i]['resultat'] = (int)$result;
         }
 
+        $formData['agrement'] = $agrement = \Model_agrement::find($formData['agrement']);
 
 
-        foreach($nom_groupe as $value) {
-            //$boucle++;
+        /*
+         * Récupération des filière en fonctions des agréments
+         */
+        $filiere = $db->getFiliere($formData['agrement']->id_agrement);
+
+        /*
+         * Récupération de tout les contrats concerné par la filière durant l'année choisie
+         */
+        foreach ($filiere as $filieres) {
+
+            /**
+             * Récupération des contrats par filière
+             */
+            $formData['filiere'][$filieres['t_nom']] = $db->getContratTrimestre($date, $filieres['id_filiere']);
 
 
-            $data['participant-' . $value] = $db->participant($value, $data['annee']);
-            $data['heure-' . $value] = array();
+            $countContrat = count($formData['filiere'][$filieres['t_nom']]);
+
+            for ($i = 0; $i < $countContrat; $i++) {
+                /**
+                 * Recherche motif fin de contrat
+                 */
+
+                $formData['filiere'][$filieres['t_nom']][$i]['type_fin_contrat'] = $db->getFinFormation($formData['filiere'][$filieres['t_nom']][$i]['id_contrat']);
+
+                /**
+                 * Calcul des heures éffectuées l'année précédente
+                 */
+
+                $formData['filiere'][$filieres['t_nom']][$i]['precedente'] =
+                    $db->getHeuresPrecedente($formData['filiere'][$filieres['t_nom']][$i]['participant_id'], $date, "'+','$','@','#','/','='");
+                /**
+                 * Récupération des informations du stagiaire
+                 */
+                $formData['filiere'][$filieres['t_nom']][$i]['signaletique'] =
+                    $db->participant($formData['filiere'][$filieres['t_nom']][$i]['participant_id'], $formData['filiere'][$filieres['t_nom']][$i]['id_contrat']);
+
+                /**
+                 * Calcule des heures de prestations pour l'année définie
+                 */
+                $formData['filiere'][$filieres['t_nom']][$i]['eft'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'+'");
+                $formData['filiere'][$filieres['t_nom']][$i]['gratuit'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'$','#'");
+                $formData['filiere'][$filieres['t_nom']][$i]['payant'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'@'");
+                $formData['filiere'][$filieres['t_nom']][$i]['stage'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'='");
+                $formData['filiere'][$filieres['t_nom']][$i]['assimile'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'/'");
+
+            }
+
+            for ($ii = 1; $ii < 13; $ii++) {
+
+                /**
+                 * Formation de la date pour l'extraire sur l'année et le mois
+                 */
+                $extract = $date->format('Y'). str_pad($ii, 2, 0, STR_PAD_LEFT);
 
 
-            $count_participant = count($data['participant-' . $value]);
+                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['eft'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'+'");
+                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['gratuit'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'$','#'");
+                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['payant'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'@'");
+                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['stage'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'='");
+                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['assimile'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'/'");
 
-            for($y = 0; $y < $count_participant; $y++) {
-                //$boucle++;
-                $data['participant-' . $value][$y]['t_nationalite'] = \Cranberry\MyXML::get_valeurPays($data['participant-' . $value][$y]['t_nationalite']);
             }
 
 
-            $date_boucle = clone $date;
-            $date_boucle_precedente = clone $date;
-            $date_boucle_precedente->sub(new \DateInterval('P1Y'));
-            for($i = 0; $i < 12; $i++) {
-                  //$boucle++;
-                $jours = $date_boucle->format('t');
-                $jours_annee_precedente = $date_boucle_precedente->format('t');
-
-               // $jours = cal_days_in_month(CAL_JULIAN, $i+1, $annee);
-               // $jours_annee_precedente = cal_days_in_month(CAL_JULIAN, $i+1, $annee_precedente);
-
-
-                $eft = 0;
-                $gratuit = 0;
-                $payant = 0;
-                $stage = 0;
-                $assimile = 0;
-
-                for($a = 0; $a < $count_participant; $a++) {
-                    //$boucle++;
-
-                    $date_z = clone $date_boucle_precedente;
-                    $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['precedente'] = 0;
-                    $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['eft'] = 0;
-                    $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['gratuit'] = 0;
-                    $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['payant'] = 0;
-                    $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['stage'] = 0;
-                    $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['assimile'] = 0;
-
-
-                    for($z = 0; $z < $jours_annee_precedente; $z++) {
-                         //$boucle++ ;
-                        $heure_precedente = $db->calculHeuresMoisStatL2($data['participant-' . $value][$a]['id_participant'],
-                            "'+','-','$','@','#','/','='",$date_z->format('Y-m-d'));
-
-                        if ($heure_precedente[0]['iSum'] == null) {
-
-                            $heure_precedente[0]['iSum'] = 0;
-                        }
-
-
-
-
-
-                        $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['precedente'] =
-                            $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['precedente'] + $heure_precedente[0]['iSum'];
-
-                        $date_z->add(new \DateInterval('P1D'));
-
-                    }
-
-
-
-
-
-
-                    //      cacul des heures de l'année en cours.
-
-                    $date_b = clone $date_boucle;
-                    for($b=0;$b<$jours;$b++) {
-                       // \Maitrepylos\Debug::dump($date_b);
-                        //$boucle++;
-                        $db_eft = $db->calculHeuresMoisStatL2($data['participant-'.$value][$a]['id_participant'],
-                            "'+','-'",$date_b->format('Y-m-d'));
-                        //calcul de tout les participants par mois
-                        $eft = $eft + $db_eft[0]['iSum'];
-
-
-                        //calcul des heures par participant et par année
-                        $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['eft'] =
-                            $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['eft'] + $db_eft[0]['iSum'];
-
-                        $db_gratuit = $db->calculHeuresMoisStatL2($data['participant-'.$value][$a]['id_participant'],
-                            "'$'",$date_b->format('Y-m-d'));
-                        $gratuit = $gratuit + $db_gratuit[0]['iSum'];
-                        //calcul des heures par participant et par année
-                        $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['gratuit'] =
-                            $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['gratuit'] + $db_gratuit[0]['iSum'];
-
-                        $db_payant = $db->calculHeuresMoisStatL2($data['participant-'.$value][$a]['id_participant'],
-                            "'@','#'",$date_b->format('Y-m-d'));
-                        $payant = $payant + $db_payant[0]['iSum'];
-                        //calcul des heures par participant et par année
-                        $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['payant'] =
-                            $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['payant'] + $db_payant[0]['iSum'];
-
-                        $db_stage = $db->calculHeuresMoisStatL2($data['participant-'.$value][$a]['id_participant'],
-                            "'='",$date_b->format('Y-m-d'));
-                        $stage = $stage + $db_stage[0]['iSum'];
-                        //calcul des heures par participant et par année
-                        $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['stage'] =
-                            $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['stage'] + $db_stage[0]['iSum'];
-
-                        $db_assimile = $db->calculHeuresMoisStatL2($data['participant-'.$value][$a]['id_participant'],
-                            "'/'",$date_b->format('Y-m-d'));
-                        $assimile = $assimile + $db_assimile[0]['iSum'];
-                        //calcul des heures par participant et par année
-                        $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['assimile'] =
-                            $data['heure-'.$value][$data['participant-'.$value][$a]['id_participant']]['assimile'] + $db_assimile[0]['iSum'];
-
-                        $date_b->add(new \DateInterval('P1D'));
-
-                    }
-                }
-                $data[$value][$i]['eft'] = $eft;
-                $data[$value][$i]['gratuit'] = $gratuit;
-                $data[$value][$i]['payant'] = $payant;
-                $data[$value][$i]['stage'] = $stage;
-                $data[$value][$i]['assimile'] = $assimile;
-
-                $date_boucle->add(new \DateInterval('P1M'));
-                $date_boucle_precedente->add(new \DateInterval('P1M'));
-            }
         }
 
-//        $fin_calcul = microtime(true);
-//        $total_temp = ($fin_calcul - $debut_calcul);
+        $formData['annexe1'][1] = \SplFixedArray::fromArray($formData['annexe1'][1]);
+        $formData['annexe1'][1]->setSize(24);
 
-        //\Maitrepylos\Debug::dump($cedefop);
-       // \Maitrepylos\Debug::dump($data['annexe1'][1][$i]['t_nom']);
-       //
-        $data['annexe1'][1] = \SplFixedArray::fromArray($data['annexe1'][1]);
-        $data['annexe1'][1]->setSize(24);
-     //   \Maitrepylos\Debug::dump($data);
-
-      \Maitrepylos\Excel\L3excel::excel($data,$nom_groupe);
-
+        \Maitrepylos\Excel\L3excel::excel($formData);
+        
         $this->template->title = 'Gestion des documents';
         $this->template->content = \View::forge('test');
-
     }
+
 
 
     public function action_menu($id)
     {
         $annees = \Model_Heures_Prestation::find('all', array('order_by' => array('annee'=>'desc')));
-
-
         $select_annees = array();
         foreach($annees as $annee) {
             $select_annees[$annee->annee] = $annee->annee;
         }
-
-
+        
         $route = array(1 => 'statistique/stat/', 2 => 'statistique/l3/', 3 => 'statistique/trimestre/');
         $title = array(1 => 'Statistiques de présence', 2 => 'Stat l3', 3 => 'Recensement annuel des stagiaires (xls)');
 
+        $agrement = \Model_agrement::find('all');
+        $agrements = array();
+        foreach ($agrement as $value) {
+
+            $agrements[$value->id_agrement] = $value->t_agrement;
+        }
+        
+        $this->data['title'] = $this->title . ' - '.$title[$id];
         $this->data['route'] = $route[$id];
         $this->data['annee'] = $select_annees;
         $this->data['titre'] = $title[$id];
-        $this->template->title = $title[$id];
-        $this->template->content = \View::forge('statistique/menu', $this->data);
+        $this->data['agrements'] = $agrements;
+        $this->data['id'] = $id;
+        return $this->theme->view($this->dir.'menu', $this->data);
 
     }
 }
