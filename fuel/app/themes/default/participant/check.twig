@@ -55,6 +55,12 @@
 {{ form_hidden('t_moyen_transport', input_post('t_moyen_transport', participant.t_moyen_transport), {'': '', 'TEC': 'Transports en commun', 'Voiture/scooter/vélo': 'Voiture/scooter/vélo', 'Rien': 'Rien'}) }}
 {{ form_hidden('t_pointure', input_post('t_pointure', participant.t_pointure)) }}
 {{ form_hidden('t_taille', input_post('t_taille', participant.t_taille)) }}
+{{ form_hidden('t_nom_rue', input_post('t_nom_rue', adresse.t_nom_rue)) }}
+{{ form_hidden('t_bte', input_post('t_bte', adresse.t_bte)) }}
+{{ form_hidden('t_code_postal', input_post('t_code_postal', adresse.t_code_postal)) }}
+{{ form_hidden('t_commune', input_post('t_commune', adresse.t_commune)) }}
+{{ form_hidden('t_telephone', input_post('t_telephone', adresse.t_telephone)) }}
+{{ form_hidden('t_type', input_post('t_type', adresse.t_type)) }}
 {{ form_hidden('checked', '1') }}
 <div class="form-actions">
     <button type="submit" class="btn btn-success">Valider l'ajout</button>

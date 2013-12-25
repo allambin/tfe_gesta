@@ -48,7 +48,7 @@
                         <div class="control-group">
                             {{ form_label('Sexe', 't_sexe', {class: 'control-label'}) }}
                             <div class="controls">
-                            {{ form_select('t_sexe', input_post('t_nom', participant.t_sexe), {'': '', 'M': 'Homme', 'F': 'Femme'}) }}
+                            {{ form_select('t_sexe', input_post('t_sexe', participant.t_sexe), {'': '', 'M': 'Homme', 'F': 'Femme'}) }}
                             </div>
                         </div>
                     </td>
@@ -161,6 +161,47 @@
         </td>
     </tr>
 </table>
+
+{% if eid == 1 %}
+<h2>Adresse</h2>
+<div class="control-group">
+    {{ form_label('Rue', 't_nom_rue', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_nom_rue', input_post('t_nom_rue', adresse.t_nom_rue)) }}
+    </div>  
+</div>
+<div class="control-group">
+    {{ form_label('Boite', 't_bte', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_bte', input_post('t_bte', adresse.t_bte)) }}
+    </div>  
+</div>
+<div class="control-group">
+    {{ form_label('Code Postal', 't_code_postal', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_code_postal', input_post('t_code_postal', adresse.t_code_postal)) }}
+    </div>  
+</div>
+<div class="control-group">
+    {{ form_label('Communue', 't_commune', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_commune', input_post('t_commune', adresse.t_commune)) }}
+    </div>  
+</div>
+<div class="control-group">
+    {{ form_label('Téléphone', 't_telephone', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_telephone', input_post('t_telephone', adresse.t_telephone)) }}
+    </div>  
+</div>
+<div class="control-group">
+    {{ form_label('Type', 't_type', {class: 'control-label'}) }}
+    <div class="controls">
+    {{ form_input('t_type', input_post('t_type', adresse.t_type)) }}
+    </div>  
+</div>
+{{ form_hidden('t_courrier', 1) }}
+{% endif %}
 
 {% block javascript_footer %}
 <script type="text/javascript">

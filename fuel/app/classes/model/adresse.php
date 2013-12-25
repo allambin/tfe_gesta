@@ -123,12 +123,12 @@ class Model_Adresse extends Orm\Model
     public function set_massive_assigment($fields, $origin = null)
     {
         $this->t_nom_rue = $fields['t_nom_rue'];
-        $this->t_bte = $fields['t_bte'];
+        $this->t_bte = isset($fields['t_bte']) ? $fields['t_bte'] : '';
         $this->t_code_postal = $fields['t_code_postal'];
         $this->t_commune = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha($fields['t_commune']));
-        $this->t_telephone = $fields['t_telephone'];
+        $this->t_telephone = isset($fields['t_telephone']) ? $fields['t_telephone'] : '';
         $this->t_courrier = isset($fields['t_courrier']) ? (int)$fields['t_courrier']: 0;
-        $this->t_type = $fields['t_type'];
+        $this->t_type = isset($fields['t_type']) ? $fields['t_type'] : '';
         
         if($origin == 'contact')
         {

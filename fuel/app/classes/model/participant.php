@@ -316,10 +316,29 @@ class Model_Participant extends Orm\Model
         $this->t_lieu_naissance = \Cranberry\MySanitarization::ucFirstAndToLower($fields['t_lieu_naissance']);
         $this->d_date_naissance = $dob;
         $this->t_sexe = $fields['t_sexe'];
-        $this->t_gsm = $fields['t_gsm'];
-        $this->t_gsm2 = $fields['t_gsm2'];
-        $this->t_email = $fields['t_email'];
-//        die(print_r($fields));
+        // Transformation du registre national
+        $registre = null;
+        if(isset($fields['t_registre_national']))
+            $registre = \Cranberry\MySanitarization::filterRegistreNational($fields['t_registre_national']);
+        $this->t_registre_national = $registre;
+        
+        if($scenario != 'eid')
+        {
+            $this->t_gsm = $fields['t_gsm'];
+            $this->t_gsm2 = $fields['t_gsm2'];
+            $this->t_email = $fields['t_email'];
+            $this->t_etat_civil = $fields['t_etat_civil'];
+            $this->t_moyen_transport = $fields['t_moyen_transport'];
+            $this->t_pointure = $fields['t_pointure'];
+            $this->t_taille = $fields['t_taille'];
+
+            // Transformation du compte bancaire
+            $compte = null;
+            if(isset($fields['t_compte_bancaire']))
+                $compte = \Cranberry\MySanitarization::filterCompteBancaire($fields['t_compte_bancaire']);
+            $this->t_compte_bancaire = $compte;
+        }
+        
         if($scenario == 'update')
         {
             $children = isset($fields['t_children']) ? $fields['t_children'] : '' ;
@@ -336,32 +355,16 @@ class Model_Participant extends Orm\Model
             $permis = null;
             if(isset($fields['t_permis']))
                 $permis = implode(',', $fields['t_permis']);
-
-            // Transformation du registre national
-            $registre = null;
-            if(isset($fields['t_registre_national']))
-                $registre = \Cranberry\MySanitarization::filterRegistreNational($fields['t_registre_national']);
-                
-            // Transformation du compte bancaire
-            $compte = null;
-            if(isset($fields['t_compte_bancaire']))
-                $compte = \Cranberry\MySanitarization::filterCompteBancaire($fields['t_compte_bancaire']);
-                
+            
             $this->t_type_etude = $fields['t_type_etude'];
             $this->t_diplome = $fields['t_diplome'];
             $this->d_fin_etude = $dfe;
             $this->t_annee_etude = $fields['t_annee_etude'];
-            $this->t_etat_civil = $fields['t_etat_civil'];
-            $this->t_registre_national = $registre;
-            $this->t_compte_bancaire = $compte;
-            $this->t_pointure = $fields['t_pointure'];
-            $this->t_taille = $fields['t_taille'];
             $this->t_enfants_charge = $fields['t_enfants_charge'];
             $this->t_mutuelle = $fields['t_mutuelle'];
             $this->t_organisme_paiement = $fields['t_organisme_paiement'];
             $this->t_organisme_paiement_phone = $fields['t_organisme_paiement_phone'];
             $this->t_permis = $permis;
-            $this->t_moyen_transport = $fields['t_moyen_transport'];
             if(isset($fields['b_attestation_reussite']))
                 $this->b_attestation_reussite = $fields['b_attestation_reussite'];
             $this->d_date_permis_theorique = $dpt;
@@ -382,7 +385,7 @@ class Model_Participant extends Orm\Model
         }
     }
     
-    public static function validate($factory, $id_participant) 
+    public static function validate($factory, $id_participant = 0) 
     {
         $val = Validation::forge($factory);
 

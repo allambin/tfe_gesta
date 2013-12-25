@@ -133,53 +133,70 @@ class Controller_Participant extends \Controller_Main
     public function action_ajouter()
     {
         $participant = new \Model_Participant();
+        $eid = 0;
+        $adresse = new \Model_Adresse();
         
         if (\Input::method() == 'POST')
 	{
-            // Validation des champs
-            $val = \Model_Participant::validate('create_participant');
-			
-            // si la validation ne renvoie aucune erreur et si le participant n'existe pas
-            if ($val->run())
+            $eid = \Input::post('eid');
+            if($eid == 1)
             {
-                // On forge un objet participant
-                $participant->set_massive_assigment(\Input::post());
-                $participant->b_is_actif = 1;
-                
-                // On vérifie qu'un/des participant(s) ayant le même tryptique n'existe(nt) pas déjà
-                $participants = \Model_Participant::query()
-                                ->where('t_nom', $participant->t_nom)
-                                ->where('t_prenom', $participant->t_prenom)
-                                ->where('d_date_naissance', $participant->d_date_naissance)
-                                ->get();
-                if(!empty($participants) && \Input::post('checked') != '1')
-                {
-                    $this->data['title'] = $this->title . ' - Vérification';
-                    $this->data['participant'] = $participant;
-                    $this->data['participants'] = $participants;
-                    $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
-                    return $this->theme->view($this->dir.'check', $this->data);
-                }
-                
-                // On save si c'est bon
-                if ($participant->save())
-                {
-                    Session::set_flash('success', "Le participant a bien été ajouté.");
-                    Response::redirect($this->dir . 'modifier/'.$participant->id_participant);
-                }
-                else // sinon on affiche les erreurs
-                {
-                    Session::set_flash('error', "Impossible de sauver le participant.");
-                }
+                $participant->set_massive_assigment(\Input::post(), 'eid');
+                $adresse->set_massive_assigment(\Input::post());
+                $participant->adresses[] = $adresse;
             }
-            else // si la validation a échoué
+            else
             {
-                Session::set_flash('error', $val->show_errors());
+                // Validation des champs
+                $val = \Model_Participant::validate('create_participant');
+
+                // si la validation ne renvoie aucune erreur et si le participant n'existe pas
+                if ($val->run())
+                {
+                    // On forge un objet participant
+                    $participant->set_massive_assigment(\Input::post());
+                    $participant->b_is_actif = 1;
+                    $adresse->set_massive_assigment(\Input::post());
+                    $adresse->t_courrier = 1;
+                    $participant->adresses[] = $adresse;
+
+                    // On vérifie qu'un/des participant(s) ayant le même tryptique n'existe(nt) pas déjà
+                    $participants = \Model_Participant::query()
+                                    ->where('t_nom', $participant->t_nom)
+                                    ->where('t_prenom', $participant->t_prenom)
+                                    ->where('d_date_naissance', $participant->d_date_naissance)
+                                    ->get();
+                    if(!empty($participants) && \Input::post('checked') != '1')
+                    {
+                        $this->data['title'] = $this->title . ' - Vérification';
+                        $this->data['participant'] = $participant;
+                        $this->data['participants'] = $participants;
+                        $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+                        return $this->theme->view($this->dir.'check', $this->data);
+                    }
+
+                    // On save si c'est bon
+                    if ($participant->save())
+                    {
+                        Session::set_flash('success', "Le participant a bien été ajouté.");
+                        Response::redirect($this->dir . 'modifier/'.$participant->id_participant);
+                    }
+                    else // sinon on affiche les erreurs
+                    {
+                        Session::set_flash('error', "Impossible de sauver le participant.");
+                    }
+                }
+                else // si la validation a échoué
+                {
+                    Session::set_flash('error', $val->show_errors());
+                }
             }
         }
         
         $this->data['title'] = $this->title . ' - Nouvelle inscription';
         $this->data['participant'] = $participant;
+        $this->data['adresse'] = $adresse;
+        $this->data['eid'] = $eid;
         $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
         return $this->theme->view($this->dir.'create', $this->data);
     }
