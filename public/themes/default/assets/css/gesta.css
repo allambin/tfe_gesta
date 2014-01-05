@@ -477,7 +477,7 @@ table.table_heures_details
 
 .alert-error
 {
-    padding-top: 5px;
+    padding: 5px;
     border: 1px solid #b94a48;
 }
 
@@ -486,4 +486,10 @@ table.table_heures_details
     padding: 5px;
     border: 1px solid #468847;
     margin-bottom: 10px;
+}
+
+
+table th.six
+{
+    width: 15%;
 }

@@ -11,6 +11,7 @@ class Controller_Tableau extends \Controller_Main
 {
     public $title = 'Tableau';
     public $data = array();
+    private $dir = 'tableau/';
 
     /**
      * Override la function before().
@@ -25,7 +26,7 @@ class Controller_Tableau extends \Controller_Main
         if ($this->current_user == NULL) {
             \Session::set('direction', '/tableau');
             \Response::redirect('users/login');
-        } else if (!\Auth::member(100)) {
+        } else if (!\Auth::member(50) && !\Auth::member(100)) {
             \Response::redirect('users/no_rights'); #7F7F7F
         }
     }
@@ -33,7 +34,8 @@ class Controller_Tableau extends \Controller_Main
 
     public function action_index()
     {
-
+        $this->data['title'] = $this->title;
+        
         //création de la date en fonction du jour ou du passage de paramètres
         $lundi = new \DateTime();
 
@@ -131,11 +133,11 @@ class Controller_Tableau extends \Controller_Main
 
 
         $this->data['date'] = $dateTableau;
-        $this->data['groupe'] = $groupe;
+        $this->data['groupes'] = $groupe;
         $this->data['next'] = $semaine_next->format('d/m/Y');
         $this->data['pre'] = $semaine_pre->format('d/m/Y');
-        //\Maitrepylos\Debug::dump(\Input::post('action'));
-        $this->template->title = $this->title;
+        
+        return $this->theme->view($this->dir.'index', $this->data);
         
         if(\Cranberry\MyMobileDetection::is_mobile())
             $this->template->content = \View::forge('tableau/mobile', $this->data);

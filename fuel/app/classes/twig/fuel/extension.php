@@ -41,6 +41,7 @@ class Twig_Fuel_Extension extends \Parser\Twig_Fuel_Extension
             'form_submit' => new Twig_Function_Function('Form::submit'),
             'input_post' => new Twig_Function_Function('Input::post'),
             'session_get_flash' => new Twig_Function_Function('Session::get_flash'),
+            'asset_img' => new Twig_Function_Function('Asset::img'),
             'render' => new Twig_Function_Function('render'),
         );
         

@@ -1,0 +1,184 @@
+{% extends './layout.twig' %}
+
+{% block css %}
+{{ parent() }}
+{{ asset_css('jquery.css') }}
+{{ asset_css('jquery-ui-1.10.3.custom.min.css') }}
+{% endblock css %}
+
+{% block javascript_header %}
+{{ asset_js('jquery-ui-1.10.3.custom.min.js') }}
+{% endblock javascript_header %}
+
+{% block form %}
+
+<div class="row">
+    <div class="span4">
+        <h2 class="smaller">Semaine
+            du {{ date[0]|date('d-m-Y') }} au {{ date[4]|date('d-m-Y') }}</h2>
+    </div>
+    <div class="span4 offset2">
+
+        {{ form_open({'action': 'tableau/', 'class': 'form_heures right','id': 'form_id'}) }}
+
+        {{ form_label('Changement de semaine') }}
+        {{ form_input('change', '', {'class': 'jour control-group', 'required': 'required'}) }}
+
+        {{ form_close() }}
+
+    </div>
+</div>
+
+<div class="row bottom-space">
+    {{ form_open({'action': 'tableau/', 'class': 'inline'}) }}
+    {{ form_hidden('change', pre) }}
+    {{ form_submit('submit_choix', 'Semaine précédente', {'class': "btn btn-small btn-previous"}) }}
+    {{ form_close() }}
+
+    {{ form_open({'action': 'tableau/', 'class': 'inline'}) }}
+
+    {{ form_hidden('change', next) }}
+    {{ form_submit('submit_choix', 'Semaine suivante', {'class': "btn btn-small btn-next"}) }}
+    {{ form_close() }}
+</div>
+
+
+<div class="row">
+    <div class="span12">
+        <ul class="nav nav-pills">
+            <li>P : Présence : {{ asset_img({0: 'default.png'}) }} &nbsp;&nbsp;</li>
+            <li>J : Absence justifié : {{ asset_img({0: 'jaune.png'}) }} &nbsp;&nbsp;</li>
+            <li>A : Absence <b>non</b> justifié : {{ asset_img({0: 'excla.png'}) }} </li>
+        </ul>
+    </div>
+</div>
+
+{% for groupe in groupes %}
+<table class="table form-inline table-striped table-top table-inner-bordered table-condensed">
+
+{{ form_open({'action': 'tableau/'}) }}
+
+{# Le champs caché suivant va permettre de retourner sur le tableau où nous avons modifier les heures dateeurs #}
+
+{{ form_hidden('affiche', date[0]|date('d-m-Y')) }}
+
+    <thead>
+        <tr>
+            <th class="text-center tdark" colspan="9">{{ groupe.t_nom }}</th>
+        </tr>
+        <tr>
+            <th class="six">Stagiaires</th>
+            <th class="text-center six">Lundi</th>
+            <th class="text-center six">Mardi</th>
+            <th class="text-center six">Mercredi</th>
+            <th class="text-center six">Jeudi</th>
+            <th class="text-center six">Vendredi</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        <tr>
+            <td></td>
+            {% for value in date %}
+            <td class="text-center">{{ value|date('d-m-Y') }}</td>
+            {% endfor %}
+        </tr>
+
+        {% set a = 0 %}
+        {% for participant in groupe.participant %}
+        {% if(in_array(true, participant.contrat)) %}
+        
+        <tr>
+            <td>
+                {{ html_anchor('participant/modifier/'~participant.id_participant, participant.t_nom~' '~participant.t_prenom) }}
+            </td>
+
+            {% set i = 0 %}
+            {% for contrat in participant.contrat %}
+            {% if (contrat[0] != false) %}
+            {% set h = '7:30' %}
+                {% if (i == 4) %}
+                {% set h = '6:30' %}
+                {% endif %}
+
+                {% if (contrat[1] == '+') %}
+
+            <td class="text-center">{{ asset_img({0: 'default.png'}) }}</td>
+
+                {% elseif (contrat[1] == '*') %}
+
+            <td class="text-center">{{ asset_img({0 : 'excla.png'}) }}</td>
+
+                {% elseif (contrat[1] == '0') %}
+
+            <td class="text-center">
+            {{ form_label('P', 'action') }}
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Travail', 
+            {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
+            {{ form_label('J', 'action') }}
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Absence à Justifier', 
+            {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
+            {{ form_label('A', 'action') }}
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Absence', 
+            {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
+            </td>
+            
+                {% else %}
+
+            <td class="text-center">{{ asset_img({0: 'jaune.png'}) }}</td>
+
+                {% endif %}
+
+            {% else %}
+            <td></td>
+            {% endif %}
+                    
+            {% set i = i + 1 %}
+            {% set a = a + 1 %}
+                    
+            {% endfor %}
+        {% endif %}
+
+        </tr>
+
+   {% endfor %}
+
+        <tr>
+            <th colspan="9" class="text-right tdark">{{ form_submit('submit_choix', 'Enregistrer présences', {'class': "btn btn-success btn-mini"}) }}</th>
+        </tr>
+    </tbody>
+</table>
+
+{% endfor %}
+
+{{ form_close() }}
+
+{% endblock form %}
+
+{% block javascript_footer %}
+<script>
+    $(function () {
+        $('.jour').datepicker({
+            dateFormat:'dd/mm/yy',
+            selectOtherMonths:true,
+            changeMonth:true,
+            changeYear:true,
+            dayNamesMin:['Di', 'Lu', 'Ma', 'Me', 'Je', 'Ve', 'Sa'],
+            firstDay:1,
+            yearRange:'c-2:c+4',
+            onSelect:function (dateText, inst) {
+                $('#form_id').submit();
+            }
+        })
+
+    });
+</script>
+
+<script type="text/javascript">
+
+    function InactiveCheckBox(Quoi,Qui){
+        document.getElementById(Quoi).checked = false ;
+        document.getElementById(Qui).checked = false ;
+    }
+</script>
+{% endblock javascript_footer %}

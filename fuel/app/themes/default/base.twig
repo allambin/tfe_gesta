@@ -40,9 +40,10 @@
                                     <li>{{ html_anchor('listeattente','Liste Candidat') }}</li>
                                 </ul>
                             </li>
-                            <li class="hidden-phone">{{ html_anchor('administration','Administration', {'id':'link_admin'}) }}</li>
-                            {% if(use_github) %}<li class="hidden-phone">{{ html_anchor('repository','Mise à jour', {'id':'link_admin'}) }}</li>{% endif %}
-                            <li class="hidden-phone">{{ html_anchor('statistique','Statistiques', {'id':'link_admin'}) }}</li>
+                            <li class="hidden-phone">{{ html_anchor('administration','Administration') }}</li>
+                            {% if(use_github) %}<li class="hidden-phone">{{ html_anchor('repository','Mise à jour') }}</li>{% endif %}
+                            <li class="hidden-phone">{{ html_anchor('statistique','Statistiques') }}</li>
+                            <li>{{ html_anchor('tableau','Tableau') }}</li>
                         </ul>
                     </div>
                 </div>
