@@ -4,25 +4,32 @@
 
 <h2>Mise à jour de l'application {% if subtitle is not null %}<small>{{ subtitle }}</small>{% endif %}</h2>
 
-<h2>Changements à rapatrier</h2>
-{% if (portal.incoming_changes is not empty) %}
-<pre>{{ portal.incoming_changes }}</pre>
+{% if(error) %}
+
+    <p>{{ error }}</p>
+
 {% else %}
-<pre>Aucun nouveau commit</pre>
-{% endif %}
+    <h2>Changements à rapatrier</h2>
+    {% if (portal.incoming_changes is not empty) %}
+    <pre>{{ portal.incoming_changes }}</pre>
+    {% else %}
+    <pre>Aucun nouveau commit</pre>
+    {% endif %}
 
-{% if (portal.modified_files is not empty) %}
-<h2>Changements locaux</h2>
-<pre>{{ portal.modified_files }}</pre>
-{% endif %}
+    {% if (portal.modified_files is not empty) %}
+    <h2>Changements locaux</h2>
+    <pre>{{ portal.modified_files }}</pre>
+    {% endif %}
 
-{% if(portal.incoming_changes is not empty) and (portal.modified_files is empty) %}
-<a href="repository/update" class="btn btn-success pull-right">Mettre à jour !</a>
-{% elseif(portal.modified_files is not empty) %}
-<a href="#" class="btn btn-danger pull-right disabled">Impossible de mettre à jour !</a>
-{% elseif(portal.incoming_changes is empty) %}
-<a href="#" class="btn btn-info pull-right disabled">Rien à mettre à jour !</a>
+    {% if(portal.incoming_changes is not empty) and (portal.modified_files is empty) %}
+    <a href="repository/update" class="btn btn-success pull-right">Mettre à jour !</a>
+    {% elseif(portal.modified_files is not empty) %}
+    <a href="#" class="btn btn-danger pull-right disabled">Impossible de mettre à jour !</a>
+    {% elseif(portal.incoming_changes is empty) %}
+    <a href="#" class="btn btn-info pull-right disabled">Rien à mettre à jour !</a>
+    {% endif %}
+    <div class="clear"></div>
+
 {% endif %}
-<div class="clear"></div>
 
 {% endblock content %}
