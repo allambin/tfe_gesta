@@ -132,6 +132,13 @@ class Controller_Participant extends \Controller_Main
      */
     public function action_ajouter()
     {
+        $path = null;
+        if($this->data['use_eid'])
+        {
+            \Config::load('eid');
+            $path = \Config::get('path');
+        }
+        
         $participant = new \Model_Participant();
         $eid = 0;
         $adresse = new \Model_Adresse();
@@ -197,6 +204,7 @@ class Controller_Participant extends \Controller_Main
         $this->data['participant'] = $participant;
         $this->data['adresse'] = $adresse;
         $this->data['eid'] = $eid;
+        $this->data['path'] = $path;
         $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
         return $this->theme->view($this->dir.'create', $this->data);
     }
