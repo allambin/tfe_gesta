@@ -22,13 +22,13 @@ class Controller_Listeattente extends \Controller_Main
     {
         parent::before();
 
-//        if (!\Auth::member(100)) {
-//            \Session::set('direction', '/listeattente');
-//            \Response::redirect('users/login');
-//        }
-//        
-//        $this->data['view_dir'] = $this->view_dir;
-//        $this->data['partial_dir'] = $this->partial_dir;
+        if (!\Auth::member(70)) {
+            \Session::set('direction', '/listeattente');
+            \Response::redirect('users/login');
+        }
+        
+        $this->data['view_dir'] = $this->view_dir;
+        $this->data['partial_dir'] = $this->partial_dir;
     }
     
     public function action_ajax_liste()

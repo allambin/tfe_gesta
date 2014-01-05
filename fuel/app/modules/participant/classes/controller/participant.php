@@ -24,15 +24,15 @@ class Controller_Participant extends \Controller_Main
     {
         parent::before();
 
-//        if ($this->current_user == NULL)
-//        {
-//            Session::set('direction', '/participant');
-//            Response::redirect('users/login');
-//        }
-//        else if (!\Auth::member(100))
-//        {
-//            Response::redirect('users/no_rights');
-//        }
+        if ($this->current_user == NULL)
+        {
+            Session::set('direction', '/participant');
+            Response::redirect('users/login');
+        }
+        else if (!\Auth::member(70))
+        {
+            Response::redirect('users/no_rights');
+        }
     }
     
     public function action_index()

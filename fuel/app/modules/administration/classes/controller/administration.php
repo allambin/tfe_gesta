@@ -13,31 +13,6 @@ class Controller_Administration extends \Controller_Main
 {
 
     protected $dir = 'administration/';
-    
-    public function action_test()
-    {
-        $checklist = \Model_Checklist::find(5, array('related' => array('valeurs')));
-        $valeurs = \Model_Checklist_Valeur::find('all');
-
-        if (Input::method() == 'POST')
-        {
-//            $new_valeurs = \Input::post('test');
-////            die(print_r($new_valeurs));
-//            foreach ($new_valeurs as $value)
-//            {
-//                $v = \Model_Checklist_Valeur::find($value);
-////                die(print_r($v));
-//                $checklist->valeurs[] = $v;
-//            }
-//            $checklist->save();
-        }
-
-        $this->data['checklist'] = $checklist;
-        $this->data['valeurs'] = $valeurs;
-        return $this->theme->view('administration/test', $this->data);
-    }
-
-//    public $template = 'template_admin.twig'; // do that to take /root/views/template_admin.twig
 
     public $title = 'Administration';
     public $data = array();
@@ -140,13 +115,13 @@ class Controller_Administration extends \Controller_Main
     {
         parent::before();
 
-//        if (!\Auth::member(100)) {
-//            \Session::set('direction', '/administration');
-//            \Response::redirect('users/login');
-//        }
-//
-//        $this->data['view_dir'] = $this->view_dir;
-//        $this->data['partial_dir'] = $this->partial_dir;
+        if (!\Auth::member(100)) {
+            \Session::set('direction', '/administration');
+            \Response::redirect('users/login');
+        }
+
+        $this->data['view_dir'] = $this->view_dir;
+        $this->data['partial_dir'] = $this->partial_dir;
     }
 
     /**
