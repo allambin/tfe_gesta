@@ -39,13 +39,11 @@ class Controller_Users extends Controller_Main
                 Response::redirect(Uri::create($direction));
             } else {
                 // Sinon, on lui affiche les erreurs.
-                $message[] = 'Le login et le mot de passe ne correspondent pas.';
-                \Session::set_flash('error', $message);
+                \Session::set_flash('error', 'Le login et le mot de passe ne correspondent pas.');
             }
         } else {
             if ($_POST) {
-                $message[] = $val->show_errors();
-                \Session::set_flash('error', $message);
+                \Session::set_flash('error', $val->show_errors());
             }
         }
 
