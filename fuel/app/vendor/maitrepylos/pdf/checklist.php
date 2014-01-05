@@ -26,6 +26,10 @@ class Checklist
      */
     public static function pdf($stagiaire_id)
     {
+        include PKGPATH.'pdf/vendor/fpdf/fpdf.php';
+        $pdf=new \FPDF();
+        $pdf->AddPage();
+        
         $stagiaire = \Model_Listeattente::find($stagiaire_id, array('related' => array('checklist')));
         
         $checklist_model = \Model_Checklist_Section::find('all', array('related' => 'valeurs', 'order_by' => 't_nom'));
@@ -35,44 +39,37 @@ class Checklist
             foreach ($stagiaire->checklist as $value)
                 $current_checklist[$value->id_checklist_valeur] = $value->id_checklist_valeur;
         }
+
+        $pdf->SetFont('Arial','B',18);
+        $pdf->Cell(0,10, 'Checklist de '.$stagiaire->t_nom.' '.$stagiaire->t_prenom);
+        $pdf->Ln(20);
+
+        foreach ($checklist_model as $section)
+        {
+            $pdf->SetFont('Arial','B',16);
+            $pdf->Cell(0,10, utf8_decode($section->t_nom));
+            $pdf->Ln(10);
+            
+            $pdf->SetFont('Arial','',12);
+            
+            foreach ($section->valeurs as $valeur)
+            {
+                if (isset($current_checklist[$valeur->id_checklist_valeur]))
+                {
+                    $pdf->Cell(10,7, 'X');
+                    $pdf->Cell(40,7, utf8_decode($valeur->t_nom));
+                    $pdf->Ln();
+                }
+                else
+                {
+                    $pdf->Cell(10,7, 'O');
+                    $pdf->Cell(40,7, utf8_decode($valeur->t_nom));
+                    $pdf->Ln();
+                }
+            }
+        }
         
-        $pdf = \Pdf::forge('mpdf');
-
-
-        $html = '<h1>Checklist</h1>';
-
-//        foreach ($checklist_model as $section)
-//        {
-//            $html .= '<h3>' . $section->t_nom . '</h3>';
-//            foreach ($section->valeurs as $valeur)
-//            {
-//
-//                $html .= '<p>';
-//                $html .= $valeur->t_nom;
-//
-//                if ($current_checklist[$valeur->id_checklist_valeur])
-//                {
-//                    $html .= \Form::checkbox('list[]', $valeur->id_checklist_valeur, array('checked' => 'checked'));
-//                }
-//                else
-//                {
-//                    $html .= \Form::checkbox('list[]', $valeur->id_checklist_valeur);
-//                }
-//                $html .= '</p>';
-//            }
-//        }
-
-        $pdf->WriteHTML($html);die("toto");
-//        ob_end_clean();
-        $pdf->Output();
-//die("toto");
-//        exit;
-//        $response = new Response();
-//        // We'll be outputting a PDF
-//        $response->set_header('Content-Type', 'application/pdf');
-//        $response->set_header('Content-Disposition', 'attachment; filename="downloaded.pdf"');
-//
-//        return $response;
+        $pdf->Output();        
     }
 }
 

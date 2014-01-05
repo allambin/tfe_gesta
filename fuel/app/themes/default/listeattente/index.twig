@@ -75,7 +75,7 @@ $(document).ready(function() {
                 var actif = full[6];
                 var can_delete = full[7];
                 var links = '<td>';
-                var links = links+'<a class="btn btn-mini btn-success" title="Valider le stagiaire" href="{{ uri_create('listeattente/confirmer/') }}'+id+'"><i class="icon-ok icon-white"></i></a><a class="btn btn-mini btn-info" title="Editer la checklist" href="{{ uri_create('listeattente/checklist/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a class="btn btn-mini btn-warning" title="Imprimer la checklist" href="{{ uri_create('listeattente/print_checklist/') }}'+id+'"><i class="icon-print icon-white"></i></a>';
+                var links = links+'<a class="btn btn-mini btn-success" title="Valider le stagiaire" href="{{ uri_create('listeattente/confirmer/') }}'+id+'"><i class="icon-ok icon-white"></i></a><a class="btn btn-mini btn-info" title="Editer la checklist" href="{{ uri_create('listeattente/checklist/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a class="btn btn-mini btn-warning" title="Imprimer la checklist" target="_blank" href="{{ uri_create('listeattente/print_checklist/') }}'+id+'"><i class="icon-print icon-white"></i></a>';
                 //var links = links+'<a class="btn btn-mini btn-success" title="Valider le stagiaire" href="{{ uri_create('listeattente/confirmer/') }}'+id+'"><i class="icon-ok icon-white"></i></a>';
                 var delete_link = '<a title="Supprimer" class="btn btn-mini btn-danger" href="{{ uri_create('listeattente/supprimer/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir supprimer cet item ?\')"><i class="icon-remove-sign icon-white"></i></a>';
                 if(actif === '1')

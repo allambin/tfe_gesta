@@ -333,17 +333,10 @@ class Controller_Listeattente extends \Controller_Main
     public function action_print_checklist($id)
     {
         $this->data['title'] = $this->title . ' - Checklist';
+        
         \Maitrepylos\Pdf\Checklist::pdf($id);
-//        $this->template->title = 'Gestion des documents';
-//        $this->template->content = \View::forge('test');
-        $response = new Response();
-        $response->set_header('Content-Type', 'application/pdf');
-        \Maitrepylos\Pdf\Checklist::pdf($id);
-
-// This will be a NOT FOUND response
-//$response->set_status(303);
-return $response;
-        return $this->theme->view($this->dir.'checklist', $this->data);
+        
+        exit;
     }
 
 }
