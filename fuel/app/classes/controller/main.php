@@ -32,9 +32,7 @@ class Controller_Main extends \Fuel\Core\Controller
             Asset::add_path("$path/$active_template/$assets_folder");
             Asset::add_path("$path/$default_template/$assets_folder");
         }
-
-        if(Uri::segment(1) != 'users')
-            Session::set('direction', 'administration');
+        
         $this->current_user = Auth::check() ? Model_User::find(Arr::get(Auth::get_user_id(), 1)) : NULL;
         
         $this->data['current_user'] = $this->current_user;

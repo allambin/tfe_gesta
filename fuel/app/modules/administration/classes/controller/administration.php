@@ -119,9 +119,6 @@ class Controller_Administration extends \Controller_Main
             \Session::set('direction', '/administration');
             \Response::redirect('users/login');
         }
-
-        $this->data['view_dir'] = $this->view_dir;
-        $this->data['partial_dir'] = $this->partial_dir;
     }
 
     /**

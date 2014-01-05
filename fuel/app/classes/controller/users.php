@@ -17,9 +17,8 @@ class Controller_Users extends Controller_Main
          */
         $direction = Session::get('direction');
         if (!isset($direction)) {
-            $direction = 'administration';
+            $direction = Uri::create('');
         }
-
 
         // Règle de validation
         $val = Validation::forge('users');
@@ -36,7 +35,7 @@ class Controller_Users extends Controller_Main
                 $id = $auth->get_user_id();
                 Session::set('id_login',$id[1]);
                 
-                // Si le membre existe en db, on le log et on le renvoie sur l'accueil.
+                // Si le membre existe en db, on le log et on le renvoie là où il voulait aller
                 Response::redirect(Uri::create($direction));
             } else {
                 // Sinon, on lui affiche les erreurs.
@@ -50,7 +49,7 @@ class Controller_Users extends Controller_Main
             }
         }
 
-        $this->data['title'] = "Login Page";
+        $this->data['title'] = "Identification";
         return $this->theme->view('users/login', $this->data);
     }
 
@@ -69,8 +68,8 @@ class Controller_Users extends Controller_Main
      */
     public function action_no_rights()
     {
-        $this->template->title = "Droits insuffisants";
-        $this->template->content = View::forge('users/no_rights');
+        $this->data['title'] = "Droits insuffisants";
+        return $this->theme->view('users/no_rights', $this->data);
     }
 }
 

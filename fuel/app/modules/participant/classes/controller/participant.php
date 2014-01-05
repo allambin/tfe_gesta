@@ -29,7 +29,7 @@ class Controller_Participant extends \Controller_Main
             Session::set('direction', '/participant');
             Response::redirect('users/login');
         }
-        else if (!\Auth::member(70))
+        else if (!\Auth::member(70) && !\Auth::member(100))
         {
             Response::redirect('users/no_rights');
         }
