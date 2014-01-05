@@ -42,7 +42,7 @@
         <div class="form-actions">
             <button type="submit" class="btn btn-success">Valider</button>
             <a href="{{ uri_create('participant/index') }}" class="btn btn-danger">Annuler</a>
-            <a href="https://localhost:8181/mavenproject2/identification.jsp" class="btn btn-info">Via EID</a>
+            {% if(use_eid) %}<a href="https://localhost:8181/mavenproject2/identification.jsp" class="btn btn-info">Via EID</a>{% endif %}
         </div>
 
     </fieldset>

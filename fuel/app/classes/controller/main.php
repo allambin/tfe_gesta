@@ -39,6 +39,11 @@ class Controller_Main extends \Fuel\Core\Controller
         
         $this->data['current_user'] = $this->current_user;
         
+        // gestion des extras (github, eid)
+        $extras = \Config::get('extras');
+        $this->data['use_eid'] = $extras['eid'];
+        $this->data['use_github'] = $extras['github'];
+        
         parent::before();
     }
 

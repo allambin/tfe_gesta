@@ -43,7 +43,7 @@ return array(
      */
     'index_file' => false,
 
-    'profiling' => true,
+    'profiling' => false,
 
     /**
      * Settings for Cache class
@@ -230,6 +230,11 @@ return array(
     'security' => array(
         'auto_filter_output'  => '',
     ),
+    
+    'extras' => array(
+        'github' => true,
+        'eid' => true
+    )
 
 );
 
