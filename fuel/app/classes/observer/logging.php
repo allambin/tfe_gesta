@@ -6,6 +6,10 @@
 class Observer_Logging extends Orm\Observer
 {
 
+    /**
+     * A exécuter après un INSERT
+     * @param Orm\Model $model
+     */
     public function after_insert(Orm\Model $model)
     {
         $user = \Auth::instance()->get_user_id();
@@ -23,6 +27,10 @@ class Observer_Logging extends Orm\Observer
                 ->execute();
     }
     
+    /**
+     * A exécuter après un UPDATE
+     * @param Orm\Model $model
+     */
     public function after_update(Orm\Model $model)
     {
         $user = \Auth::instance()->get_user_id();
@@ -40,6 +48,10 @@ class Observer_Logging extends Orm\Observer
                 ->execute();
     }
     
+    /**
+     * A exécuter après un DELETE
+     * @param Orm\Model $model
+     */
     public function after_delete(Orm\Model $model)
     {
         $user = \Auth::instance()->get_user_id();

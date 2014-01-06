@@ -266,6 +266,58 @@ class Model_My_Statistique extends \Maitrepylos\db {
         return $result->fetchAll(PDO::FETCH_ASSOC);
         //  return $result;
     }
+    
+    public function participantBis($idsParticipant)
+    {
+        $idsParticipant = implode(',', $idsParticipant);
+        
+        $sql = "SELECT
+            participant.id_participant,
+            participant.t_nom,
+            participant.t_prenom,
+            participant.t_nationalite,
+            participant.t_lieu_naissance,
+            (SELECT t_valeur FROM type_pays WHERE t_nom = participant.t_nationalite) as t_nationalite,
+            DATE_FORMAT(participant.d_date_naissance,'%d-%m-%Y') AS d_date_naissance,
+            participant.t_sexe,
+            adresse.t_nom_rue,
+            adresse.t_bte,
+            adresse.t_code_postal,
+            adresse.t_commune,
+            contrat.t_situation_sociale,
+            DATE_FORMAT(contrat.d_date_debut_contrat,'%d-%m-%Y') AS d_date_debut_contrat,
+            DATE_FORMAT(contrat.d_date_fin_contrat_prevu,'%d-%m-%Y') AS d_date_fin_contrat,
+            contrat.t_duree_innoccupation,
+            participant.t_type_etude,
+            participant.t_diplome,
+            participant.d_fin_etude,
+            participant.t_numero_inscription_forem,
+            DATE_FORMAT(participant.d_date_inscription_forem,'%d-%m-%Y') AS d_date_inscription_forem,
+            contrat.b_derogation_rw,
+            contrat.id_contrat,
+            groupe.t_nom as nom_groupe,
+            formation.t_fin_formation,
+            formation.t_fin_formation_suite
+            FROM
+            participant
+            INNER JOIN contrat ON participant.id_participant = contrat.participant_id
+            INNER JOIN adresse ON participant.id_participant = adresse.participant_id
+            INNER JOIN groupe ON contrat.groupe_id = groupe.id_groupe
+            LEFT OUTER JOIN formation ON formation.contrat_id = contrat.id_contrat
+            WHERE id_participant IN ($idsParticipant)";
+        
+        $r = $this->_db->prepare($sql);
+        $r->execute();
+        $return = array();
+        while($row = $r->fetch(PDO::FETCH_ASSOC))
+        {
+            if(!isset($return[$row['id_participant']]))
+                $return[$row['id_participant']] = array();
+            $return[$row['id_participant']][$row['id_contrat']] = $row;
+        }
+        
+        return $return;
+    }
 
 
 
@@ -398,6 +450,25 @@ class Model_My_Statistique extends \Maitrepylos\db {
         }
         return $f['iSum'];
     }
+    
+    public function getHeuresPrecedentesBis($idsParticipant, $date, $schema)
+    {
+        $idsParticipant = implode(',', $idsParticipant);
+        $sql = "SELECT SUM(h.i_secondes) AS iSum, participant_id
+                FROM heures AS h
+                WHERE h.participant_id IN (?)
+                AND EXTRACT(YEAR FROM h.d_date) < ?
+                AND h.t_schema IN ($schema) ";
+
+        $r = $this->_db->prepare($sql);
+        $r->execute(array($idsParticipant,$date->format('Y')));
+        
+        $return = array();
+        while($row = $r->fetch(PDO::FETCH_ASSOC))
+            $return[$row['participant_id']] = isset($row['iSum']) ? $row['iSum'] : 0;
+        
+        return $return;
+    }
 
     /**
      * Récupération de l'ensemble des contrats pour le trimestrille de 'année demandé
@@ -424,6 +495,31 @@ class Model_My_Statistique extends \Maitrepylos\db {
         $r = $this->_db->prepare($sql);
         $r->execute(array($finAnnee->format('Y-m-d'),$date->format('Y-m-d'),$idFiliere));
         return $r->fetchAll(PDO::FETCH_ASSOC);
+    }
+    
+    public function getContratTrimestreBis(\DateTime $date){
+
+        $finAnnee = clone $date;
+        $finAnnee->setDate($date->format('Y'),'12','31');
+
+        $sql = "SELECT id_filiere, c.id_contrat,c.d_date_debut_contrat,c.d_date_fin_contrat_prevu,c.d_date_fin_contrat,g.id_groupe,f.id_filiere,c.participant_id,i_code_cedefop
+                FROM contrat c
+                INNER JOIN groupe g
+                ON g.id_groupe = c.groupe_id
+                INNER JOIN filiere f
+                ON f.id_filiere = g.filiere_id
+                WHERE c.d_date_debut_contrat <= ?
+                AND c.d_date_fin_contrat_prevu >= ?
+                ORDER BY g.id_groupe,c.participant_id";
+
+        $r = $this->_db->prepare($sql);
+        $r->execute(array($finAnnee->format('Y-m-d'),$date->format('Y-m-d')));
+        
+        $return = array();
+        while($row = $r->fetch(PDO::FETCH_ASSOC))
+            $return[$row['id_filiere']][] = $row;
+        
+        return $return;
     }
 
     /**
@@ -456,6 +552,36 @@ class Model_My_Statistique extends \Maitrepylos\db {
         return $f['iSum'];
 
     }
+    
+    public function getHeuresTotalFiliereBis($date){
+
+        $sql = "SELECT EXTRACT(MONTH FROM h.d_date) as month, t_schema, id_filiere, SUM(h.i_secondes) AS iSum
+                FROM contrat c
+                INNER JOIN heures h
+                ON h.contrat_id = c.id_contrat
+                INNER JOIN groupe g
+                ON g.id_groupe = c.groupe_id
+                INNER JOIN filiere f
+                ON f.id_filiere = g.filiere_id
+                WHERE EXTRACT(YEAR_MONTH FROM h.d_date) = ? 
+                GROUP BY t_schema, f.id_filiere";
+
+        $r = $this->_db->prepare($sql);
+        $r->execute(array($date->format('Y-m-d')));
+        
+        $return = array();
+        while($row = $r->fetch(PDO::FETCH_ASSOC))
+        {
+            if(!isset($return[$row['t_schema']]))
+                $return[$row['t_schema']] = array();
+            if(!isset($return[$row['t_schema']][$row['month']]))
+                $return[$row['t_schema']][$row['month']] = array();
+            $return[$row['t_schema']][$row['month']][$row['id_filiere']] = $row['iSum'];
+        }
+        
+        return $return;
+
+    }
 
     /**
      * Calcule des heures par contrat pour le trimestrielle en fonction de l'année et des contrats
@@ -480,6 +606,30 @@ class Model_My_Statistique extends \Maitrepylos\db {
             return 0;
         }
         return $f['iSum'];
+
+    }
+    
+    public function getHeuresTotalContratBis(\Datetime $annee, $idsContrat)
+    {
+        $idsContrat = implode(',',$idsContrat);
+        $sql = "SELECT t_schema, contrat_id, SUM(i_secondes) AS iSum
+                FROM heures
+                WHERE EXTRACT(YEAR FROM d_date) = ?
+                AND contrat_id IN ($idsContrat) 
+                GROUP BY t_schema,contrat_id";
+
+        $r = $this->_db->prepare($sql);
+        $r->execute(array($annee->format('Y')));
+        
+        $return = array();
+        while($row = $r->fetch(PDO::FETCH_ASSOC))
+        {
+            if(!isset($return[$row['t_schema']]))
+                $return[$row['t_schema']] = array();
+            $return[$row['t_schema']][$row['contrat_id']] = $row['iSum'];
+        }
+        
+        return $return;
 
     }
 
@@ -550,6 +700,19 @@ class Model_My_Statistique extends \Maitrepylos\db {
         $r = $this->_db->prepare($sql);
         $r->execute(array($idContrat));
         return $r->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public function getFinFormationBis(){
+
+        $sql  = "SELECT contrat_id, t_fin_formation_suite FROM formation";
+        $r = $this->_db->prepare($sql);
+        $r->execute();
+        
+        $return = array();
+        while($row = $r->fetch(PDO::FETCH_ASSOC))
+            $return[$row['contrat_id']] = $row;
+        
+        return $return;
     }
 
 

@@ -58,6 +58,22 @@ class Model_Groupe extends Model
             'cascade_delete' => false,
         )
     );
+    
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
+    public static function get_primary_key_name()
+    {
+        return self::$_primary_key[0];
+    }
 
     public static function getNames()
     {

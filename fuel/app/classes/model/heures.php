@@ -26,7 +26,7 @@ class Model_Heures extends \Orm\Model {
         'contrat_id',
         'login_id'
     );
-
+    
     public static function validate_heures($factory) {
         $val = Validation::forge($factory);
         $val->add_callable('\Maitrepylos\Validation');

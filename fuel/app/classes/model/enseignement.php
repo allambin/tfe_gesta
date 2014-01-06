@@ -48,12 +48,21 @@ class Model_Enseignement extends Model
             'events' => array('after_insert', 'after_update', 'after_delete'), 
         )
     );
-
+    
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
     }
     
+    /**
+     * Permet de remplir les champs select depuis un autre Model
+     * 
+     */
     public static function _init()
     {
         $types = DB::select()->from('type_enseignement')->as_object()->execute();
@@ -64,21 +73,11 @@ class Model_Enseignement extends Model
         static::$_properties['type_enseignement_id']['form']['options'] = $data;
     }
     
-//    public static function validate($factory)
-//    {
-//        $val = Validation::forge($factory);
-//        $val->add_field('t_nom', 'Nom', 'required|max_length[255]');
-//        $val->add_field('t_valeur', 'Valeur', 'required|max_length[10]');
-//
-//
-//
-//        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
-//        $val->set_message('required', 'Veuillez remplir le champ :label.');
-//        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
-//
-//        return $val;
-//    }
-
+    /**
+     * Renvoie le tableau $list_properties, utilisé dans l'administration
+     * 
+     * @return array
+     */
     public static function get_list_properties()
     {
         $to_return = array();
@@ -88,6 +87,11 @@ class Model_Enseignement extends Model
         return $to_return;
     }
     
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields)
     {
         $this->t_nom = $fields['t_nom'];

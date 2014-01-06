@@ -360,32 +360,32 @@ class Stagiaire {
 
             $cellule = (12 + $i);
             $sheet->setCellValueByColumnAndRow(0, $cellule, ($i + 1));
-            $sheet->setCellValueByColumnAndRow(1, $cellule, $data[$i]['signaletique'][0]['t_nom']);
-            $sheet->setCellValueByColumnAndRow(2, $cellule, $data[$i]['signaletique'][0]['t_prenom']);
-            $sheet->setCellValueByColumnAndRow(3, $cellule, $data[$i]['signaletique'][0]['t_nom_rue']);
-            $sheet->setCellValueByColumnAndRow(4, $cellule, $data[$i]['signaletique'][0]['t_code_postal']);
-            $sheet->setCellValueByColumnAndRow(5, $cellule, $data[$i]['signaletique'][0]['d_date_naissance']);
-            $sheet->setCellValueByColumnAndRow(6, $cellule, $data[$i]['signaletique'][0]['t_sexe']);
-            $sheet->setCellValueByColumnAndRow(7, $cellule, (int)$data[$i]['signaletique'][0]['t_nationalite']);
-            $sheet->setCellValueByColumnAndRow(8, $cellule, $data[$i]['signaletique'][0]['t_situation_sociale']);
-            $sheet->setCellValueByColumnAndRow(9, $cellule, $data[$i]['signaletique'][0]['d_date_inscription_forem']);
-            $sheet->setCellValueByColumnAndRow(10, $cellule, $data[$i]['signaletique'][0]['t_duree_innoccupation']);
-            $sheet->setCellValueByColumnAndRow(11, $cellule, $data[$i]['signaletique'][0]['t_diplome']);
-            $sheet->setCellValueByColumnAndRow(12, $cellule, $data[$i]['signaletique'][0]['t_type_etude']);
-            $sheet->setCellValueByColumnAndRow(13, $cellule, $data[$i]['signaletique'][0]['d_date_debut_contrat']);
+            $sheet->setCellValueByColumnAndRow(1, $cellule, $data[$i]['signaletique']['t_nom']);
+            $sheet->setCellValueByColumnAndRow(2, $cellule, $data[$i]['signaletique']['t_prenom']);
+            $sheet->setCellValueByColumnAndRow(3, $cellule, $data[$i]['signaletique']['t_nom_rue']);
+            $sheet->setCellValueByColumnAndRow(4, $cellule, $data[$i]['signaletique']['t_code_postal']);
+            $sheet->setCellValueByColumnAndRow(5, $cellule, $data[$i]['signaletique']['d_date_naissance']);
+            $sheet->setCellValueByColumnAndRow(6, $cellule, $data[$i]['signaletique']['t_sexe']);
+            $sheet->setCellValueByColumnAndRow(7, $cellule, (int)$data[$i]['signaletique']['t_nationalite']);
+            $sheet->setCellValueByColumnAndRow(8, $cellule, $data[$i]['signaletique']['t_situation_sociale']);
+            $sheet->setCellValueByColumnAndRow(9, $cellule, $data[$i]['signaletique']['d_date_inscription_forem']);
+            $sheet->setCellValueByColumnAndRow(10, $cellule, $data[$i]['signaletique']['t_duree_innoccupation']);
+            $sheet->setCellValueByColumnAndRow(11, $cellule, $data[$i]['signaletique']['t_diplome']);
+            $sheet->setCellValueByColumnAndRow(12, $cellule, $data[$i]['signaletique']['t_type_etude']);
+            $sheet->setCellValueByColumnAndRow(13, $cellule, $data[$i]['signaletique']['d_date_debut_contrat']);
 
-            if ($data[$i]['signaletique'][0]['d_date_fin_contrat'] != null) {
+            if ($data[$i]['signaletique']['d_date_fin_contrat'] != null) {
 
                 /**
                  * Si on regénère un trimestrielle à une année antérieur on affiche pas les données due à une annèe postérieur
                  *
                  * Exemple si on génère 2012, on affiche pas les données de 2013
                  */
-                $date_fin = \DateTime::createFromFormat('d-m-Y', $data[$i]['signaletique'][0]['d_date_fin_contrat']);
+                $date_fin = \DateTime::createFromFormat('d-m-Y', $data[$i]['signaletique']['d_date_fin_contrat']);
 
                 $date_affiche = null;
                 if ($date_fin->format('Y') == $annee) {
-                    $date_affiche = $data[$i]['signaletique'][0]['d_date_fin_contrat'];
+                    $date_affiche = $data[$i]['signaletique']['d_date_fin_contrat'];
 
                 } else {
                     //on met la fin de contrat dans la même situation.

@@ -131,8 +131,8 @@ class Controller_Administration extends \Controller_Main
     }
 
     /**
-     * Private function that lists the items according to the key,
-     * if the key is found in the $items attribute
+     * Liste les items selon la clé, si celle-ci se trouve dans $items
+     * 
      * @param string $key
      * @param array $params     additionnal parameters
      * @return type
@@ -170,9 +170,10 @@ class Controller_Administration extends \Controller_Main
     }
 
     /**
-     * Private function that will displays the form to add an object,
-     * according to the key if the key is found in the $items attribute,
-     * and manages the action to effectively add it in the databases
+     * Affiche le formulaire permettant d'ajouter un objet,
+     * selon la clé si celle-ci se trouve dans $items.
+     * La définition du formulaire se trouve dans le Model.
+     * 
      * @param string $key
      * @return type
      * @throws HttpNotFoundException
@@ -218,9 +219,10 @@ class Controller_Administration extends \Controller_Main
     }
 
     /**
-     * Private function that will displays the form to updat an object,
-     * according to the key if the key is found in the $items attribute,
-     * and manages the action to effectively update it in the databases
+     * Affiche le formulaire pour modifier un objet,
+     * selon la clé si celle-ci est trouvée dans $items.
+     * La définition du formulaire se trouve dans le Model.
+     * 
      * @param string $key
      * @param int $id
      * @return type
@@ -268,8 +270,8 @@ class Controller_Administration extends \Controller_Main
     }
 
     /**
-     * Private function that will delete an object,
-     * according to the key if the key is found in the $items attribute
+     * Supprime un objet, sleon la clé si celle-ci est trouvée dans $items
+     * 
      * @param string $key
      * @param int $id
      * @throws HttpNotFoundException

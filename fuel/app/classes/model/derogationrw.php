@@ -23,7 +23,7 @@ class Model_Derogationrw extends Orm\Model {
         't_ressource',
         't_connaissance_eft'
     );
-
+    
     public static function validate($factory) {
         $val = Validation::forge($factory);
         return $val;

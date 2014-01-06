@@ -35,12 +35,22 @@ class Controller_Participant extends \Controller_Main
         }
     }
     
+    /**
+     * Affiche la liste des participants
+     * 
+     * @return type
+     */
     public function action_index()
     {
         $this->data['title'] = $this->title;
         return $this->theme->view($this->dir.'index', $this->data);
     }
     
+    /**
+     * Fonction utilisée par le Datatable pour afficher la liste des stagiaires (server side)
+     * 
+     * @return type
+     */
     public function action_ajax_liste()
     {        
         $columns = array('id_participant', 't_nom', 't_prenom', 'd_date_naissance', 't_lieu_naissance',
@@ -50,7 +60,6 @@ class Controller_Participant extends \Controller_Main
         $entry = \Model_Participant::query()->select('id_participant', 't_nom', 't_prenom', 't_nationalite', 
                              't_lieu_naissance', 'd_date_naissance', 't_registre_national',
                              't_numero_inscription_onem', 'b_is_actif');
-//        $entry->where('b_is_actif', '=', '1');
         
         if (isset($_GET['sSearch']) && $_GET['sSearch'] != "")
         {
@@ -126,9 +135,7 @@ class Controller_Participant extends \Controller_Main
     /**
      * Ajoute un nouveau participant
      * 
-     * @param type $id 
-     * 
-     * @todo fieldset, twig, etc
+     * @param int $id 
      */
     public function action_ajouter()
     {
@@ -212,8 +219,7 @@ class Controller_Participant extends \Controller_Main
     /**
      * Permet de réactiver un participant précédemment "supprimé"
      *
-     * @param type $id
-     * @param type $confirmation 
+     * @param int $id
      */
     public function action_reactiver($id)
     {
@@ -243,7 +249,7 @@ class Controller_Participant extends \Controller_Main
     /**
      * Modifie un participant selon l'id passé en paramètre.
      * 
-     * @param type $id 
+     * @param int $id 
      */
     public function action_modifier($id)
     {
@@ -347,8 +353,9 @@ class Controller_Participant extends \Controller_Main
     }
         
     /**
-     * Désactiver un participant
-     * @param type $id
+     * Désactive un participant
+     * 
+     * @param int $id
      */
     public function action_desactiver($id)
     {
@@ -365,14 +372,12 @@ class Controller_Participant extends \Controller_Main
             Session::set_flash('error', 'Impossible de désactiver le participant.');
         
         Response::redirect($this->dir . 'index');
-    }
-    
-    
+    }   
 
     /**
-     * Suppression d'un contact selon son id.
+     * Supprime d'un contact selon son id.
      * 
-     * @param type $id 
+     * @param int $id 
      */
     public function action_supprimer($id)
     {
@@ -394,9 +399,9 @@ class Controller_Participant extends \Controller_Main
     }
     
     /**
-     * Ajouter une adresse à un participant dont l'id est passé en paramètre.
+     * Ajoute une adresse à un participant dont l'id est passé en paramètre.
      *
-     * @param type $id 
+     * @param int $id 
      */
     public function action_ajouter_adresse($id)
     {
@@ -427,9 +432,9 @@ class Controller_Participant extends \Controller_Main
     }
     
     /**
-     * Modification d'une adresse selon son id passé en paramètre.
+     * Modifie d'une adresse selon son id passé en paramètre.
      *
-     * @param type $id 
+     * @param int $id 
      */
     public function action_modifier_adresse($id)
     {
@@ -473,9 +478,9 @@ class Controller_Participant extends \Controller_Main
     }
 
     /**
-     * Ajouter un contact à un participant.
+     * Ajoute un contact à un participant.
      * 
-     * @param type $id 
+     * @param int $id 
      */
     public function action_ajouter_contact($id)
     {
@@ -513,9 +518,9 @@ class Controller_Participant extends \Controller_Main
     }
 
     /**
-     * Modifier un contact selon son id passé en paramètre.
-     *c
-     * @param type $id 
+     * Modifie un contact selon son id passé en paramètre.
+     *
+     * @param int $id 
      */
     public function action_modifier_contact($id = NULL)
     {
@@ -571,9 +576,9 @@ class Controller_Participant extends \Controller_Main
     }
     
     /**
-     * Suppression d'une adresse selon son id.
+     * Supprime une adresse selon son id.
      * 
-     * @param type $id 
+     * @param int $id 
      */
     public function action_supprimer_adresse($id)
     {
@@ -604,9 +609,9 @@ class Controller_Participant extends \Controller_Main
     }
 
     /**
-     * Suppression d'un contact selon son id.
+     * Supprime un contact selon son id.
      * 
-     * @param type $id 
+     * @param int $id 
      */
     public function action_supprimer_contact($id)
     {

@@ -16,9 +16,8 @@ class Controller_Users extends Controller_Main
          * On récupère d'où on vient pour rediriger
          */
         $direction = Session::get('direction');
-        if (!isset($direction)) {
+        if (!isset($direction))
             $direction = Uri::create('');
-        }
 
         // Règle de validation
         $val = Validation::forge('users');
@@ -28,23 +27,28 @@ class Controller_Users extends Controller_Main
         // Message d'erreur
         $val->set_message('required', 'Veuillez remplir le champ :label.');
 
-        if ($val->run()) {
+        if ($val->run())
+        {
             $auth = Auth::instance();
-            if ($auth->login($val->validated('username'), $val->validated('password'))) {
+            if ($auth->login($val->validated('username'), $val->validated('password')))
+            {
                 //Important  ne pas effacer, cela me permet d'avoir l'id de la personne qui se connecte.
                 $id = $auth->get_user_id();
-                Session::set('id_login',$id[1]);
-                
+                \Session::set('id_login', $id[1]);
+
                 // Si le membre existe en db, on le log et on le renvoie là où il voulait aller
-                Response::redirect(Uri::create($direction));
-            } else {
+                \Response::redirect(Uri::create($direction));
+            }
+            else
+            {
                 // Sinon, on lui affiche les erreurs.
                 \Session::set_flash('error', 'Le login et le mot de passe ne correspondent pas.');
             }
-        } else {
-            if ($_POST) {
+        }
+        else
+        {
+            if ($_POST)
                 \Session::set_flash('error', $val->show_errors());
-            }
         }
 
         $this->data['title'] = "Identification";
@@ -69,6 +73,7 @@ class Controller_Users extends Controller_Main
         $this->data['title'] = "Droits insuffisants";
         return $this->theme->view('users/no_rights', $this->data);
     }
+
 }
 
 ?>

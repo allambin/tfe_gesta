@@ -42,19 +42,10 @@ class Model_Participant extends Orm\Model
         )
     );
     
-    protected static $_has_one = array(
-//        'checklist' => array(
-//            'key_from' => 'id_participant',
-//            'model_to' => 'Model_Checklist',
-//            'key_to' => 'participant_id',
-//            'cascade_save' => true,
-//            'cascade_delete' => true,
-//        )
-    );
-    
     /**
-     * Voir si ça peut pas devenir une fonction normale
-     * @return type
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
      */
     public static function get_primary_key_name()
     {
@@ -278,33 +269,11 @@ class Model_Participant extends Orm\Model
         )
     );
     
-//    public static function _init()
-//    {
-//        $types = \Model_Type_Enseignement::find('all', array('order_by' => array('t_nom' => 'ASC'), 'related' => array('enseignements' => array('order_by' => array('i_position' => 'ASC')))));
-//        
-//        $d = array('' => '');
-//        $t = array('' => '');
-//        foreach ($types as $type)
-//        {
-//            foreach ($type->enseignements as $enseignement)
-//            {
-//                if(preg_match('#dipl.*me#i', $type->t_nom))
-//                {
-//                    $d[$enseignement->t_valeur] = $enseignement->t_nom;
-//                    
-//                }
-//                else if(preg_match('#type#i', $type->t_nom))
-//                {
-//                    $t[$enseignement->t_valeur] = $enseignement->t_nom;
-//                }
-//            }
-//        }
-//
-//        static::$_properties['t_type_etude']['form']['options'] = $t;
-//        static::$_properties['t_diplome']['form']['options'] = $d;
-//        static::$_properties['t_nationalite']['form']['options'] = Cranberry\MyXML::getPaysAsSelect();
-//    }
-
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields, $scenario = null)
     {
         // Transformation de la date de naissance
@@ -385,34 +354,15 @@ class Model_Participant extends Orm\Model
         }
     }
     
-    public static function validate($factory, $id_participant = 0) 
-    {
-        $val = Validation::forge($factory);
-
-        $val->add_callable('\Cranberry\MyValidation');
-
-        $val->add_field('t_nom', 'Nom', 'required|max_length[50]');
-        $val->add_field('t_prenom', 'Prénom', 'required|max_length[50]');
-        $val->add_field('t_registre_national', 'Registre national', 'registreNational|unique_registre_national['.$id_participant.']');
-        $val->add_field('t_compte_bancaire', 'Compte bancaire', 'compteBancaire');
-        $val->add_field('t_gsm', 'GSM', 'exact_length[10]|valid_string[numeric]');
-        $val->add_field('t_gsm2', 'GSM', 'exact_length[10]|valid_string[numeric]');
-        $val->add_field('t_organisme_paiement_phone', 'Téléphone de l\'orgasnime', 'exact_length[9]|valid_string[numeric]');
-        $val->add_field('t_taille', 'Taille', 'max_length[3]|valid_string[numeric]');
-        $val->add_field('d_date_naissance', 'Date de naissance', 'required|checkdate|isMajeur');
-        $val->add_field('t_email', 'Email', 'valid_email');
-        $val->add_field('t_children', 'Enfants à charge', 'childrenData');
-
-        $val->set_message('required', 'Veuillez remplir le champ :label.');
-        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
-        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
-        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
-        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
-        $val->set_message('valid_email', 'Le champ :label est invalide.');
-        
-        return $val;
-    }
-    
+    /**
+     * Vérifie si l'utilisateur existe, via un tryptique nom - prénom - dob
+     * 
+     * @param string $nom
+     * @param string $prenom
+     * @param string $dob
+     * @param bool $actif
+     * @return bool
+     */
     public static function exists($nom, $prenom, $dob, $actif)
     {
         $query = Model_Participant::query()->where(array('t_nom' => $nom, 't_prenom' => $prenom, 'd_date_naissance' => $dob, 'b_is_actif' => $actif));

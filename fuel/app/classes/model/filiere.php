@@ -21,7 +21,7 @@ class Model_Filiere extends Orm\Model
             'cascade_delete' => false,
         )
     );
-
+    
 
 
     protected static $_properties = array(

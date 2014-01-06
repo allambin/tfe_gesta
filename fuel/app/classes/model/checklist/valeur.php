@@ -33,12 +33,28 @@ class Model_Checklist_Valeur extends Model
             'cascade_delete' => false,
         )
     );
-
+    
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
+    /**
+     * Renvoie le nom de la PK (utilisé dans l'administration)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
     }
     
+    /**
+     * Renvoie le tableau $list_properties, utilisé dans l'administration
+     * 
+     * @return array
+     */
     public static function get_list_properties()
     {
         $to_return = array();
@@ -48,6 +64,9 @@ class Model_Checklist_Valeur extends Model
         return $to_return;
     }
     
+    /**
+     * Permet de remplir les champs select depuis un autre Model
+     */
     public static function _init()
     {
         $types = DB::select()->from('checklist_section')->as_object()->execute();
@@ -58,27 +77,15 @@ class Model_Checklist_Valeur extends Model
         static::$_properties['section_id']['form']['options'] = $data;
     }
     
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields)
     {
         $this->t_nom = $fields['t_nom'];
         $this->section_id = $fields['section_id'];
-    }
-    
-    public static function validate($factory)
-    {
-        $val = Validation::forge($factory);
-        $val->add_field('t_nom', 'Tnom', 'required|max_length[255]');
-        $val->add_field('section_id', 'Section', 'required|valid_string[numeric]');
-
-        return $val;
-    }
-
-    public static function getCount($id)
-    {
-        $res = DB::select()->from('checklist_valeur')->where('section_id', '=', $id)->execute();
-
-        return DB::count_last_query();
-    }
-    
+    }    
 
 }

@@ -43,6 +43,11 @@ class Model_Contrat extends Orm\Model
         'type_contrat_id'
     );
     
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];

@@ -14,6 +14,7 @@ class Controller_Main extends \Fuel\Core\Controller
      * Permet ici de vérifier si le visiteur est authentifié. Si c'est le cas,
      * ses informations sont stockées dans $this->current_user.
      * Utilise le composant Auth de FuelPHP.
+     * Définit aussi quelques variables globales.
      */
     public function before()
     {

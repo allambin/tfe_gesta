@@ -28,11 +28,27 @@ class Model_Checklist_Section extends Model
         )
     );
     
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
+    /**
+     * Renvoie le nom de la PK (utilisé dans l'administration)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
     }
     
+    /**
+     * Renvoie le tableau $list_properties, utilisé dans l'administration
+     * 
+     * @return array
+     */
     public static function get_list_properties()
     {
         $to_return = array();
@@ -42,45 +58,14 @@ class Model_Checklist_Section extends Model
         return $to_return;
     }
     
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields)
     {
         $this->t_nom = $fields['t_nom'];
-    }
-    
-//    public static function validate($factory)
-//    {
-//        $val = Validation::forge($factory);
-//        $val->add_field('t_nom', 'Nom', 'required|max_length[255]');
-//
-//        $val->set_message('required', 'Veuillez remplir le champ :label.');
-//        
-//        return $val;
-//    }
-    
-    public static function getAsSelect()
-    {
-        $o_sections = \Model_Checklist_Section::find('all');
-        $sections = array();
-
-        foreach ($o_sections as $section)
-        {
-            $sections[$section->id_checklist_section] = $section->t_nom;
-        }
-        
-        return $sections;
-    }
-    
-    public static function getAsArray()
-    {
-        $result = \DB::select('*')->from('checklist_section')->as_assoc()->execute();
-
-        $liste = array();
-        foreach ($result as $res)
-        {
-            $liste[$res['id_checklist_section']] = $res['t_nom'];
-        }
-        
-        return $liste;
     }
 
 }

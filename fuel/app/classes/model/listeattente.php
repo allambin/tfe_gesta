@@ -57,6 +57,17 @@ class Model_Listeattente extends \Orm\Model {
         )
     );
     
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
@@ -100,28 +111,14 @@ class Model_Listeattente extends \Orm\Model {
             'cascade_delete' => false,
         )
     );
-
-//    public static function validate($factory) {
-//        $val = Validation::forge($factory);
-//
-//        $val->add_callable('\Cranberry\MyValidation');
-//
-//        $val->add_field('t_nom', 'Nom', 'required|max_length[50]');
-//        $val->add_field('t_prenom', 'Prénom', 'required|max_length[50]');
-//        $val->add_field('d_date_naissance', 'Date de naissance', 'required|isMajeur');
-//
-//        $val->set_message('required', 'Veuillez remplir le champ :label.');
-//        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
-//        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
-//        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
-//        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
-//        
-//        return $val;
-//    }
-
+    
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields)
     {
-//        die(print_r($fields));
         // Transformation de la date de naissance
         $dob = ($fields['d_date_naissance'] != NULL) ? date('Y/m/d', strtotime($fields['d_date_naissance'])) : NULL;
         $de = ($fields['d_date_entretien'] != NULL) ? date('Y/m/d', strtotime($fields['d_date_entretien'])) : NULL;

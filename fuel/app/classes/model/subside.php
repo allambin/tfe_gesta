@@ -11,7 +11,7 @@ class Model_Subside extends Orm\Model
         'id_subside',
         't_nom'
     );
-
+    
 
     public static function validate($factory)
     {

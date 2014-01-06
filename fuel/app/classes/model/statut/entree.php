@@ -50,14 +50,23 @@ class Model_Statut_Entree extends Model
         )
     );
     
+    /**
+     * Renvoie le nom de la PK (utilisé dans l'administration)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
     }
     
+    /**
+     * Permet de remplir les champs select depuis un autre Model
+     */
     public static function _init()
     {
-        // doit faire ça pour éviter le bug du "FrozenObject"
+        // on doit faire ça, au lieu de passer par le Model->find()
+        // pour éviter le bug du "FrozenObject"
         $types = DB::select()->from('type_statut')->as_object()->execute();
 
         foreach ($types as $t)
@@ -66,6 +75,11 @@ class Model_Statut_Entree extends Model
         static::$_properties['type_statut_id']['form']['options'] = $data;
     }
     
+    /**
+     * Renvoie le tableau $list_properties, utilisé dans l'administration
+     * 
+     * @return array
+     */
     public static function get_list_properties()
     {
         $to_return = array();
@@ -75,6 +89,11 @@ class Model_Statut_Entree extends Model
         return $to_return;
     }
     
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields)
     {
         $this->t_nom = $fields['t_nom'];
@@ -82,28 +101,5 @@ class Model_Statut_Entree extends Model
         $this->i_position = $fields['i_position'];
         $this->type_statut_id = $fields['type_statut_id'];
     }
-
-//    public static function validate($factory)
-//    {
-//        $val = Validation::forge($factory);
-//        $val->add_field('t_nom', 'Nom', 'required|max_length[255]');
-//        $val->add_field('t_valeur', 'Valeur', 'required');
-//
-//        $val->set_message('required', 'Veuillez remplir le champ :label.');
-//        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
-//
-//        return $val;
-//    }
-    
-//    public static function orm_notify(Model $model, $event)
-//    {
-//        \Log::info('I was notified of the event '.$event.' on a Model of class '.get_class($model));
-//    }
-//    
-//    public static function orm_notify(Model $model, $event)
-//    {
-//        die("GREEEEUH");
-//        \Log::info('I was notified of the event '.$event.' on a Model of class '.get_class($model));
-//    }
 
 }

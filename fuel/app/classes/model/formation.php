@@ -8,8 +8,6 @@ class Model_Formation extends Model
     protected static $_primary_key = array('id_formation');
     protected static $_table_name = 'formation';
 
-
-
     protected static $_properties = array(
         'id_formation',
         'd_date_fin_formation',
@@ -18,15 +16,20 @@ class Model_Formation extends Model
         'contrat_id',
     );
     
-//    protected static $_belongs_to = array(
-//        'contrat' => array(
-//            'key_from' => 'contrat_id',
-//            'model_to' => 'Model_contrat',
-//            'key_to' => 'id_contrat',
-//            'cascade_save' => true,
-//            'cascade_delete' => false,
-//        ),
-//    );
-
+    protected static $_observers = array(
+        'Observer_Logging' => array(
+            'events' => array('after_insert', 'after_update', 'after_delete'), 
+        )
+    );
+    
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
+    public static function get_primary_key_name()
+    {
+        return self::$_primary_key[0];
+    }
 
 }

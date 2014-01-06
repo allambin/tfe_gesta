@@ -3,21 +3,6 @@
 class Model_User extends \Orm\Model 
 {
     protected static $list_properties = array('username', 'email', 'group');
-
-//    protected static $_properties = array(
-//        'id',
-//        'username',
-//        'password',
-//        'group',
-//        'email',
-//        'last_login',
-//        'login_hash',
-//        'profile_fields',
-//        'is_actif',
-//        't_nom',
-//        't_prenom',
-//        't_acl'
-//    );
     
     protected static $_properties = array(
         'id',
@@ -95,34 +80,22 @@ class Model_User extends \Orm\Model
             'events' => array('after_insert', 'after_update', 'after_delete'), 
         )
     );
-
+    
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
     }
     
-//    public static function validate($factory, $required_password = true) 
-//    {
-//        $val = Validation::forge($factory);
-//
-//        $val->add_callable('\Cranberry\MyValidation');
-//        $val->add_field('username', 'Login', 'required');        
-//        if($required_password)
-//            $val->add_field('password', 'Mot de passe', 'required');
-//        
-//        $val->set_message('required', 'Veuillez remplir le champ :label.');
-//
-//        return $val;
-//    }
-
-//    public static function get_users()
-//    {
-//
-//        $query = \DB::select('id', 'username')->from('users')->execute();
-//        return $query;
-//
-//    }
-    
+    /**
+     * Renvoie le tableau $list_properties, utilisé dans l'administration
+     * 
+     * @return array
+     */
     public static function get_list_properties()
     {
         $to_return = array();
@@ -132,6 +105,11 @@ class Model_User extends \Orm\Model
         return $to_return;
     }
     
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigments($fields)
     {
         $this->username = $fields['username'];
@@ -146,6 +124,9 @@ class Model_User extends \Orm\Model
         $this->t_acl = $fields['t_acl'];
     }
     
+    /**
+     * Permet de remplir les champs select depuis un autre Model
+     */
     public static function _init()
     {
         $groups = \Config::get('simpleauth');
@@ -153,7 +134,6 @@ class Model_User extends \Orm\Model
 
         foreach ($groups as $key => $g)
         {
-//            group
             $data[$key] = $g['name'];
         }
 

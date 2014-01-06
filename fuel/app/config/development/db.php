@@ -6,7 +6,7 @@
 return array(
     'default' => array(
         'connection' => array(
-            'dsn' => 'mysql:host=localhost;dbname=gesta7',
+            'dsn' => 'mysql:host=localhost;dbname=gesta8',
             'username' => 'root',
             'password' => 'mysql',
         ),
@@ -17,7 +17,7 @@ return array(
             'username' => 'root',
             'password' => 'mysql',
             'host' => 'localhost',
-            'dbname' => 'gesta7'
+            'dbname' => 'gesta8'
         ),
         'profiling' => true
     ),

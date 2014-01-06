@@ -35,6 +35,11 @@ class Model_Adresse extends Orm\Model
         )
     );
     
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
@@ -103,23 +108,12 @@ class Model_Adresse extends Orm\Model
             'events' => array('after_insert', 'after_update', 'after_delete'), 
         )
     );
-
-    public static function validate($factory) 
-    {
-        $val = Validation::forge($factory);
-        $val->add_field('t_code_postal', 'Code postal', 'exact_length[4]');
-        $val->add_field('t_telephone', 'Téléphone', 'exact_length[9]');
-        $val->add_field('t_email', 'Email', 'valid_email');
-
-        $val->set_message('required', 'Veuillez remplir le champ :label.');
-        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
-        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
-        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
-        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
-        
-        return $val;
-    }
     
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields, $origin = null)
     {
         $this->t_nom_rue = $fields['t_nom_rue'];
@@ -136,24 +130,12 @@ class Model_Adresse extends Orm\Model
             $this->t_type = '';
         }
     }
-
-    /**
-     * Méthode mettant à 0 le champ t_courrier dans la table adresse,
-     * selon un id_participant et un id_adresse.
-     *
-     * @param type $participant
-     * @param type $adresse 
-     */
-    public static function updateDefaultAddress($participant, $adresse) {
-        DB::update('adresse')
-                ->set(array(
-                    't_courrier' => 0
-                ))
-                ->where('participant_id', '=', $participant)
-                ->and_where('id_adresse', '!=', $adresse)
-                ->execute();
-    }
     
+    /**
+     * Renvoie un string avec l'adresse formatée
+     * 
+     * @return string
+     */
     public function getFullAddress()
     {
         return $this->t_bte . ", " . $this->t_nom_rue . "<br />" . $this->t_code_postal . " " . $this->t_commune . "<br />" . $this->t_telephone;

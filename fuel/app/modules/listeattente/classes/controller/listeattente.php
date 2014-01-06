@@ -7,16 +7,13 @@ use Fuel\Core\Response;
 
 class Controller_Listeattente extends \Controller_Main
 {
-//    public $title = "Gestion de la liste d'attente";
-//    public $data = array();
-//    private $view_dir = 'listeattente/';
-//    private $partial_dir = 'listeattente/partials/';
+    
     public $title = 'Gestion de la liste d\'attente';
     public $data = array();
     private $dir = 'listeattente/';
     
     /**
-     * Redirige toute personne non membre du groupe "100"
+     * Redirige toute personne non membre du groupe "100" ou "70"
      */
     public function before()
     {
@@ -28,13 +25,17 @@ class Controller_Listeattente extends \Controller_Main
         }
     }
     
+    /**
+     * Fonction utilisée par le Datatable pour afficher la liste des stagiaires (server side)
+     * 
+     * @return type
+     */
     public function action_ajax_liste()
     {        
         $columns = array('id_liste_attente', 't_nom', 't_prenom', 't_nom', 'd_date_naissance', 'd_date_entretien', 'b_is_actif', ' ');
         
         $entry = \Model_Listeattente::query()->select('id_liste_attente', 't_nom', 't_prenom', 'groupe_id', 'd_date_naissance', 'd_date_entretien', 'b_is_actif');
         $entry->related(array('groupe' => array('select' => array('t_nom'))));
-//        $entry->where('b_is_actif', '=', '1');
         
         if (isset($_GET['sSearch']) && $_GET['sSearch'] != "")
         {
@@ -105,12 +106,22 @@ class Controller_Listeattente extends \Controller_Main
         return json_encode($return);
     }
     
+    /**
+     * Affiche l'index
+     * 
+     * @return type
+     */
     public function action_index()
     {
         $this->data['title'] = $this->title;
         return $this->theme->view($this->dir.'index', $this->data);
     }
 
+    /**
+     * Ajoute un stagiaire
+     * 
+     * @return type
+     */
     public function action_ajouter()
     {
         $this->data['title'] = $this->title . ' - Nouveau stagiaire';
@@ -167,11 +178,15 @@ class Controller_Listeattente extends \Controller_Main
         }
 
         $this->data['form'] = $form->build();
-//        $this->data['form_adresse'] = $form_adresse->build();
         $this->data['groupes'] = $groupes;
         return $this->theme->view($this->dir.'create', $this->data);
     }
 
+    /**
+     * Désactive un stagiaire
+     * 
+     * @param int $id
+     */
     public function action_desactiver($id)
     {
         if ($stagiaire = \Model_Listeattente::find($id))
@@ -210,15 +225,14 @@ class Controller_Listeattente extends \Controller_Main
         Response::redirect($this->dir . 'index');
     }
 
+    /**
+     * Confirme un stagiaire, ce qui le transforme en participant
+     * 
+     * @param int $id
+     */
     public function action_confirmer($id)
     {
         $stagiaire = \Model_Listeattente::find($id);
-
-//        $checklist = \Model_Checklist::find('first', array(
-//            'where' => array(
-//                'stagiaire' => $id
-//            )
-//        ));
         
         if (is_object($stagiaire))
         {
@@ -241,8 +255,6 @@ class Controller_Listeattente extends \Controller_Main
 
                 $stagiaire->b_is_actif = 0;
                 $stagiaire->save();
-                
-//                \Model_Checklist::saveParticipant($stagiaire->id, $participant->idparticipant);
 
                 \Session::set_flash('success', "Le participant a bien été réactivé.");
                 Response::redirect('participant/modifier/' . $participant->id_participant);
@@ -255,22 +267,8 @@ class Controller_Listeattente extends \Controller_Main
                 $new_participant->d_date_naissance = $stagiaire->d_date_naissance;
                 $new_participant->is_actif = 1;
 
-//                $adresse = \Model_Adresse::find($stagiaire->adresse);
-//                $new_adresse = new \Model_Adresse();
-//                $new_adresse->t_nom_centre = $adresse->t_nom_centre;
-//                $new_adresse->t_bte = $adresse->t_bte;
-//                $new_adresse->t_code_postal = $adresse->t_code_postal;
-//                $new_adresse->t_commune = $adresse->t_commune;
-//                $new_adresse->t_telephone = $adresse->t_telephone;
-//                $new_adresse->t_courrier = 0;
-
                 if ($new_participant->save())
                 {
-//                    \Model_Checklist::saveParticipant($id, $new_participant->idparticipant);
-                    
-//                    $new_adresse->participant = $new_participant->id_participant;
-//                    $new_adresse->save();
-
                     $stagiaire->b_is_actif = 0;
                     $stagiaire->save();
 
@@ -287,6 +285,12 @@ class Controller_Listeattente extends \Controller_Main
         Response::redirect($this->dir . 'index');
     }
 
+    /**
+     * Affiche la checklist du stagiaire
+     * 
+     * @param int $id
+     * @return type
+     */
     public function action_checklist($id)
     {
         $this->data['title'] = $this->title . ' - Checklist';
@@ -330,6 +334,11 @@ class Controller_Listeattente extends \Controller_Main
         return $this->theme->view($this->dir.'checklist', $this->data);
     }
 
+    /**
+     * Affiche la checklist en PDF pour permettre l'impression
+     * 
+     * @param int $id
+     */
     public function action_print_checklist($id)
     {
         $this->data['title'] = $this->title . ' - Checklist';

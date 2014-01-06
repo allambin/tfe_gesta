@@ -283,16 +283,6 @@ ul.nav
     border-radius: 3px;
 }
 
-#content ul.document li
-{
-    background-image: url("../img/document.png");
-}
-
-#content ul.document li a:hover
-{
-    background-image: url("../img/document-white.png");
-}
-
 /* TABLE */
 #content table th.actions
 {

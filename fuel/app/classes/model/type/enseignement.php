@@ -18,6 +18,11 @@ class Model_Type_Enseignement extends Model
         ),
     );
     
+    /**
+     * Renvoie le nom de la PK (utilisé dans l'administration)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
@@ -39,6 +44,11 @@ class Model_Type_Enseignement extends Model
         )
     );
     
+    /**
+     * Renvoie le tableau $list_properties, utilisé dans l'administration
+     * 
+     * @return array
+     */
     public static function get_list_properties()
     {
         $to_return = array();
@@ -48,6 +58,11 @@ class Model_Type_Enseignement extends Model
         return $to_return;
     }
     
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields)
     {
         $this->t_nom = $fields['t_nom'];

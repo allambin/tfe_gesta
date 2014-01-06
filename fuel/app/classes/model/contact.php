@@ -35,6 +35,11 @@ class Model_Contact extends Orm\Model
         )
     );
     
+    /**
+     * Renvoie le nom de la PK (utilisé dans les observers)
+     * 
+     * @return string
+     */
     public static function get_primary_key_name()
     {
         return self::$_primary_key[0];
@@ -85,21 +90,11 @@ class Model_Contact extends Orm\Model
         ),
     );
     
-    public static function validate($factory) 
-    {
-        $val = Validation::forge($factory);
-        $val->add_field('t_nom', 'Nom', 'required|max_length[50]');
-        $val->add_field('t_prenom', 'Prénom', 'required|max_length[50]');
-
-        $val->set_message('required', 'Veuillez remplir le champ :label.');
-        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
-        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
-        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
-        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
-        
-        return $val;
-    }
-    
+    /**
+     * Remplit les champs de l'objet avec le tableau passé en paramètre
+     * 
+     * @param array $fields
+     */
     public function set_massive_assigment($fields)
     {
         $adresse = new Model_Adresse();
@@ -120,17 +115,5 @@ class Model_Contact extends Orm\Model
         
         $this->adresse = $adresse;
     }
-
-    /**
-     * Renvoie l'id de l'adresse liée au contact.
-     *
-     * @param type $id
-     * @return type 
-     */
-//    public static function getIdAddress($id) 
-//    {
-//        return DB::select('adresse')->from('contact')
-//                        ->where('contact.id_contact', $id)->execute()->as_array();
-//    }
 
 }

@@ -1,6 +1,10 @@
 <?php
 
 namespace Statistique;
+
+use Fuel\Core\Response;
+use Fuel\Core\Input;
+
 /**
  *Gestion des liens de modification d'un participant.
  */
@@ -17,10 +21,10 @@ class Controller_Statistique extends \Controller_Main
     {
         parent::before();
 
-//        if (!\Auth::member(100)) {
-//            \Session::set('direction', '/statistique');
-//            \Response::redirect('users/login');
-//        }
+        if (!\Auth::member(100)) {
+            \Session::set('direction', '/statistique');
+            \Response::redirect('users/login');
+        }
 
     }
 
@@ -264,22 +268,12 @@ class Controller_Statistique extends \Controller_Main
 
     public function action_trimestre()
     {
-        $formData = \Input::post();
+        $formData = Input::post();
 
         $date = new \DateTime();
-        $date->setDate((int)$formData['annee'], 01, 01);
-
-        /**
-         * Nous devions récupérer les heures de l'année précedente.
-         * Maintenant nous devons récupérer toutes les heures antérieur à l'année en cours
-         * Je laisse pour historique et si jamais nous devons de nouveau changer.
-         * L'utilisation en état faite dans $db->getHeuresPrecedente
-         */
-        //$anneePrecedente = ((int)$formData['annee'] - 1);
-
+        $date->setDate((int) $formData['annee'], 01, 01);
 
         $db = new \Model_My_Statistique();
-
 
         /**
          * Récupération des contrat par filière et par dérogation
@@ -289,105 +283,104 @@ class Controller_Statistique extends \Controller_Main
         $formData['xml'] = \Model_Centre::find('first');
 
         $count = count($formData['annexe1'][1]);
-        $derogation = NULL;
-        $result = NULL;
 
+        for ($i = 0; $i < $count; $i++)
+        {
+            $derogation = NULL;
+            $result = NULL;
 
-        for ($i = 0; $i < $count; $i++) {
-            foreach ($formData['annexe1'][2] as $compteur) {
-                //$boucle++;
-
-                if ($formData['annexe1'][1][$i]['t_nom'] == $compteur['t_nom']) {
+            foreach ($formData['annexe1'][2] as $compteur)
+            {
+                if ($formData['annexe1'][1][$i]['t_nom'] == $compteur['t_nom'])
+                {
                     $derogation = $compteur['compteur'];
-                    $result = ((int)$formData['annexe1'][1][$i]['compteur']) - ((int)$compteur['compteur']);
-
+                    $result = ((int) $formData['annexe1'][1][$i]['compteur']) - ((int) $compteur['compteur']);
                 }
             }
 
             $formData['annexe1'][1][$i]['derogation'] = $derogation;
-            $formData['annexe1'][1][$i]['resultat'] = (int)$result;
+            $formData['annexe1'][1][$i]['resultat'] = (int) $result;
         }
 
-        $formData['agrement'] = $agrement = \Model_agrement::find($formData['agrement']);
+        $formData['agrement'] = \Model_agrement::find($formData['agrement']);
 
 
         /*
          * Récupération des filière en fonctions des agréments
          */
-        $filiere = $db->getFiliere($formData['agrement']->id_agrement);
+        $filieres = \Model_Filiere::find('all', array('where' => array(array('agrement_id', $formData['agrement']->id_agrement))));
 
         /*
          * Récupération de tout les contrats concerné par la filière durant l'année choisie
          */
-        foreach ($filiere as $filieres) {
-
+        $contratsTrimestre = $db->getContratTrimestreBis($date);
+        $idsParticipant = array();
+        $idsContrats = array();
+        foreach ($contratsTrimestre as $idFiliere => $values)
+            foreach ($values as $value)
+            {
+                $idsParticipant[] = $value['participant_id'];
+                $idsContrats[] = $value['id_contrat'];
+            }
+        
+        $idsParticipant = array_unique($idsParticipant);
+        $idsContrats = array_unique($idsContrats);
+        
+        $heuresPrecedentes = $db->getHeuresPrecedentesBis($idsParticipant, $date, "'+','$','@','#','/','='");        
+        $participants = $db->participantBis($idsParticipant);        
+        $finsFormation = $db->getFinFormationBis();
+        $heuresTotalContrat = $db->getHeuresTotalContratBis($date,$idsContrats);
+        $heuresTotalFiliere = $db->getHeuresTotalFiliereBis($date);
+        
+        foreach ($filieres as $filiere)
+        {
             /**
              * Récupération des contrats par filière
              */
-            $formData['filiere'][$filieres['t_nom']] = $db->getContratTrimestre($date, $filieres['id_filiere']);
+            $formData['filiere'][$filiere['t_nom']] = $contratsTrimestre[$filiere['id_filiere']];
+            $countContrat = count($formData['filiere'][$filiere['t_nom']]);
 
-
-            $countContrat = count($formData['filiere'][$filieres['t_nom']]);
-
-            for ($i = 0; $i < $countContrat; $i++) {
+            for ($i = 0; $i < $countContrat; $i++)
+            {
                 /**
                  * Recherche motif fin de contrat
                  */
-
-                $formData['filiere'][$filieres['t_nom']][$i]['type_fin_contrat'] = $db->getFinFormation($formData['filiere'][$filieres['t_nom']][$i]['id_contrat']);
+                $formData['filiere'][$filiere['t_nom']][$i]['type_fin_contrat'] = isset($finsFormation[$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']]) ? $finsFormation[$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']] : null;
 
                 /**
                  * Calcul des heures éffectuées l'année précédente
                  */
-
-                $formData['filiere'][$filieres['t_nom']][$i]['precedente'] =
-                    $db->getHeuresPrecedente($formData['filiere'][$filieres['t_nom']][$i]['participant_id'], $date, "'+','$','@','#','/','='");
+                $formData['filiere'][$filiere['t_nom']][$i]['precedente'] = isset($heuresPrecedentes[$formData['filiere'][$filiere['t_nom']][$i]['participant_id']]) ? $heuresPrecedentes[$formData['filiere'][$filiere['t_nom']][$i]['participant_id']] : 0;
                 /**
                  * Récupération des informations du stagiaire
                  */
-                $formData['filiere'][$filieres['t_nom']][$i]['signaletique'] =
-                    $db->participant($formData['filiere'][$filieres['t_nom']][$i]['participant_id'], $formData['filiere'][$filieres['t_nom']][$i]['id_contrat']);
+                $formData['filiere'][$filiere['t_nom']][$i]['signaletique'] = $participants[$formData['filiere'][$filiere['t_nom']][$i]['participant_id']][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']];
 
                 /**
                  * Calcule des heures de prestations pour l'année définie
                  */
-                $formData['filiere'][$filieres['t_nom']][$i]['eft'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'+'");
-                $formData['filiere'][$filieres['t_nom']][$i]['gratuit'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'$','#'");
-                $formData['filiere'][$filieres['t_nom']][$i]['payant'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'@'");
-                $formData['filiere'][$filieres['t_nom']][$i]['stage'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'='");
-                $formData['filiere'][$filieres['t_nom']][$i]['assimile'] = $db->getHeuresTotalContrat($date, $formData['filiere'][$filieres['t_nom']][$i]['id_contrat'], "'/'");
-
+                $formData['filiere'][$filiere['t_nom']][$i]['eft'] = isset($heuresTotalContrat['+'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']]) ? $heuresTotalContrat['+'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']] : 0;
+                $formData['filiere'][$filiere['t_nom']][$i]['gratuit'] = (isset($heuresTotalContrat['$'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']]) ? $heuresTotalContrat['$'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']] : 0) + (isset($heuresTotalContrat['#'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']]) ? $heuresTotalContrat['#'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']] : 0);
+                $formData['filiere'][$filiere['t_nom']][$i]['payant'] = isset($heuresTotalContrat['@'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']]) ? $heuresTotalContrat['@'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']] : 0;
+                $formData['filiere'][$filiere['t_nom']][$i]['stage'] = isset($heuresTotalContrat['='][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']]) ? $heuresTotalContrat['='][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']] : 0;
+                $formData['filiere'][$filiere['t_nom']][$i]['assimile'] = isset($heuresTotalContrat['/'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']]) ? $heuresTotalContrat['/'][$formData['filiere'][$filiere['t_nom']][$i]['id_contrat']] : 0;                
             }
 
-            for ($ii = 1; $ii < 13; $ii++) {
-
-                /**
-                 * Formation de la date pour l'extraire sur l'année et le mois
-                 */
-                $extract = $date->format('Y'). str_pad($ii, 2, 0, STR_PAD_LEFT);
-
-
-                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['eft'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'+'");
-                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['gratuit'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'$','#'");
-                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['payant'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'@'");
-                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['stage'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'='");
-                $formData['filiere'][$filieres['t_nom']]['mois'][$ii]['assimile'] = $db->getHeuresTotalFiliere($extract, $filieres['id_filiere'], "'/'");
-
+            for ($ii = 1; $ii < 13; $ii++)
+            {
+                $formData['filiere'][$filiere['t_nom']]['mois'][$ii]['eft'] = isset($heuresTotalFiliere['+'][$ii][$filiere['id_filiere']]) ? $heuresTotalFiliere['+'][$ii][$filiere['id_filiere']] : 0;
+                $formData['filiere'][$filiere['t_nom']]['mois'][$ii]['gratuit'] = (isset($heuresTotalFiliere['$'][$ii][$filiere['id_filiere']]) ? $heuresTotalFiliere['$'][$ii][$filiere['id_filiere']] : 0) + (isset($heuresTotalFiliere['#'][$ii][$filiere['id_filiere']]) ? $heuresTotalFiliere['#'][$ii][$filiere['id_filiere']] : 0);
+                $formData['filiere'][$filiere['t_nom']]['mois'][$ii]['payant'] = isset($heuresTotalFiliere['@'][$ii][$filiere['id_filiere']]) ? $heuresTotalFiliere['@'][$ii][$filiere['id_filiere']] : 0;
+                $formData['filiere'][$filiere['t_nom']]['mois'][$ii]['stage'] = isset($heuresTotalFiliere['='][$ii][$filiere['id_filiere']]) ? $heuresTotalFiliere['='][$ii][$filiere['id_filiere']] : 0;
+                $formData['filiere'][$filiere['t_nom']]['mois'][$ii]['assimile'] = isset($heuresTotalFiliere['/'][$ii][$filiere['id_filiere']]) ? $heuresTotalFiliere['/'][$ii][$filiere['id_filiere']] : 0;
             }
-
-
         }
 
         $formData['annexe1'][1] = \SplFixedArray::fromArray($formData['annexe1'][1]);
         $formData['annexe1'][1]->setSize(24);
 
         \Maitrepylos\Excel\L3excel::excel($formData);
-        
-        $this->template->title = 'Gestion des documents';
-        $this->template->content = \View::forge('test');
     }
-
-
 
     public function action_menu($id)
     {

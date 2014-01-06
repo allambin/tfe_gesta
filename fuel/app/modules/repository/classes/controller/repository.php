@@ -22,7 +22,7 @@ class Controller_Repository extends \Controller_Main
     }
     
     /**
-     * Display the status of the git repository
+     * Affiche le statut du repository Github
      */
     public function action_status()
     {
@@ -47,7 +47,7 @@ class Controller_Repository extends \Controller_Main
     }
     
     /**
-     * Update the repository if there's no local changes
+     * Met à jour l'application s'il n'y a aucune modification locale
      */
     public function action_update()
     {
