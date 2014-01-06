@@ -4,17 +4,6 @@
 /* mauve dark : #611c49 */
 /* mauve light : #6c2d58 */
 
-
-/*@media only screen and (max-width : 480px)
-{*/
-    
-    
-.navbar
-{
-    /*display: none;*/
-}
-/*}*/
-
 /* --= USEFUL CLASS =-- */
 .pull-center 
 {
@@ -54,6 +43,19 @@ div.jGrowl div.jGrowl-notification.success
     background: #bed733;
     border: 0px;
     color: black;
+}
+
+.alert-error
+{
+    padding: 5px;
+    border: 1px solid #b94a48;
+}
+
+.alert-success
+{
+    padding: 5px;
+    border: 1px solid #468847;
+    margin-bottom: 10px;
 }
 
 /* --= HEADER =--*/
@@ -104,7 +106,7 @@ ul.nav
 /* --= MENU PILLS =-- */
 .nav-pills > .active > a, .nav-pills > .active > a:hover
 {
-    background-color: #611c49;
+    background: none;
 }
 
 /* --= CONTENT =--*/
@@ -334,6 +336,11 @@ ul.nav
     border-right: 1px solid #dddddd;
 }
 
+table th.six
+{
+    width: 15%;
+}
+
 /* TABLE FORM */
 table.form
 {
@@ -351,7 +358,18 @@ table.form table
     width: 100%;
 }
 
-
+/* --= POPUP FORM =-- */
+#dialog-adresse label, #dialog-contact label
+{
+    display: block;
+    width: 130px;
+    background-color: #bcd428;
+    float: left;
+    text-align: right;
+    line-height: 2.1em;
+    padding: 0 0.8em 0 0;
+    margin-right: 3px;
+}
 
 /* --= FOOTER =-- */
 #footer 
@@ -361,8 +379,6 @@ table.form table
     margin-top: 70px;
     padding: 70px 0;
 }
-
-
 
 /* --= HEURES =-- */
 #content form.form_heures
@@ -408,8 +424,6 @@ td.wk
 {
     background-color: #90EE90;
 }
-
-
 
 table.table_heures_details
 {
@@ -475,21 +489,15 @@ table.table_heures_details
     body { font-size: 50%; }
 }
 
-.alert-error
+/* --= JQUERY CORRECTIONS =-- */
+.ui-dialog .ui-dialog-titlebar-close span
 {
-    padding: 5px;
-    border: 1px solid #b94a48;
+    margin: 0;
 }
 
-.alert-success
+.ui-button-icon-only .ui-icon, .ui-button-text-icon-primary .ui-icon, .ui-button-text-icon-secondary .ui-icon, .ui-button-text-icons .ui-icon, .ui-button-icons-only .ui-icon
 {
-    padding: 5px;
-    border: 1px solid #468847;
-    margin-bottom: 10px;
-}
-
-
-table th.six
-{
-    width: 15%;
+    position: absolute;
+    top: 0px;
+    left: 0px;
 }

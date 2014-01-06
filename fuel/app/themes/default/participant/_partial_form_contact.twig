@@ -1,10 +1,4 @@
 <div class="control-group">
-    {{ form_label('Type', 't_type', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_type', input_post('t_type', (contact is not null) ? contact.t_type : '')) }}
-    </div>
-</div>
-<div class="control-group">
     {% set t = {pro: 'Pro', famille: 'Famille', urgence: 'Urgence'} %}
     {% for key, value in t %}
         {% set a = {} %}
@@ -16,51 +10,48 @@
         {{ value }} {{ form_checkbox('t_cb_type[]', key, a) }}
     {% endfor %}
 </div>
-<div class="control-group">
-    {{ form_label('Civilité', 't_civilite', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_select('t_civilite', input_post('t_civilite', (contact is not null) ? contact.t_civilite : ''), {'': '', 'Monsieur': 'Monsieur', 'Madame': 'Madame'}) }}
-    </div>
-</div>
-<div class="control-group">
-    {{ form_label('Nom', 't_nom', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_nom', input_post('t_nom', (contact is not null) ? contact.t_nom : '')) }}
-    </div>
-</div>
-<div class="control-group">
-    {{ form_label('Prénom', 't_prenom', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_prenom', input_post('t_prenom', (contact is not null) ? contact.t_prenom : '')) }}
-    </div>
-</div>
-<div class="control-group">
-    {{ form_label('Rue', 't_nom_rue', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_nom_rue', input_post('t_nom_rue', (contact is not null and contact.adresse) ? contact.adresse.t_nom_rue : '')) }}
-    </div>
-</div>
-<div class="control-group">
-    {{ form_label('Bte', 't_bte', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_bte', input_post('t_bte', (contact is not null and contact.adresse) ? contact.adresse.t_bte : '')) }}
-    </div>
-</div>
-<div class="control-group">
-    {{ form_label('CP', 't_code_postal', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_code_postal', input_post('t_code_postal', (contact is not null and contact.adresse) ? contact.adresse.t_code_postal : '')) }}
-    </div>
-</div>
-<div class="control-group">
-    {{ form_label('Commune', 't_commune', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_commune', input_post('t_commune', (contact is not null and contact.adresse) ? contact.adresse.t_commune : '')) }}
-    </div>
-</div>
-<div class="control-group">
-    {{ form_label('Téléphone', 't_telephone', {'class': 'control-label'}) }}
-    <div class="controls">
-    {{ form_input('t_telephone', input_post('t_telephone', (contact is not null and contact.adresse) ? contact.adresse.t_telephone : '')) }}
-    </div>
-</div>
+
+<table>
+    <tr>
+        <td class="">{{ form_label('Type', 't_type', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_type', input_post('t_type', (contact is not null) ? contact.t_type : '')) }} </td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('Civilité', 't_civilite', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_select('t_civilite', input_post('t_civilite', (contact is not null) ? contact.t_civilite : ''), {'': '', 'Monsieur': 'Monsieur', 'Madame': 'Madame'}) }}</td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('Nom', 't_nom', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_nom', input_post('t_nom', (contact is not null) ? contact.t_nom : '')) }}</td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('Prénom', 't_prenom', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_prenom', input_post('t_prenom', (contact is not null) ? contact.t_prenom : '')) }}</td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('Rue', 't_nom_rue', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_nom_rue', input_post('t_nom_rue', (contact is not null and contact.adresse) ? contact.adresse.t_nom_rue : '')) }}</td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('Bte', 't_bte', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_bte', input_post('t_bte', (contact is not null and contact.adresse) ? contact.adresse.t_bte : '')) }}</td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('CP', 't_code_postal', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_code_postal', input_post('t_code_postal', (contact is not null and contact.adresse) ? contact.adresse.t_code_postal : '')) }}</td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('Commune', 't_commune', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_commune', input_post('t_commune', (contact is not null and contact.adresse) ? contact.adresse.t_commune : '')) }}</span> </td>
+    </tr>
+    <tr>
+        <td class="">{{ form_label('Téléphone', 't_telephone', {'class': 'control-label'}) }}</td>
+        <td class="">{{ form_input('t_telephone', input_post('t_telephone', (contact is not null and contact.adresse) ? contact.adresse.t_telephone : '')) }}</span> </td>
+    </tr>
+    <tr>
+        <td class=""></td>
+        <td class=""><input type="submit" value="Ajouter" class="btn medium primary" id="form_submit" name="submit" /> <span></span> </td>
+    </tr>
+
+</table>
+
