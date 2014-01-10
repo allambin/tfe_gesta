@@ -5,7 +5,7 @@ namespace Cranberry;
 use Fuel\Core\DB;
 use Fuel\Core\Date;
 
-class MyValidation 
+class MyValidation
 {
 
     /**
@@ -13,8 +13,8 @@ class MyValidation
      * Le parametre $actif permet de sélectionner soit les participants actifs,
      * soit ceux qui ont été "supprimés".
      */
-    public static function exists($nom, $prenom, $datenaissance, $actif) 
-                {
+    public static function exists($nom, $prenom, $datenaissance, $actif)
+    {
         $result = DB::select("tnom")
                         ->where('t_nom', '=', $nom)
                         ->and_where('t_prenom', '=', $prenom)
@@ -24,25 +24,6 @@ class MyValidation
 
         return ($result->count() > 0);
     }
-    
-    /**
-     * Vérifie l'unicité du login (username)
-     *
-     * @param type $val
-     * @return type 
-     */
-    public static function _validation_unique_login($val)
-    {
-        $field = 'username';
-        
-        $result = DB::select("LOWER (\"$field\")")
-            ->where('username', '=', \Str::lower($val))
-            ->from('users')->execute();
-
-        \Validation::active()->set_message('unique_login', 'Ce login existe déjà.');
-        
-        return ! ($result->count() > 0);
-    }
 
     /**
      * Vérifie si le participant est majeur.
@@ -50,18 +31,18 @@ class MyValidation
      * @param type $val
      * @return type 
      */
-    public static function _validation_isMajeur($val) 
+    public static function _validation_is_majeur($val)
     {
         $d1 = new \DateTime($val);
         $d2 = new \DateTime("now");
         $diff = $d1->diff($d2);
         $years = $diff->format('%y');
 
-        \Validation::active()->set_message('isMajeur', 'Le participant doit être majeur.');
+        \Validation::active()->set_message('is_majeur', 'Le participant doit être majeur.');
 
         return ($years >= 18) ? true : false;
     }
-    
+
     /**
      * Vérifie le format de la date (dd-mm-yyyy)
      * 
@@ -72,11 +53,9 @@ class MyValidation
     {
         \Validation::active()->set_message('checkdate', 'La date de naissance est invalide (dd-mm-yyyy)');
         $date = explode('-', $val);
-        if(count($date) == 3 && checkdate($date[1], $date[0], $date[2]))
-        {
+        if (count($date) == 3 && checkdate($date[1], $date[0], $date[2]))
             return true;
-        }
-        
+
         return false;
     }
 
@@ -86,15 +65,16 @@ class MyValidation
      * @param type $val
      * @return type 
      */
-    public static function _validation_registreNational($val) 
+    public static function _validation_registre_national($val)
     {
-        \Validation::active()->set_message('registreNational', 'Le registre national doit comporter 11 chiffres.');
-        if($val != null || !empty($val))
+        \Validation::active()->set_message('registre_national', 'Le registre national doit comporter 11 chiffres.');
+        if ($val != null || !empty($val))
         {
             $registre = \Cranberry\MySanitarization::filterDigits($val);
 
             $nbr = strlen($registre);
-            if ($nbr != 11) {
+            if ($nbr != 11)
+            {
                 return false;
             }
             return true;
@@ -111,14 +91,15 @@ class MyValidation
      * @param type $val
      * @return type 
      */
-    public static function _validation_compteBancaire($val) 
+    public static function _validation_compte_bancaire($val)
     {
-        \Validation::active()->set_message('compteBancaire', 'Le compte bancaire doit comporter 12 chiffres.');
-        if($val != null || !empty($val))
+        \Validation::active()->set_message('compte_bancaire', 'Le compte bancaire doit comporter 12 chiffres.');
+        if ($val != null || !empty($val))
         {
             $compte = \Cranberry\MySanitarization::filterDigits($val);
             $nbr = strlen($compte);
-            if ($nbr != 12) {
+            if ($nbr != 12)
+            {
                 return false;
             }
             return true;
@@ -128,85 +109,89 @@ class MyValidation
             return true;
         }
     }
-    
-        /**
-         * Vérifie l'unicité d'une année dans la table heures_prestation
-         *
-         * @param type $val 
-         */
-        public static function _validation_unique_annee($val, $idgroupe)
-        {
-            \Validation::active()->set_message('unique_annee', 'Cette année existe déjà pour ce groupe.');
-            $result = DB::select("annee")
-                ->where("annee", '=', $val)
-                ->where("groupe_id", "=", $idgroupe)
-                ->from('heures_prestations')->execute();
 
-            return ! ($result->count() > 0);
-        }
-        
-        public static function _validation_childrenData($val)
-        {
-            if(count($val) == 1 || empty($val))
-                return true;
-            
-            foreach ($val as $input) 
-            {
-                if($val != null && empty($input))
-                    return false;
-            }
-            
-            \Validation::active()->set_message('childrenData', 'Veuillez entrer toutes les informations concernant les enfants à charge.');
+    /**
+     * Vérifie l'unicité d'une année dans la table heures_prestation
+     *
+     * @param type $val 
+     */
+    public static function _validation_unique_annee($val, $idgroupe)
+    {
+        \Validation::active()->set_message('unique_annee', 'Cette année existe déjà pour ce groupe.');
+        $result = DB::select("annee")
+                        ->where("annee", '=', $val)
+                        ->where("groupe_id", "=", $idgroupe)
+                        ->from('heures_prestations')->execute();
 
+        return !($result->count() > 0);
+    }
+
+    /**
+     * Vérifie les données sur les enfants à charge
+     * 
+     * @param type $val
+     * @return boolean
+     */
+    public static function _validation_children_data($val)
+    {
+        \Validation::active()->set_message('children_data', 'Veuillez entrer toutes les informations concernant les enfants à charge.');
+
+        if (count($val) == 1 || empty($val))
             return true;
-        }
-        
-        /**
-         * Vérifie l'unicité du nom d'une activité
-         * @param type $val
-         * @return type
-         */
-        public static function _validation_uniqueActivityName($val)
+
+        foreach ($val as $input)
         {
-            $field = 't_nom';
-
-            $result = DB::select("LOWER (\"$field\")")
-                ->where($field, '=', \Str::lower($val))
-                ->from('activite')->execute();
-
-            \Validation::active()->set_message('uniqueActivityName', 'Ce nom existe déjà.');
-
-            return ! ($result->count() > 0);
+            if ($val != null && empty($input))
+                return false;
         }
-        
-        /**
-         * Vérifie l'unicité du nom d'une activité
-         * @param type $val
-         * @return type
-         */
-        public static function _validation_unique_registre_national($val, $id = 0)
-        {
-            $val = trim($val);
-            if(empty($val))
-                return true;
-            
-            $field = 't_registre_national';
 
-            $query = DB::select("LOWER (\"$field\")")
+        return true;
+    }
+
+    /**
+     * Vérifie l'unicité du nom d'une activité
+     * @param type $val
+     * @return type
+     */
+    public static function _validation_uniqueActivityName($val)
+    {
+        \Validation::active()->set_message('uniqueActivityName', 'Ce nom existe déjà.');
+
+        $field = 't_nom';
+
+        $result = DB::select("LOWER (\"$field\")")
+                        ->where($field, '=', \Str::lower($val))
+                        ->from('activite')->execute();
+
+        return !($result->count() > 0);
+    }
+
+    /**
+     * Vérifie l'unicité du nom d'une activité
+     * @param type $val
+     * @return type
+     */
+    public static function _validation_unique_registre_national($val, $id = null)
+    {
+        \Validation::active()->set_message('unique_registre_national', 'Ce registre national existe déjà.');
+
+        $val = trim($val);
+        if (empty($val))
+            return true;
+
+        $field = 't_registre_national';
+
+        $query = DB::select("LOWER (\"$field\")")
                 ->where($field, '=', \Str::lower($val))
                 ->from('participant');
-            
-            if($id != 0)
-            {
-                $query->where('id_participant', '<> ', $id);
-            }
-            
-            $result = $query->execute();
 
-            \Validation::active()->set_message('unique_registre_national', 'Ce registre national existe déjà.');
+        if ($id)
+            $query->where('id_participant', '<> ', $id);
 
-            return ! ($result->count() > 0);
-        }
+        $result = $query->execute();
+
+        return !($result->count() > 0);
+    }
 
 }
 

@@ -361,6 +361,12 @@ table.form table
     margin-right: 3px;
 }
 
+/* --= DATATABLES =-- */
+.mydatatables
+{
+    margin-top: 50px;
+}
+
 /* --= FOOTER =-- */
 #footer 
 {

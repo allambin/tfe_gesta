@@ -57,12 +57,6 @@ class Model_Listeattente extends \Orm\Model {
         )
     );
     
-    protected static $_observers = array(
-        'Observer_Logging' => array(
-            'events' => array('after_insert', 'after_update', 'after_delete'), 
-        )
-    );
-    
     /**
      * Renvoie le nom de la PK (utilisé dans les observers)
      * 

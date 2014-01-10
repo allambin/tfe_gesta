@@ -115,5 +115,20 @@ class Model_Contact extends Orm\Model
         
         $this->adresse = $adresse;
     }
+    
+    public static function validate($factory)
+    {
+        $val = Validation::forge($factory);
+        $val->add_field('t_nom', 'Nom', 'required|max_length[50]');
+        $val->add_field('t_prenom', 'Prénom', 'required|max_length[50]');
+
+        $val->set_message('required', 'Veuillez remplir le champ :label.');
+        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
+        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
+        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
+        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
+
+        return $val;
+    }
 
 }

@@ -456,11 +456,14 @@ class Controller_Participant extends \Controller_Main
             if ($fieldset->validation()->run() == true)
             {
                 $fields = $fieldset->validated();
-
                 $adresse->set_massive_assigment($fields);
+                $isDefault = $adresse->t_courrier;
 
                 if ($adresse->save())
                 {
+                    if($isDefault)
+                        \DB::query("UPDATE adresse SET t_courrier = 0 WHERE id_adresse <> $id")->execute();
+                    
                     Session::set_flash('success', "L'adresse a bien été mise à jour.");
                     Response::redirect($this->dir.'modifier/'.$adresse->participant_id);
                 }
@@ -507,7 +510,7 @@ class Controller_Participant extends \Controller_Main
 
                 if ($participant->save())
                     Session::set_flash('success', "L'adresse a bien été créée.");
-            }
+                }
             else
             {
                 Session::set_flash('error', $val->show_errors());

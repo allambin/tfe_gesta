@@ -78,7 +78,7 @@ class Model_Participant extends Orm\Model
         'd_date_naissance' => array(
             'data_type' => 'text',
             'label' => 'Date de naissance',
-            'validation' => array('required', 'checkdate', 'isMajeur')
+            'validation' => array('required', 'checkdate', 'is_majeur')
         ),
         't_sexe' => array(
             'data_type' => 'text',
@@ -117,12 +117,12 @@ class Model_Participant extends Orm\Model
         't_registre_national' => array(
             'data_type' => 'text',
             'label' => 'Registre national',
-            'validation' => array('registreNational')
+            'validation' => array('registre_national')
         ),
         't_compte_bancaire' => array(
             'data_type' => 'text',
             'label' => 'Compte bancaire',
-            'validation' => array('compteBancaire')
+            'validation' => array('compte_bancaire')
         ),
         't_pointure' => array(
             'data_type' => 'text',
@@ -137,7 +137,7 @@ class Model_Participant extends Orm\Model
         't_enfants_charge' => array(
             'data_type' => 'text',
             'label' => 'Enfants à charge',
-            'validation' => array(),
+            'validation' => array('children_data'),
             'form' => array('type' => 'select', 'options' => array('' => '', 'Oui' => 'Oui', 'Non' => 'Non'))
         ),
         't_mutuelle' => array(
@@ -248,7 +248,7 @@ class Model_Participant extends Orm\Model
         't_email' => array(
             'data_type' => 'text',
             'label' => 'Email',
-            'validation' => array('required', 'max_length'=>array(255))
+            'validation' => array('required', 'max_length'=>array(255), 'valid_email')
         ),
         't_children' => array(
             'data_type' => 'text',
@@ -291,7 +291,7 @@ class Model_Participant extends Orm\Model
             $registre = \Cranberry\MySanitarization::filterRegistreNational($fields['t_registre_national']);
         $this->t_registre_national = $registre;
         
-        if($scenario != 'eid')
+        if($scenario != 'eid') // pour tous les scenarios SAUF eid
         {
             $this->t_gsm = $fields['t_gsm'];
             $this->t_gsm2 = $fields['t_gsm2'];
@@ -308,7 +308,7 @@ class Model_Participant extends Orm\Model
             $this->t_compte_bancaire = $compte;
         }
         
-        if($scenario == 'update')
+        if($scenario == 'update') // seulement pour l'update'
         {
             $children = isset($fields['t_children']) ? $fields['t_children'] : '' ;
             if($fields['t_enfants_charge'] == 'Non' || $fields['t_enfants_charge'] == '')
@@ -367,6 +367,32 @@ class Model_Participant extends Orm\Model
     {
         $query = Model_Participant::query()->where(array('t_nom' => $nom, 't_prenom' => $prenom, 'd_date_naissance' => $dob, 'b_is_actif' => $actif));
         return ($query->count() > 0) ? true : false;
+    }
+    
+    public static function validate($factory, $id_participant = 0)
+    {
+        $val = Validation::forge($factory);
+        $val->add_callable('\Cranberry\MyValidation');
+        $val->add_field('t_nom', 'Nom', 'required|max_length[50]');
+        $val->add_field('t_prenom', 'Prénom', 'required|max_length[50]');
+        $val->add_field('t_registre_national', 'Registre national', 'registre_national|unique_registre_national[' . $id_participant . ']');
+        $val->add_field('t_compte_bancaire', 'Compte bancaire', 'compte_bancaire');
+        $val->add_field('t_gsm', 'GSM', 'exact_length[10]|valid_string[numeric]');
+        $val->add_field('t_gsm2', 'GSM', 'exact_length[10]|valid_string[numeric]');
+        $val->add_field('t_organisme_paiement_phone', 'Téléphone de l\'orgasnime', 'exact_length[9]|valid_string[numeric]');
+        $val->add_field('t_taille', 'Taille', 'max_length[3]|valid_string[numeric]');
+        $val->add_field('d_date_naissance', 'Date de naissance', 'required|checkdate|is_majeur');
+        $val->add_field('t_email', 'Email', 'valid_email');
+        $val->add_field('t_children', 'Enfants à charge', 'children_data');
+
+        $val->set_message('required', 'Veuillez remplir le champ :label.');
+        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
+        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
+        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
+        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
+        $val->set_message('valid_email', 'Le champ :label est invalide.');
+
+        return $val;
     }
 
 }

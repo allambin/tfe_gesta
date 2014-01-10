@@ -1,5 +1,7 @@
 <?php
 
+use Cranberry\MyValidation;
+
 class Model_User extends \Orm\Model 
 {
     protected static $list_properties = array('username', 'email', 'group');
@@ -9,7 +11,7 @@ class Model_User extends \Orm\Model
         'username' => array( //column name
             'data_type' => 'string',
             'label' => 'Nom d\'utilisateur', //label for the input field
-            'validation' => array('required', 'max_length'=>array(100), 'min_length'=>array(5)) //validation rules
+            'validation' => array('required', 'max_length'=>array(100), 'min_length'=>array(5), 'unique_login') //validation rules
         ),
         'password' => array( 
             'data_type' => 'password',
@@ -26,21 +28,21 @@ class Model_User extends \Orm\Model
         'email' => array( 
             'data_type' => 'string',
             'label' => 'Email',
-            'validation' => array('required', 'max_length'=>array(255)) //validation rules
+            'validation' => array('required', 'max_length'=>array(255), 'valid_email') //validation rules
         ),
         'last_login' => array( 
             'form' => array(
-                'type' => false, // this prevents this field from being rendered on a form
+                'type' => false,
             ),
         ),
         'login_hash' => array( 
             'form' => array(
-                'type' => false, // this prevents this field from being rendered on a form
+                'type' => false,
             ),
         ),
         'profile_fields' => array( 
             'form' => array(
-                'type' => false, // this prevents this field from being rendered on a form
+                'type' => false,
             ),
         ),
         'is_actif' => array( 
@@ -110,7 +112,7 @@ class Model_User extends \Orm\Model
      * 
      * @param array $fields
      */
-    public function set_massive_assigments($fields)
+    public function set_massive_assigment($fields)
     {
         $this->username = $fields['username'];
         $this->password = \Auth::instance()->hash_password($fields['password']);
@@ -138,6 +140,25 @@ class Model_User extends \Orm\Model
         }
 
         static::$_properties['group']['form']['options'] = $data;
+    }
+    
+    /**
+     * Vérifie l'unicité du login (username)
+     *
+     * @param type $val
+     * @return type 
+     */
+    public static function _validation_unique_login($val)
+    {
+        $field = 'username';
+
+        $result = DB::select("LOWER (\"$field\")")
+                        ->where('username', '=', \Str::lower($val))
+                        ->from('users')->execute();
+
+        \Validation::active()->set_message('unique_login', 'Ce login existe déjà.');
+
+        return !($result->count() > 0);
     }
 
 }

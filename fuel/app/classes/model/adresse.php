@@ -75,9 +75,10 @@ class Model_Adresse extends Orm\Model
         't_courrier' => array(
             'data_type' => 'text',
             'label' => 'Défaut',
-            'validation' => array('max_length'=>array(255)),
+            'validation' => array(),
             'form' => array(
-                'type' => 'checkbox'
+                'type' => 'checkbox',
+                'value' => 1
             )
         ),
         'participant_id' => array(
@@ -139,6 +140,22 @@ class Model_Adresse extends Orm\Model
     public function getFullAddress()
     {
         return $this->t_bte . ", " . $this->t_nom_rue . "<br />" . $this->t_code_postal . " " . $this->t_commune . "<br />" . $this->t_telephone;
+    }
+    
+    public static function validate($factory)
+    {
+        $val = Validation::forge($factory);
+        $val->add_field('t_code_postal', 'Code postal', 'exact_length[4]');
+        $val->add_field('t_telephone', 'Téléphone', 'exact_length[9]');
+        $val->add_field('t_email', 'Email', 'valid_email');
+
+        $val->set_message('required', 'Veuillez remplir le champ :label.');
+        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
+        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
+        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
+        $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
+
+        return $val;
     }
 
 }
