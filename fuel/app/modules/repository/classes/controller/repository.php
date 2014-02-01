@@ -37,8 +37,6 @@ class Controller_Repository extends \Controller_Main
             $error = "Le chemin vers le repository Github n'est pas défini. Veuillez vous référer au document app/config/repository.php.";
         else
         {
-            
-            
             $portal['incoming_changes'] = shell_exec("cd $path && git fetch && git log ..origin/master");
             $portal['modified_files'] = shell_exec("cd $path && git status -s");
         }
@@ -59,8 +57,9 @@ class Controller_Repository extends \Controller_Main
         $local_changes = shell_exec("cd $path && git status -s");
         if(empty($local_changes))
         {
+            // Pour que la commande suivante fonctionne, le dossier
+            // doit être en rw pour le groupe (www-data)
             shell_exec("cd $path && git pull");
-            die("toto");
         }
         
         \Response::redirect($this->dir . 'status');
