@@ -59,7 +59,7 @@ class Controller_Repository extends \Controller_Main
         if(empty($local_changes))
             shell_exec("cd $path && git pull");
         
-        \Response::redirect($this->view_dir . 'status');
+        \Response::redirect($this->dir . 'status');
     }
 
 }
