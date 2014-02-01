@@ -58,7 +58,10 @@ class Controller_Repository extends \Controller_Main
         
         $local_changes = shell_exec("cd $path && git status -s");
         if(empty($local_changes))
+        {
             shell_exec("cd $path && git pull");
+            die("toto");
+        }
         
         \Response::redirect($this->dir . 'status');
     }
