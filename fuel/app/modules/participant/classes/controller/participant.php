@@ -153,57 +153,54 @@ class Controller_Participant extends \Controller_Main
         if (\Input::method() == 'POST')
 	{
             $eid = \Input::post('eid');
-            if($eid == 1)
-            {
-                $participant->set_massive_assigment(\Input::post(), 'eid');
-                $adresse->set_massive_assigment(\Input::post());
-                $participant->adresses[] = $adresse;
-            }
-            else
-            {
-                // Validation des champs
-                $val = \Model_Participant::validate('create_participant');
+            // Validation des champs
+            $val = \Model_Participant::validate('create_participant');
 
-                // si la validation ne renvoie aucune erreur et si le participant n'existe pas
-                if ($val->run())
+            // si la validation ne renvoie aucune erreur et si le participant n'existe pas
+            if ($val->run())
+            {
+                // On forge un objet participant
+                if($eid == 1)
                 {
-                    // On forge un objet participant
+                    $participant->set_massive_assigment(\Input::post(), 'eid');
+                    $adresse->set_massive_assigment(\Input::post());
+                    $participant->adresses[] = $adresse;
+                }
+                else
+                {
                     $participant->set_massive_assigment(\Input::post());
                     $participant->b_is_actif = 1;
-                    $adresse->set_massive_assigment(\Input::post());
-                    $adresse->t_courrier = 1;
-                    $participant->adresses[] = $adresse;
-
-                    // On vérifie qu'un/des participant(s) ayant le même tryptique n'existe(nt) pas déjà
-                    $participants = \Model_Participant::query()
-                                    ->where('t_nom', $participant->t_nom)
-                                    ->where('t_prenom', $participant->t_prenom)
-                                    ->where('d_date_naissance', $participant->d_date_naissance)
-                                    ->get();
-                    if(!empty($participants) && \Input::post('checked') != '1')
-                    {
-                        $this->data['title'] = $this->title . ' - Vérification';
-                        $this->data['participant'] = $participant;
-                        $this->data['participants'] = $participants;
-                        $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
-                        return $this->theme->view($this->dir.'check', $this->data);
-                    }
-
-                    // On save si c'est bon
-                    if ($participant->save())
-                    {
-                        Session::set_flash('success', "Le participant a bien été ajouté.");
-                        Response::redirect($this->dir . 'modifier/'.$participant->id_participant);
-                    }
-                    else // sinon on affiche les erreurs
-                    {
-                        Session::set_flash('error', "Impossible de sauver le participant.");
-                    }
                 }
-                else // si la validation a échoué
+
+                // On vérifie qu'un/des participant(s) ayant le même tryptique n'existe(nt) pas déjà
+                $participants = \Model_Participant::query()
+                                ->where('t_nom', $participant->t_nom)
+                                ->where('t_prenom', $participant->t_prenom)
+                                ->where('d_date_naissance', $participant->d_date_naissance)
+                                ->get();
+                if(!empty($participants) && \Input::post('checked') != '1')
                 {
-                    Session::set_flash('error', $val->show_errors());
+                    $this->data['title'] = $this->title . ' - Vérification';
+                    $this->data['participant'] = $participant;
+                    $this->data['participants'] = $participants;
+                    $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+                    return $this->theme->view($this->dir.'check', $this->data);
                 }
+
+                // On save si c'est bon
+                if ($participant->save())
+                {
+                    Session::set_flash('success', "Le participant a bien été ajouté.");
+                    Response::redirect($this->dir . 'modifier/'.$participant->id_participant);
+                }
+                else // sinon on affiche les erreurs
+                {
+                    Session::set_flash('error', "Impossible de sauver le participant.");
+                }
+            }
+            else // si la validation a échoué
+            {
+                Session::set_flash('error', $val->show_errors());
             }
         }
         
@@ -212,7 +209,7 @@ class Controller_Participant extends \Controller_Main
         $this->data['adresse'] = $adresse;
         $this->data['eid'] = $eid;
         $this->data['path'] = $path;
-        $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+        $this->data['pays'] = \Model_Type_Pays::getAsSelect();
         return $this->theme->view($this->dir.'create', $this->data);
     }
     
@@ -347,7 +344,7 @@ class Controller_Participant extends \Controller_Main
         $this->data['types'] = $types;
         $this->data['diplomes'] = $diplomes;
         $this->data['annees'] = \Cranberry\MyXML::get_annee_etude();
-        $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+        $this->data['pays'] = \Model_Type_Pays::getAsSelect();
         $this->data['form_adresse'] = $form_adresse->build(\Uri::create($this->dir.'/ajouter_adresse/'.$participant->id_participant));
         return $this->theme->view($this->dir.'update', $this->data);
     }

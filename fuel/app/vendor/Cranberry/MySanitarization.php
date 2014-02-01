@@ -84,6 +84,8 @@ class MySanitarization
      */
     public static function filterRegistreNational($num)
     {
+        if(empty($num) || !is_string($num))
+            return;
         $num = \Cranberry\MySanitarization::filterDigits($num);
         $num = str_split($num);
         return $num[0] . $num[1] . '.' . $num[2] . $num[3] . '.' . $num[4] . $num[5] . '-' . $num[6] . $num[7] . $num[8] . '.' . $num[9] . $num[10];
@@ -97,6 +99,8 @@ class MySanitarization
      */
     public static function filterCompteBancaire($num)
     {
+        if(empty($num) || !is_string($num))
+            return;
         $num = \Cranberry\MySanitarization::filterDigits($num);
         $num = str_split($num);
         return $num[0] . $num[1] . $num[2] . '-' . $num[3] . $num[4] . $num[5] . $num[6] . $num[7] . $num[8] . $num[9] . '-' . $num[10] . $num[11];
