@@ -37,6 +37,7 @@ class Controller_Repository extends \Controller_Main
             $error = "Le chemin vers le repository Github n'est pas défini. Veuillez vous référer au document app/config/repository.php.";
         else
         {
+            
             $portal['incoming_changes'] = shell_exec("cd $path && git fetch && git log ..origin/master");
             $portal['modified_files'] = shell_exec("cd $path && git status -s");
         }
