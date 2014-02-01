@@ -105,7 +105,39 @@ class Controller_Administration extends \Controller_Main
             ),
             'layout' => 'multiple',
             'model' => 'Model_Checklist_Valeur'
-        )
+        ),
+        'filiere' => array(
+            'name' => array(
+                'single' => 'filière',
+                'plural' => 'filières'
+            ),
+            'layout' => 'simple',
+            'model' => 'Model_Filiere'
+        ),
+        'subside' => array(
+            'name' => array(
+                'single' => 'subside',
+                'plural' => 'subsides'
+            ),
+            'layout' => 'simple',
+            'model' => 'Model_Subside'
+        ),
+        'activite' => array(
+            'name' => array(
+                'single' => 'activité',
+                'plural' => 'activités'
+            ),
+            'layout' => 'simple',
+            'model' => 'Model_Activite'
+        ),
+        'type_pays' => array(
+            'name' => array(
+                'single' => 'pays',
+                'plural' => 'pays'
+            ),
+            'layout' => 'simple',
+            'model' => 'Model_Type_Pays'
+        ),
     );
 
     /**
@@ -704,6 +736,98 @@ class Controller_Administration extends \Controller_Main
     public function action_supprimer_checklist_valeur($id)
     {
         return $this->_delete('checklist_valeur', $id);
+    }
+    
+    public function action_liste_filiere()
+    {
+        return $this->_list('filiere');
+    }
+
+    public function action_ajouter_filiere()
+    {
+        return $this->_create('filiere');
+    }
+
+    public function action_modifier_filiere($id)
+    {
+        return $this->_update('filiere', $id);
+    }
+
+    public function action_supprimer_filiere($id)
+    {
+        $children = \DB::select('*')->from('groupe')->where('filiere_id', $id)->execute();
+        if(count($children) > 0)
+        {
+            Session::set_flash('error', "Impossible de supprimer la filière : des objets (groupe) lui sont associées.");
+            Response::redirect($this->dir.'liste_type_statut');
+        }
+        return $this->_delete('filiere', $id);
+    }
+    
+    public function action_liste_subside()
+    {
+        return $this->_list('subside');
+    }
+
+    public function action_ajouter_subside()
+    {
+        return $this->_create('subside');
+    }
+
+    public function action_modifier_subside($id)
+    {
+        return $this->_update('subside', $id);
+    }
+
+    public function action_supprimer_subside($id)
+    {
+        return $this->_delete('subside', $id);
+    }
+    
+    public function action_liste_activite()
+    {
+        $params = array();
+        $params['conditions'] = array('order_by' => array('i_position' => 'ASC'));
+
+        return $this->_list('activite', $params);
+    }
+
+    public function action_ajouter_activite()
+    {
+        return $this->_create('activite');
+    }
+
+    public function action_modifier_activite($id)
+    {
+        return $this->_update('activite', $id);
+    }
+
+    public function action_supprimer_activite($id)
+    {
+        return $this->_delete('activite', $id);
+    }
+    
+    public function action_liste_type_pays()
+    {
+        $params = array();
+        $params['conditions'] = array('order_by' => array('t_valeur' => 'ASC'));
+
+        return $this->_list('type_pays', $params);
+    }
+
+    public function action_ajouter_type_pays()
+    {
+        return $this->_create('type_pays');
+    }
+
+    public function action_modifier_type_pays($id)
+    {
+        return $this->_update('type_pays', $id);
+    }
+
+    public function action_supprimer_type_pays($id)
+    {
+        return $this->_delete('type_pays', $id);
     }
 
 }
