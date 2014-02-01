@@ -38,6 +38,7 @@ class Controller_Repository extends \Controller_Main
         else
         {
             
+            
             $portal['incoming_changes'] = shell_exec("cd $path && git fetch && git log ..origin/master");
             $portal['modified_files'] = shell_exec("cd $path && git status -s");
         }
