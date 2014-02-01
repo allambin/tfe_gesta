@@ -58,7 +58,7 @@ class Controller_Repository extends \Controller_Main
         if(empty($local_changes))
         {
             // Pour que la commande suivante fonctionne, le dossier
-            // doit être en rw pour le groupe (www-data)
+            // doit être en +rw pour le groupe (www-data)
             shell_exec("cd $path && git pull");
         }
         
