@@ -193,7 +193,7 @@ class Controller_Participant extends \Controller_Main
                         $this->data['participant'] = $participant;
                         $this->data['participants'] = $participants;
                         $this->data['has_address'] = $has_address;
-                        $this->data['pays'] = \Cranberry\MyXML::getPaysAsSelect();
+                        $this->data['pays'] = \Model_Type_Pays::getAsSelect();
                         return $this->theme->view($this->dir.'check', $this->data);
                     }
 
