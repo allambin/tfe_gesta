@@ -148,10 +148,10 @@ class Controller_Participant extends \Controller_Main
         
         $participant = new \Model_Participant();
         $adresse = new \Model_Adresse();
+        $eid = \Input::post('eid');
         
         if (\Input::method() == 'POST')
 	{
-            $eid = \Input::post('eid');
             if($eid == 1)
             {
                 $participant->set_massive_assigment(\Input::post(), 'eid');
