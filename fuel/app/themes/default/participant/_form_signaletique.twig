@@ -163,6 +163,7 @@
 </table>
 
 {% if eid == 1 %}
+{{ form_hidden('has_address', input_post('has_address', 1)) }}
 <h2>Adresse</h2>
 <div class="control-group">
     {{ form_label('Rue', 't_nom_rue', {class: 'control-label'}) }}

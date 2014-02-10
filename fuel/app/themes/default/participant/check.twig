@@ -62,6 +62,7 @@
 {{ form_hidden('t_telephone', input_post('t_telephone', adresse.t_telephone)) }}
 {{ form_hidden('t_type', input_post('t_type', adresse.t_type)) }}
 {{ form_hidden('checked', '1') }}
+{{ form_hidden('has_address', input_post('has_address', has_address)) }}
 <div class="form-actions">
     <button type="submit" class="btn btn-success">Valider l'ajout</button>
     <a href="{{ uri_create('participant/index') }}" class="btn btn-danger">Annuler</a>
