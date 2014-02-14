@@ -160,5 +160,19 @@ class Model_User extends \Orm\Model
 
         return !($result->count() > 0);
     }
+    
+    public static function validate($factory, $required_password = true) 
+    {
+        $val = Validation::forge($factory);
+
+        $val->add_callable('\Cranberry\MyValidation');
+        $val->add_field('username', 'Login', 'required');        
+        if($required_password)
+            $val->add_field('password', 'Mot de passe', 'required');
+        
+        $val->set_message('required', 'Veuillez remplir le champ :label.');
+
+        return $val;
+    }
 
 }
