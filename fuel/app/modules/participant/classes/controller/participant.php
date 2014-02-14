@@ -148,6 +148,7 @@ class Controller_Participant extends \Controller_Main
         }
         
         $participant = new \Model_Participant();
+        $participant->t_nationalite = "Belgique";
         $adresse = new \Model_Adresse();
         $eid = \Input::post('eid');
         
