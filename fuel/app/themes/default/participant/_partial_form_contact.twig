@@ -50,8 +50,12 @@
     </tr>
     <tr>
         <td class=""></td>
-        <td class=""><input type="submit" value="Ajouter" class="btn medium primary" id="form_submit" name="submit" /> <span></span> </td>
+        <td class=""><input type="submit" value="Sauvegarder" class="btn btn-success form-width" id="form_submit" name="submit" /> <span></span> </td>
     </tr>
 
 </table>
 
+{% if back is not null %}
+<a class="btn pull-right" href="{{ back }}"><i class="icon-step-backward"></i> Retour</a>
+<div class="clear"></div>
+{% endif %}

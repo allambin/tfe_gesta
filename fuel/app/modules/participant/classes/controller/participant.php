@@ -4,6 +4,7 @@ namespace Participant;
 use Fuel\Core\Input;
 use Fuel\Core\Session;
 use Fuel\Core\Response;
+use Fuel\Core\Uri;
 
 /**
  * Controller gérant toute la partie "Participant".
@@ -309,7 +310,7 @@ class Controller_Participant extends \Controller_Main
         // création du formulaire adresse
         $fs_adresse = \Fieldset::forge('new_address')->add_model('Model_Adresse')->repopulate();
         $form_adresse = $fs_adresse->form();
-        $form_adresse->add('submit', '', array('type' => 'submit', 'value' => 'Ajouter', 'class' => 'btn medium primary'));
+        $form_adresse->add('submit', '', array('type' => 'submit', 'value' => 'Ajouter', 'class' => 'btn btn-success'));
                 
         // Transformation du string en array
         $participant->t_permis = explode(",", $participant->t_permis);
@@ -457,7 +458,7 @@ class Controller_Participant extends \Controller_Main
 
         $fieldset = \Fieldset::forge('update')->add_model('Model_Adresse')->populate($adresse);
         $form = $fieldset->form();
-        $form->add('submit', '', array('type' => 'submit', 'value' => 'Sauvegarder', 'class' => 'btn medium primary'));
+        $form->add('submit', '', array('type' => 'submit', 'value' => 'Sauvegarder', 'class' => 'btn btn-success form-width'));
 
         if (Input::method() == 'POST')
         {
@@ -482,6 +483,7 @@ class Controller_Participant extends \Controller_Main
             }
         }
         
+        $this->data['back'] = Uri::create('participant/modifier/'.$adresse->participant_id);
         $this->data['form'] = $form->build();
         $this->data['title'] = $this->title . " - Modifier l'adresse";
         $this->data['subtitle'] = " Modifier l'adresse";
@@ -580,6 +582,7 @@ class Controller_Participant extends \Controller_Main
         // Transformation du string en array
         $contact->t_cb_type = explode(",", $contact->t_cb_type);
         
+        $this->data['back'] = Uri::create('participant/modifier/'.$contact->participant_id);
         $this->data['title'] = $this->title . " - Modifier le contact";
         $this->data['subtitle'] = " Modifier le contact";
         $this->data['contact'] = $contact;

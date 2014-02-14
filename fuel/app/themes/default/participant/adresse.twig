@@ -4,4 +4,9 @@
 
 {{ form }}
 
+{% if back is not null %}
+<a class="btn pull-right" href="{{ back }}"><i class="icon-step-backward"></i> Retour</a>
+<div class="clear"></div>
+{% endif %}
+
 {% endblock form %}

@@ -219,7 +219,7 @@ class Controller_Administration extends \Controller_Main
 
         $fieldset = \Fieldset::forge('new')->add_model($class)->repopulate();
         $form = $fieldset->form();
-        $form->add('submit', '', array('type' => 'submit', 'value' => 'Ajouter', 'class' => 'btn medium primary'));
+        $form->add('submit', '', array('type' => 'submit', 'value' => 'Ajouter', 'class' => 'btn btn-success form-width'));
 
         if (Input::method() == 'POST')
         {
@@ -271,7 +271,7 @@ class Controller_Administration extends \Controller_Main
 
         $fieldset = \Fieldset::forge('update')->add_model($class)->populate($object);
         $form = $fieldset->form();
-        $form->add('submit', '', array('type' => 'submit', 'value' => 'Sauvegarder', 'class' => 'btn medium primary'));
+        $form->add('submit', '', array('type' => 'submit', 'value' => 'Sauvegarder', 'class' => 'btn btn-success form-width'));
 
         if (Input::method() == 'POST')
         {

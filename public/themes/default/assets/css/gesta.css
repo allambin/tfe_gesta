@@ -15,6 +15,11 @@ a.pull-right
     margin-left: 10px;
 }
 
+input.form-width
+{
+    width: 200px;
+}
+
 /* --= GENERAL =--*/
 html
 {
@@ -192,13 +197,9 @@ ul.nav
     margin-right: 3px;
 }
 
-#content form input
+#content .admin form input
 {
-    border: 1px solid #cccccc;
     width: 250px;
-    -webkit-border-radius:3px;
-    -moz-border-radius:3px;
-    border-radius:3px;
 }
 
 #content form input:active, #content form input:hover
@@ -360,6 +361,14 @@ table.form table
     line-height: 2.1em;
     padding: 0 0.8em 0 0;
     margin-right: 3px;
+}input.form-width
+{
+    width: 200px;
+}
+
+#dialog-adresse input.btn, #dialog-contact input.btn
+{
+    width: 100%;
 }
 
 /* --= DATATABLES =-- */
