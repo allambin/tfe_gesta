@@ -10,7 +10,7 @@ class MySanitarization
      * @param type $string
      * @return type 
      */
-    public static function stripAccents($string){
+    public static function strip_accents($string){
         $_remplace = array('à'=>'a',
                          'á'=>'a',
                          'â'=>'a',
@@ -47,7 +47,7 @@ class MySanitarization
      * 
      * @param type $string 
      */
-    public static function filterAlpha($string)
+    public static function filter_alpha($string)
     {
         $pattern = '/[^\p{L} -]/u';
         return preg_replace($pattern, '', (string) $string);
@@ -59,7 +59,7 @@ class MySanitarization
      * @param type $str
      * @return type 
      */
-    public static function ucFirstAndToLower($str)
+    public static function uc_first_and_to_lower($str)
     {
          return ucfirst(mb_strtolower(trim($str)));
     }
@@ -70,7 +70,7 @@ class MySanitarization
      * @param type $string
      * @return type 
      */
-    public static function filterDigits($string)
+    public static function filter_digits($string)
     {
         $pattern = '/[^0-9]/';
         return preg_replace($pattern, '', (string) $string);
@@ -82,11 +82,11 @@ class MySanitarization
      * @param type $num
      * @return type 
      */
-    public static function filterRegistreNational($num)
+    public static function filter_registre_national($num)
     {
         if(empty($num) || !is_string($num))
             return;
-        $num = \Cranberry\MySanitarization::filterDigits($num);
+        $num = \Cranberry\MySanitarization::filter_digits($num);
         $num = str_split($num);
         return $num[0] . $num[1] . '.' . $num[2] . $num[3] . '.' . $num[4] . $num[5] . '-' . $num[6] . $num[7] . $num[8] . '.' . $num[9] . $num[10];
     }
@@ -97,11 +97,11 @@ class MySanitarization
      * @param type $num
      * @return type 
      */
-    public static function filterCompteBancaire($num)
+    public static function filter_compte_bancaire($num)
     {
         if(empty($num) || !is_string($num))
             return;
-        $num = \Cranberry\MySanitarization::filterDigits($num);
+        $num = \Cranberry\MySanitarization::filter_digits($num);
         $num = str_split($num);
         return $num[0] . $num[1] . $num[2] . '-' . $num[3] . $num[4] . $num[5] . $num[6] . $num[7] . $num[8] . $num[9] . '-' . $num[10] . $num[11];
     }

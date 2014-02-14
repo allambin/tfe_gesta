@@ -110,8 +110,8 @@ class Model_Contact extends Orm\Model
         $this->t_civilite = $fields['t_civilite'];
         $this->t_type = $fields['t_type'];
         $this->t_cb_type = $cb;
-        $this->t_nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents($fields['t_nom'])));
-        $this->t_prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha($fields['t_prenom']));
+        $this->t_nom = strtoupper(\Cranberry\MySanitarization::filter_alpha(\Cranberry\MySanitarization::strip_accents($fields['t_nom'])));
+        $this->t_prenom = \Cranberry\MySanitarization::uc_first_and_to_lower(\Cranberry\MySanitarization::filter_alpha($fields['t_prenom']));
         
         $this->adresse = $adresse;
     }

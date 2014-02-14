@@ -279,16 +279,16 @@ class Model_Participant extends Orm\Model
         // Transformation de la date de naissance
         $dob = ($fields['d_date_naissance'] != NULL) ? date('Y/m/d', strtotime($fields['d_date_naissance'])) : NULL;
         // Modification des attributs de l'objet participant
-        $this->t_nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents($fields['t_nom'])));
-        $this->t_prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha($fields['t_prenom']));
+        $this->t_nom = strtoupper(\Cranberry\MySanitarization::filter_alpha(\Cranberry\MySanitarization::strip_accents($fields['t_nom'])));
+        $this->t_prenom = \Cranberry\MySanitarization::uc_first_and_to_lower(\Cranberry\MySanitarization::filter_alpha($fields['t_prenom']));
         $this->t_nationalite = $fields['t_nationalite'];
-        $this->t_lieu_naissance = \Cranberry\MySanitarization::ucFirstAndToLower($fields['t_lieu_naissance']);
+        $this->t_lieu_naissance = \Cranberry\MySanitarization::uc_first_and_to_lower($fields['t_lieu_naissance']);
         $this->d_date_naissance = $dob;
         $this->t_sexe = $fields['t_sexe'];
         // Transformation du registre national
         $registre = null;
         if(isset($fields['t_registre_national']))
-            $registre = \Cranberry\MySanitarization::filterRegistreNational($fields['t_registre_national']);
+            $registre = \Cranberry\MySanitarization::filter_registre_national($fields['t_registre_national']);
         $this->t_registre_national = $registre;
         
         if($scenario != 'eid') // pour tous les scenarios SAUF eid
@@ -304,7 +304,7 @@ class Model_Participant extends Orm\Model
             // Transformation du compte bancaire
             $compte = null;
             if(isset($fields['t_compte_bancaire']))
-                $compte = \Cranberry\MySanitarization::filterCompteBancaire($fields['t_compte_bancaire']);
+                $compte = \Cranberry\MySanitarization::filter_compte_bancaire($fields['t_compte_bancaire']);
             $this->t_compte_bancaire = $compte;
         }
         

@@ -120,7 +120,7 @@ class Model_Adresse extends Orm\Model
         $this->t_nom_rue = $fields['t_nom_rue'];
         $this->t_bte = isset($fields['t_bte']) ? $fields['t_bte'] : '';
         $this->t_code_postal = $fields['t_code_postal'];
-        $this->t_commune = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha($fields['t_commune']));
+        $this->t_commune = \Cranberry\MySanitarization::uc_first_and_to_lower(\Cranberry\MySanitarization::filter_alpha($fields['t_commune']));
         $this->t_telephone = isset($fields['t_telephone']) ? $fields['t_telephone'] : '';
         $this->t_courrier = isset($fields['t_courrier']) ? (int)$fields['t_courrier']: 0;
         $this->t_type = isset($fields['t_type']) ? $fields['t_type'] : '';

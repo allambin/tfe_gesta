@@ -117,8 +117,8 @@ class Model_Listeattente extends \Orm\Model {
         $dob = ($fields['d_date_naissance'] != NULL) ? date('Y/m/d', strtotime($fields['d_date_naissance'])) : NULL;
         $de = ($fields['d_date_entretien'] != NULL) ? date('Y/m/d', strtotime($fields['d_date_entretien'])) : NULL;
         // Modification des attributs de l'objet participant
-        $this->t_nom = strtoupper(\Cranberry\MySanitarization::filterAlpha(\Cranberry\MySanitarization::stripAccents($fields['t_nom'])));
-        $this->t_prenom = \Cranberry\MySanitarization::ucFirstAndToLower(\Cranberry\MySanitarization::filterAlpha($fields['t_prenom']));
+        $this->t_nom = strtoupper(\Cranberry\MySanitarization::filter_alpha(\Cranberry\MySanitarization::strip_accents($fields['t_nom'])));
+        $this->t_prenom = \Cranberry\MySanitarization::uc_first_and_to_lower(\Cranberry\MySanitarization::filter_alpha($fields['t_prenom']));
         $this->d_date_naissance = $dob;
         $this->d_date_entretien = $de;
         $this->t_contact = $fields['t_contact'];

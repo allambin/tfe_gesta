@@ -70,7 +70,7 @@ class MyValidation
         \Validation::active()->set_message('registre_national', 'Le registre national doit comporter 11 chiffres.');
         if ($val != null || !empty($val))
         {
-            $registre = \Cranberry\MySanitarization::filterDigits($val);
+            $registre = \Cranberry\MySanitarization::filter_digits($val);
 
             $nbr = strlen($registre);
             if ($nbr != 11)
@@ -96,7 +96,7 @@ class MyValidation
         \Validation::active()->set_message('compte_bancaire', 'Le compte bancaire doit comporter 12 chiffres.');
         if ($val != null || !empty($val))
         {
-            $compte = \Cranberry\MySanitarization::filterDigits($val);
+            $compte = \Cranberry\MySanitarization::filter_digits($val);
             $nbr = strlen($compte);
             if ($nbr != 12)
             {
@@ -180,7 +180,7 @@ class MyValidation
             return true;
 
         $field = 't_registre_national';
-        $val = \Cranberry\MySanitarization::filterRegistreNational($val);
+        $val = \Cranberry\MySanitarization::filter_registre_national($val);
 
         $query = DB::select("LOWER (\"$field\")")
                 ->where($field, '=', \Str::lower($val))
