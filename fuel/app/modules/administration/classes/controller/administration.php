@@ -416,7 +416,13 @@ class Controller_Administration extends \Controller_Main
     }
 
     public function action_supprimer_login($id)
-    {
+    {        
+        $children = \DB::select('*')->from('groupe')->where('login_id', $id)->execute();
+        if(count($children) > 0)
+        {
+            Session::set_flash('error', "Impossible de supprimer le login : des objets (groupes) lui sont associés.");
+            Response::redirect($this->dir.'liste_login');
+        }
         return $this->_delete('login', $id);
     }
 
@@ -475,14 +481,12 @@ class Controller_Administration extends \Controller_Main
 
                 if ($user and $user->save())
                 {
-                    $message[] = 'Le login a bien été modifié.';
-                    \Session::set_flash('success', $message);
-                    \Response::redirect($this->view_dir . 'liste_logins');
+                    \Session::set_flash('success', 'Le login a bien été modifié.');
+                    Response::redirect($this->dir.'liste_login');
                 }
                 else
                 {
-                    $message[] = 'Impossible de modifier le login.';
-                    Session::set_flash('error', $message);
+                    Session::set_flash('error', 'Impossible de modifier le login.');
                 }
             }
             else
