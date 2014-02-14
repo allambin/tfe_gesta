@@ -219,11 +219,17 @@ function getAge(dateString)
     }
     return age;
 }
+$('#form_d_date_naissance').change(function(){
+    var date_string = $(this).val();
+    var age = getAge(date_string);
+    $('#age').text(age+" ans");
+});
 $(document).ready(function() 
 {
     var date_string = $('#form_d_date_naissance').val();
 
     var age = getAge(date_string);
+    if(isNaN(age)) age = 0;
     $('#age').text(age+" ans");
 });
 </script>
