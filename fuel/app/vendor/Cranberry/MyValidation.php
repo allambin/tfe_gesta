@@ -180,6 +180,7 @@ class MyValidation
             return true;
 
         $field = 't_registre_national';
+        $val = \Cranberry\MySanitarization::filterRegistreNational($val);
 
         $query = DB::select("LOWER (\"$field\")")
                 ->where($field, '=', \Str::lower($val))
