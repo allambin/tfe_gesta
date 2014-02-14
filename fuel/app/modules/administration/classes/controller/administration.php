@@ -416,7 +416,7 @@ class Controller_Administration extends \Controller_Main
     }
 
     public function action_supprimer_login($id)
-    {        
+    {
         $children = \DB::select('*')->from('groupe')->where('login_id', $id)->execute();
         if(count($children) > 0)
         {
@@ -785,6 +785,13 @@ class Controller_Administration extends \Controller_Main
 
     public function action_supprimer_subside($id)
     {
+                
+        $children = \DB::select('*')->from('type_contrat')->where('subside_id', $id)->execute();
+        if(count($children) > 0)
+        {
+            Session::set_flash('error', "Impossible de supprimer le subside : des objets (type de contrat) lui sont associés.");
+            Response::redirect($this->dir.'liste_subside');
+        }
         return $this->_delete('subside', $id);
     }
     
