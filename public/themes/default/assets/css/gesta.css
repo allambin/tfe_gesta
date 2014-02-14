@@ -367,6 +367,32 @@ table.form table
     margin-top: 50px;
 }
 
+table.mydatatables
+{
+    margin-bottom: 20px;
+}
+
+.mydatatables
+{
+    margin-top: 20px;
+}
+
+.dt-row
+{
+    margin: 0px;
+}
+
+.dt-row .dt-span2
+{
+    width: 50%;
+    margin: 0px;
+}
+
+td.actions, th.actions
+{
+    text-align: center;
+}
+
 /* --= FOOTER =-- */
 #footer 
 {

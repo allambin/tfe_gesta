@@ -3,9 +3,10 @@
 {% block list %}
 
 <a href="listeattente/ajouter" class="btn btn-success pull-right"><i class="icon-user icon-white"></i> Ajouter un stagiaire</a>
+<div class="clearfix"></div>
 
 <div class="mydatatables">
-    <table class="table">
+    <table class="table mydatatables">
         <thead>
             <tr>
                 <th class="no_sorting"></th>
@@ -23,6 +24,7 @@
         </tbody>
     </table>
 </div>
+<div class="clearfix"></div>
 
 {% endblock list %}
 
@@ -36,7 +38,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('.table').dataTable({
-        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        "sDom": "<'dt-row'<'dt-span2'l><'dt-span2'f>r>t<'dt-row'<'dt-span2'i><'dt-span2'p>>",
         "oLanguage": {
             "sProcessing":     "Traitement en cours...",
             "sSearch":         "Rechercher&nbsp;:",
@@ -62,7 +64,8 @@ $(document).ready(function() {
         "sPaginationType": "full_numbers",
         "aoColumnDefs" : [ {
             "bSortable" : false,
-            "aTargets" : [ "no_sorting" ]
+            "aTargets" : [ "no_sorting" ],
+            "sClass": "actions"
         },
         {
             "bSortable" : false,
@@ -78,7 +81,6 @@ $(document).ready(function() {
                 var can_delete = full[7];
                 var links = '<td>';
                 var links = links+'<a class="btn btn-mini btn-success" title="Valider le stagiaire" href="{{ uri_create('listeattente/confirmer/') }}'+id+'"><i class="icon-ok icon-white"></i></a><a class="btn btn-mini btn-info" title="Editer la checklist" href="{{ uri_create('listeattente/checklist/') }}'+id+'"><i class="icon-edit icon-white"></i></a><a class="btn btn-mini btn-warning" title="Imprimer la checklist" target="_blank" href="{{ uri_create('listeattente/print_checklist/') }}'+id+'"><i class="icon-print icon-white"></i></a>';
-                //var links = links+'<a class="btn btn-mini btn-success" title="Valider le stagiaire" href="{{ uri_create('listeattente/confirmer/') }}'+id+'"><i class="icon-ok icon-white"></i></a>';
                 var delete_link = '<a title="Supprimer" class="btn btn-mini btn-danger" href="{{ uri_create('listeattente/supprimer/') }}'+id+'" onclick="return confirm(\'Etes-vous sûr de vouloir supprimer cet item ?\')"><i class="icon-remove-sign icon-white"></i></a>';
                 if(actif === '1')
                 {

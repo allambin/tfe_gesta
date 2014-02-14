@@ -2,7 +2,7 @@
 
 {% block list %}
 
-<table class="table">
+<table class="table mydatatables">
     <thead>
         <tr>
             <th class="no_sorting"></th>
@@ -21,6 +21,7 @@
     <tbody>
     </tbody>
 </table>
+<div class="clearfix"></div>
 
 <a href="{{ uri_create('participant/ajouter') }}" class="btn btn-success">Ajouter</a>
 
@@ -36,7 +37,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('.table').dataTable({
-        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        "sDom": "<'dt-row'<'dt-span2'l><'dt-span2'f>r>t<'dt-row'<'dt-span2'i><'dt-span2'p>>",
         "oLanguage": {
             "sProcessing":     "Traitement en cours...",
             "sSearch":         "Rechercher&nbsp;:",
@@ -62,7 +63,8 @@ $(document).ready(function() {
         "sPaginationType": "full_numbers",
         "aoColumnDefs" : [ {
             "bSortable" : false,
-            "aTargets" : [ "no_sorting" ]
+            "aTargets" : [ "no_sorting" ],
+            "sClass": "actions"
         },
         {
             "bSortable" : false,
