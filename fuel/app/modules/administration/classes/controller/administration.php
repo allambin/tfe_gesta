@@ -491,8 +491,7 @@ class Controller_Administration extends \Controller_Main
             }
             else
             {
-                $message[] = $val->show_errors();
-                \Session::set_flash('error', $message);
+                \Session::set_flash('error', $val->show_errors());
             }
         }
 
@@ -607,22 +606,23 @@ class Controller_Administration extends \Controller_Main
     {
         $this->data['title'] = $this->title . ' - Modifier les items du photogramme';
         
-        if (\Input::method() == 'POST') {
+        if (\Input::method() == 'POST')
+        {
             $val = \Validation::forge();
             $val->add_field('nom', 'Nom', 'required');
 
             $val->set_message('required', 'Veuillez remplir le champ :label.');
 
-            if ($val->run()) {
+            if ($val->run())
+            {
                 \Cranberry\MyXML::editXMLItem('photogramme', $item, \Input::post('nom'));
 
-                $message[] = "Le photogramme a bien été édité.";
-                Session::set_flash('success', $message);
-
-                Response::redirect($this->dir.'photogramme_xml');
-            } else {
-                $message[] = $val->show_errors();
-                Session::set_flash('error', $message);
+                Session::set_flash('success', "Le photogramme a bien été édité.");
+                Response::redirect($this->dir . 'photogramme_xml');
+            }
+            else
+            {
+                Session::set_flash('error', $val->show_errors());
             }
         }
 

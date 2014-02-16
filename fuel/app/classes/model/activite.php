@@ -37,7 +37,7 @@ class Model_Activite extends \Orm\Model {
         'i_position' => array(
             'data_type' => 'text',
             'label' => 'Position',
-            'validation' => array('required', 'exact_length' => array(1), 'valid_string' => array('numeric'))
+            'validation' => array('required', 'valid_string' => array('numeric'))
         )
     );
     

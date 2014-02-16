@@ -75,6 +75,10 @@ class Observer_Delete extends Orm\Observer
             case 'Model_Listeattente':
                 \DB::delete('checklist_stagiaire')->where('stagiaire_id', '=', $model->id_liste_attente)->execute();
                 break;
+            case 'Model_Checklist_Valeur':
+                \DB::delete('checklist')->where('valeur_id', '=', $model->id_checklist_valeur)->execute();
+                \DB::delete('checklist_stagiaire')->where('valeur_id', '=', $model->id_checklist_valeur)->execute();
+                break;
             default:
                 break;
         }
