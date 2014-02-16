@@ -468,7 +468,6 @@ class Controller_Participant extends \Controller_Main
             if ($fieldset->validation()->run() == true)
             {
                 $fields = $fieldset->validated();
-//                die(print_r($fieldset));
                 $adresse->set_massive_assigment($fields);
                 $isDefault = $adresse->t_courrier;
 
@@ -527,7 +526,9 @@ class Controller_Participant extends \Controller_Main
                 }
             else
             {
-                Session::set_flash('error', $val->show_errors());
+                $errors = $val->show_errors();
+                $errors .= $val_adresse->show_errors();
+                Session::set_flash('error', $errors);
             }
 	}
         
