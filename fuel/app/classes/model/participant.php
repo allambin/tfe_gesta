@@ -378,19 +378,15 @@ class Model_Participant extends Orm\Model
         $val->add_field('t_registre_national', 'Registre national', 'registre_national|unique_registre_national[' . $id_participant . ']');
         $val->add_field('t_compte_bancaire', 'Compte bancaire', 'compte_bancaire');
         $val->add_field('t_gsm', 'GSM', 'exact_length[10]|valid_string[numeric]');
-        $val->add_field('t_gsm2', 'GSM', 'exact_length[10]|valid_string[numeric]');
+        $val->add_field('t_gsm2', 'GSM2', 'exact_length[10]|valid_string[numeric]');
         $val->add_field('t_organisme_paiement_phone', 'Téléphone de l\'orgasnime', 'exact_length[9]|valid_string[numeric]');
         $val->add_field('t_taille', 'Taille', 'max_length[3]|valid_string[numeric]');
+        $val->add_field('t_pointure', 'Pointure', 'max_length[3]|valid_string[numeric]');
         $val->add_field('d_date_naissance', 'Date de naissance', 'required|checkdate|is_majeur');
         $val->add_field('t_email', 'Email', 'valid_email');
         $val->add_field('t_children', 'Enfants à charge', 'children_data');
-
-        $val->set_message('required', 'Veuillez remplir le champ :label.');
-        $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');
-        $val->set_message('max_length', 'Le champ :label doit faire au plus :param:1 caractères.');
-        $val->set_message('exact_length', 'Le champ :label doit compter exactement :param:1 caractères.');
+        
         $val->set_message('valid_string', 'Le champ :label ne doit contenir que des chiffres.');
-        $val->set_message('valid_email', 'Le champ :label est invalide.');
 
         return $val;
     }

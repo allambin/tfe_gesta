@@ -26,6 +26,24 @@ class MyValidation
     }
 
     /**
+     * La valeur est requise. Utilisée pour certains formulaires,
+     * car FuelPHP met le * en dehors du label, cassant le visuel.
+     *
+     * @param type $val
+     * @return type 
+     */
+    public static function _validation_is_required($val)
+    {
+        \Validation::active()->set_message('is_required', 'Le champ :label est requis et doit contenir une valeur.');
+        
+        $val = trim($val);
+        if(empty($val))
+            return false;
+        
+        return true;
+    }
+
+    /**
      * Vérifie si le participant est majeur.
      *
      * @param type $val

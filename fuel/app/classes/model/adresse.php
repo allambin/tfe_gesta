@@ -50,22 +50,22 @@ class Model_Adresse extends Orm\Model
         't_nom_rue' => array(
             'data_type' => 'text',
             'label' => 'Nom de la rue',
-            'validation' => array('max_length'=>array(255))
+            'validation' => array('max_length'=>array(255), 'is_required')
         ),
         't_bte' => array(
             'data_type' => 'text',
             'label' => 'Boite',
-            'validation' => array('max_length'=>array(255))
+            'validation' => array('max_length'=>array(255), 'is_required', 'valid_string'=>array('numeric'))
         ),
         't_code_postal' => array(
             'data_type' => 'text',
             'label' => 'Code postal',
-            'validation' => array('exact_length'=>array(4))
+            'validation' => array('exact_length'=>array(4), 'valid_string'=>array('numeric'), 'is_required')
         ),
         't_commune' => array(
             'data_type' => 'text',
             'label' => 'Commune',
-            'validation' => array('max_length'=>array(255))
+            'validation' => array('max_length'=>array(255), 'is_required')
         ),
         't_telephone' => array(
             'data_type' => 'text',
@@ -145,9 +145,11 @@ class Model_Adresse extends Orm\Model
     public static function validate($factory)
     {
         $val = Validation::forge($factory);
-        $val->add_field('t_code_postal', 'Code postal', 'exact_length[4]');
-        $val->add_field('t_telephone', 'Téléphone', 'exact_length[9]');
-        $val->add_field('t_email', 'Email', 'valid_email');
+        $val->add_callable('\Cranberry\MyValidation');
+        $val->add_field('t_code_postal', 'Code postal', 'exact_length[4]|is_required|valid_string[numeric]');
+        $val->add_field('t_telephone', 'Téléphone', 'exact_length[9]|is_required');
+        $val->add_field('t_commune', 'Commune', 'is_required');
+        $val->add_field('t_bte', 'Boite', 'is_required|valid_string[numeric]');
 
         $val->set_message('required', 'Veuillez remplir le champ :label.');
         $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');

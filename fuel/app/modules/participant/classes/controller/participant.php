@@ -418,6 +418,7 @@ class Controller_Participant extends \Controller_Main
         $participant = \Model_Participant::find($id);
         
         $fieldset = \Fieldset::forge('new')->add_model('Model_Adresse')->repopulate();
+        $fieldset->validation()->add_callable('\Cranberry\MyValidation');
         
         if (\Input::method() == 'POST')
 	{
@@ -458,6 +459,7 @@ class Controller_Participant extends \Controller_Main
         }
 
         $fieldset = \Fieldset::forge('update')->add_model('Model_Adresse')->populate($adresse);
+        $fieldset->validation()->add_callable('\Cranberry\MyValidation');
         $form = $fieldset->form();
         $form->add('submit', '', array('type' => 'submit', 'value' => 'Sauvegarder', 'class' => 'btn btn-success form-width'));
 
@@ -466,13 +468,14 @@ class Controller_Participant extends \Controller_Main
             if ($fieldset->validation()->run() == true)
             {
                 $fields = $fieldset->validated();
+//                die(print_r($fieldset));
                 $adresse->set_massive_assigment($fields);
                 $isDefault = $adresse->t_courrier;
 
                 if ($adresse->save())
                 {
                     if($isDefault)
-                        \DB::query("UPDATE adresse SET t_courrier = 0 WHERE id_adresse <> $id")->execute();
+                        \DB::query("UPDATE adresse SET t_courrier = 0 WHERE id_adresse <> $id AND participant_id = ".$adresse->participant_id)->execute();
                     
                     Session::set_flash('success', "L'adresse a bien été mise à jour.");
                     Response::redirect($this->dir.'modifier/'.$adresse->participant_id);
