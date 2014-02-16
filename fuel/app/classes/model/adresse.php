@@ -49,22 +49,22 @@ class Model_Adresse extends Orm\Model
         'id_adresse',
         't_nom_rue' => array(
             'data_type' => 'text',
-            'label' => 'Nom de la rue',
+            'label' => 'Rue*',
             'validation' => array('max_length'=>array(255), 'is_required')
         ),
         't_bte' => array(
             'data_type' => 'text',
-            'label' => 'Boite',
+            'label' => 'Boite*',
             'validation' => array('max_length'=>array(255), 'is_required', 'valid_string'=>array('numeric'))
         ),
         't_code_postal' => array(
             'data_type' => 'text',
-            'label' => 'Code postal',
+            'label' => 'Code postal*',
             'validation' => array('exact_length'=>array(4), 'valid_string'=>array('numeric'), 'is_required')
         ),
         't_commune' => array(
             'data_type' => 'text',
-            'label' => 'Commune',
+            'label' => 'Commune*',
             'validation' => array('max_length'=>array(255), 'is_required')
         ),
         't_telephone' => array(
@@ -146,9 +146,10 @@ class Model_Adresse extends Orm\Model
     {
         $val = Validation::forge($factory);
         $val->add_callable('\Cranberry\MyValidation');
-        $val->add_field('t_code_postal', 'Code postal', 'exact_length[4]|is_required|valid_string[numeric]');
-        $val->add_field('t_telephone', 'Téléphone', 'exact_length[9]|is_required');
-        $val->add_field('t_commune', 'Commune', 'is_required');
+        $val->add_field('t_code_postal', 'Code postal', 'exact_length[4]|is_required|valid_string[numeric]|max_length[255]');
+        $val->add_field('t_nom_rue', 'Rue', 'is_required|max_length[255]');
+        $val->add_field('t_telephone', 'Téléphone', 'exact_length[9]');
+        $val->add_field('t_commune', 'Commune', 'is_required|max_length[255]');
         $val->add_field('t_bte', 'Boite', 'is_required|valid_string[numeric]');
 
         $val->set_message('required', 'Veuillez remplir le champ :label.');
