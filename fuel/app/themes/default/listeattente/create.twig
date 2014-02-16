@@ -18,10 +18,7 @@
 <div class="control-group">
     {{ form_label('Section', 'groupe_id', {'class': 'control-label'}) }}
     <div class="controls">
-    {{ form_select('groupe_id', input_post('groupe_id', listeattente.groupe_id), {
-        'none': '',
-        'Section': groupes,
-    }) }}
+    {{ form_select('groupe_id', input_post('groupe_id', listeattente.groupe_id), {'Section': groupes}) }}
     </div>
 </div>
 <div class="control-group">

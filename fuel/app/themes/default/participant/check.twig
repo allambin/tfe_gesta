@@ -8,7 +8,7 @@
     <p>Si vous voulez ajouter le nouveau participant, cliquez sur "Valider l'ajout".</p>
 </div>
 
-<table class="table">
+<table class="table mydatatables">
     <thead>
         <tr>
             <th>Nom</th>
@@ -63,10 +63,10 @@
 {{ form_hidden('t_type', input_post('t_type', adresse.t_type)) }}
 {{ form_hidden('checked', '1') }}
 {{ form_hidden('has_address', input_post('has_address', has_address)) }}
-<div class="form-actions">
+<p>
     <button type="submit" class="btn btn-success">Valider l'ajout</button>
     <a href="{{ uri_create('participant/index') }}" class="btn btn-danger">Annuler</a>
-</div>
+</p>
 {{ form_close() }}
 
 {% endblock list %}
@@ -81,7 +81,7 @@
 <script type="text/javascript">
 $(document).ready(function() {
     $('.table').dataTable({
-        "sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+        "sDom": "<'dt-row'<'dt-span2'l><'dt-span2'f>r>t<'dt-row'<'dt-span2'i><'dt-span2'p>>",
         "oLanguage": {
             "sProcessing":     "Traitement en cours...",
             "sSearch":         "Rechercher&nbsp;:",
@@ -107,7 +107,8 @@ $(document).ready(function() {
         "sPaginationType": "full_numbers",
         "aoColumnDefs" : [ {
             "bSortable" : false,
-            "aTargets" : [ "no_sorting" ]
+            "aTargets" : [ "no_sorting" ],
+            "sClass": "actions"
         },
         {
             "bSortable" : false,

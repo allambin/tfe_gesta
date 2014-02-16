@@ -128,6 +128,7 @@ class Controller_Listeattente extends \Controller_Main
 
         $object = new \Model_Listeattente();
         $fieldset = \Fieldset::forge('new')->add_model('Model_Listeattente')->repopulate();
+        $fieldset->validation()->add_callable('\Cranberry\MyValidation');
         $form = $fieldset->form();
         
         // création du formulaire adresse
@@ -191,35 +192,36 @@ class Controller_Listeattente extends \Controller_Main
     {
         if ($stagiaire = \Model_Listeattente::find($id))
         {
-            $result = \Model_Participant::find('all', array(
-                        'where' => array(
-                            array(
-                                'b_is_actif' => 1,
-                                't_nom' => strtoupper($stagiaire->t_nom),
-                                't_prenom' => $stagiaire->t_prenom,
-                                'd_date_naissance' => $stagiaire->d_date_naissance,
-                            )
-                        ),
-                    ));
+            $stagiaire->b_is_actif = 0;
+            $stagiaire->save();
 
-            if (count($result) > 0)
-            {
-                $stagiaire->b_is_actif = 0;
-                $stagiaire->save();
-                $message[] = "Le stagiaire a bien été désactivé.";
-            }
-            else
-            {
-                $stagiaire->delete();
-                $message[] = "Le stagiaire a bien été supprimé.";
-            }
-
-            \Session::set_flash('success', $message);
+            \Session::set_flash('success', "Le stagiaire a bien été désactivé.");
         }
         else
         {
-            $message[] = "Impossible de trouver le stagiaire sélectionné.";
-            \Session::set_flash('error', $message);
+            \Session::set_flash('error', "Impossible de trouver le stagiaire sélectionné.");
+        }
+        
+        Response::redirect($this->dir . 'index');
+    }
+
+    /**
+     * Réactive un stagiaire
+     * 
+     * @param int $id
+     */
+    public function action_reactiver($id)
+    {
+        if ($stagiaire = \Model_Listeattente::find($id))
+        {
+            $stagiaire->b_is_actif = 1;
+            $stagiaire->save();
+
+            \Session::set_flash('success', "Le stagiaire a bien été réactivé.");
+        }
+        else
+        {
+            \Session::set_flash('error', "Impossible de trouver le stagiaire sélectionné.");
         }
         
         Response::redirect($this->dir . 'index');
@@ -266,6 +268,9 @@ class Controller_Listeattente extends \Controller_Main
                 $new_participant->t_prenom = $stagiaire->t_prenom;
                 $new_participant->d_date_naissance = $stagiaire->d_date_naissance;
                 $new_participant->is_actif = 1;
+                $adresse = $stagiaire->adresse;
+                if(is_object($adresse))
+                    $new_participant->adresses[] = $adresse;
 
                 if ($new_participant->save())
                 {
@@ -346,6 +351,26 @@ class Controller_Listeattente extends \Controller_Main
         \Maitrepylos\Pdf\Checklist::pdf($id);
         
         exit;
+    }
+    
+    /**
+     * Supprime un stagiaire
+     * 
+     * @param int $id
+     */
+    public function action_supprimer($id)
+    {
+        if ($stagiaire = \Model_Listeattente::find($id))
+        {
+            $stagiaire->delete();
+            \Session::set_flash('success', "Le stagiaire a bien été supprimé.");
+        }
+        else
+        {
+            \Session::set_flash('error', "Impossible de trouver le stagiaire sélectionné.");
+        }
+        
+        Response::redirect($this->dir . 'index');
     }
 
 }

@@ -1,5 +1,7 @@
 <?php
 
+use Orm\Model;
+
 class Model_Listeattente extends \Orm\Model {
 
     protected static $_primary_key = array('id_liste_attente');
@@ -19,12 +21,12 @@ class Model_Listeattente extends \Orm\Model {
         'd_date_naissance' => array(
             'data_type' => 'text',
             'label' => 'Date de naissance',
-            'validation' => array('required', 'valid_date[dd-mm-YYY]', 'isMajeur')
+            'validation' => array('required', 'is_majeur')
         ),
         'd_date_entretien' => array(
             'data_type' => 'text',
             'label' => 'Date de l\'entretien',
-            'validation' => array('valid_date[dd-mm-YYY]')
+            'validation' => array('required', 'valid_date[dd-mm-YYY]')
         ),
         't_contact' => array(
             'data_type' => 'text',
@@ -102,7 +104,7 @@ class Model_Listeattente extends \Orm\Model {
             'model_to' => 'Model_Checklist_Valeur',
             'key_to' => 'id_checklist_valeur',
             'cascade_save' => true,
-            'cascade_delete' => false,
+            'cascade_delete' => true,
         )
     );
     
