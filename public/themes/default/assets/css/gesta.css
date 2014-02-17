@@ -197,6 +197,11 @@ ul.nav
     margin-right: 3px;
 }
 
+#content label.presence 
+{ 
+    font-size:12px; 
+}
+
 #content .admin form input
 {
     width: 250px;
@@ -521,7 +526,7 @@ table.table_heures_details
 {
     body { font-size: 50%; }
     #content h2.smaller { font-size:12px; }
-    form.presence { font-size:10px; }
+    #content label.presence { font-size:10px; }
 }
 
 /* --= JQUERY CORRECTIONS =-- */

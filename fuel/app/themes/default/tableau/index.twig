@@ -56,7 +56,7 @@
 {% for groupe in groupes %}
 <table class="table form-inline table-striped table-top table-inner-bordered table-condensed">
 
-{{ form_open({'action': 'tableau/', 'class':'presence'}) }}
+{{ form_open({'action': 'tableau/'}) }}
 
 {# Le champs caché suivant va permettre de retourner sur le tableau où nous avons modifier les heures dateeurs #}
 
@@ -116,14 +116,14 @@
                 {% elseif (contrat[1] == '0') %}
 
             <td class="text-center">
-            {{ form_label('P', 'action') }}
-            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Travail', 
+            {{ form_label('P', 'action', {'class':'presence'}) }}
+            {{ form_radio('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Travail', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
-            {{ form_label('J', 'action') }}
-            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/%/'~participant.id_contrat[0]['id_contrat']~'/Absence à Justifier', 
+            {{ form_label('J', 'action', {'class':'presence'}) }}
+            {{ form_radio('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/%/'~participant.id_contrat[0]['id_contrat']~'/Absence à Justifier', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
-            {{ form_label('A', 'action') }}
-            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/*/'~participant.id_contrat[0]['id_contrat']~'/Absence', 
+            {{ form_label('A', 'action', {'class':'presence'}) }}
+            {{ form_radio('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/*/'~participant.id_contrat[0]['id_contrat']~'/Absence', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
             </td>
             
