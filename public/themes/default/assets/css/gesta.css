@@ -521,6 +521,7 @@ table.table_heures_details
 {
     body { font-size: 50%; }
     #content h2.smaller { font-size:12px; }
+    form.presence { font-size:10px; }
 }
 
 /* --= JQUERY CORRECTIONS =-- */
