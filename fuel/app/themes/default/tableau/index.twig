@@ -117,13 +117,13 @@
 
             <td class="text-center">
             {{ form_label('P', 'action', {'class':'presence'}) }}
-            {{ form_radio('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Travail', 
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Travail', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
             {{ form_label('J', 'action', {'class':'presence'}) }}
-            {{ form_radio('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/%/'~participant.id_contrat[0]['id_contrat']~'/Absence à Justifier', 
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/%/'~participant.id_contrat[0]['id_contrat']~'/Absence à Justifier', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
             {{ form_label('A', 'action', {'class':'presence'}) }}
-            {{ form_radio('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/*/'~participant.id_contrat[0]['id_contrat']~'/Absence', 
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/*/'~participant.id_contrat[0]['id_contrat']~'/Absence', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
             </td>
             
