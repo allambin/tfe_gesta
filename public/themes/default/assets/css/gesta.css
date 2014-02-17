@@ -520,6 +520,7 @@ table.table_heures_details
 @media only screen and (max-width : 480px)
 {
     body { font-size: 50%; }
+    #content h2.smaller { font-size:12px; }
 }
 
 /* --= JQUERY CORRECTIONS =-- */

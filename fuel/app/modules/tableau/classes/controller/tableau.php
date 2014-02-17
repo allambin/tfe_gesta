@@ -40,19 +40,13 @@ class Controller_Tableau extends \Controller_Main
         $lundi = new \DateTime();
 
         if (\Input::post('change')) {
-
             $c = explode('/', \Input::post('change'));
-
             $lundi->setDate($c[2], $c[1], $c[0]);
-
-
         }
         /**
          * Ici nous récupérons les heures introduites par les formateurs et nous les traitons
          */
         if (\Input::post('action')) {
-
-
             $heure = \Input::post('action');
 
             foreach ($heure as $heures) {
@@ -63,15 +57,11 @@ class Controller_Tableau extends \Controller_Main
                 $datetime = \DateTime::createFromFormat('Y-m-d',$date);
                 $insert->insertion_heures_prestation($id_participant,$datetime,$id_contrat,$prestation,$nom,$schema,1);
                 //$insert->insertHeures($date, $prestation, $nom, $schema, $id_participant, $id_contrat, 0,1);
-
-
             }
             $c = explode('-', \Input::post('affiche'));
 
             $lundi->setDate($c[2], $c[1], $c[0]);
-
         }
-
 
         /**
          * Récupération du lundi de la semaine concerné par l'affichage du tableau
@@ -88,7 +78,6 @@ class Controller_Tableau extends \Controller_Main
         /**
          * Semaine suivante
          */
-
         $semaine_next = clone $lundi;
         $semaine_next->add(new \DateInterval('P7D'));
         /**
@@ -96,8 +85,6 @@ class Controller_Tableau extends \Controller_Main
          */
         $semaine_pre = clone $lundi;
         $semaine_pre->sub(new \DateInterval('P7D'));
-
-
 
         $dbTableau = new \Model_My_Tableau();
 
@@ -107,7 +94,6 @@ class Controller_Tableau extends \Controller_Main
         $groupe = $dbTableau->getGroupe();
 
         $countGroupe = count($groupe);
-
 
         for ($i = 0; $i < $countGroupe; $i++) {
             /**
@@ -124,13 +110,8 @@ class Controller_Tableau extends \Controller_Main
 
                 }
                 $groupe[$i]['participant'][$a]['id_contrat'] = $dbTableau->get_unique_id_contrat($groupe[$i]['participant'][$a]['id_participant']);
-
-
             }
-
-
         }
-
 
         $this->data['date'] = $dateTableau;
         $this->data['groupes'] = $groupe;
@@ -139,13 +120,7 @@ class Controller_Tableau extends \Controller_Main
         
         return $this->theme->view($this->dir.'index', $this->data);
         
-        if(\Cranberry\MyMobileDetection::is_mobile())
-            $this->template->content = \View::forge('tableau/mobile', $this->data);
-        else
-            $this->template->content = \View::forge('tableau/index', $this->data);
-        //$this->template->content = \View::forge('test');
-
-
+        $this->template->content = \View::forge('tableau/index', $this->data);
     }
 
 }

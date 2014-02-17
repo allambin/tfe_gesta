@@ -221,7 +221,7 @@ class Model_My_Prestation extends \Maitrepylos\Db {
             \Session::get('id_login')
         );
 
-        $sql = "INSERT INTO heures (d_date,i_secondes,t_motif,t_schema, participant_id,contrat_id,formateur,subside,login_id)
+        $sql = "INSERT INTO heures (d_date,i_secondes,t_motif,t_schema, participant_id,contrat_id,formateur_id,subside,login_id)
             VALUES (?,?,?,?,?,?,?,?,?)";
         $req = $this->_db->prepare($sql);
         $req->execute($rows);
@@ -283,7 +283,7 @@ class Model_My_Prestation extends \Maitrepylos\Db {
      */
     public function get_worked(\DateTime $date, $id) {
 
-        $sql = "SELECT SUM(i_secondes) as i_secondes,participant_id,d_date,DAYNAME(d_date) as jour,t_schema,formateur,contrat_id
+        $sql = "SELECT SUM(i_secondes) as i_secondes,participant_id,d_date,DAYNAME(d_date) as jour,t_schema,formateur_id,contrat_id
                     FROM heures
                  WHERE participant_id = ?
                 AND d_date = ? ";
@@ -399,7 +399,7 @@ class Model_My_Prestation extends \Maitrepylos\Db {
 
     public function get_details($id, $date) {
 
-        $sql = "SELECT h.id_heures,h.d_date,h.i_secondes,h.t_motif,h.participant_id,h.formateur,tc.t_type_contrat,u.username
+        $sql = "SELECT h.id_heures,h.d_date,h.i_secondes,h.t_motif,h.participant_id,h.formateur_id,tc.t_type_contrat,u.username
                 FROM heures h
                 INNER JOIN contrat c
                 ON h.contrat_id = c.id_contrat
@@ -445,7 +445,7 @@ class Model_My_Prestation extends \Maitrepylos\Db {
         $sql = 'UPDATE heures SET i_secondes = ?,t_schema = ?,t_motif = ?,contrat_id = ?,formateur = ?
             WHERE id_heures = ?';
         $req = $this->_db->prepare($sql);
-        $req->execute(array($heures, $schema, $motif, $contrat, $formateur, $id));
+        $req->execute(array($heures, $schema, $motif, $contrat, $formateur_id, $id));
 
         //$this->_db->update('heures', $array, array('id_heures' => $id));
     }
@@ -608,11 +608,11 @@ class Model_My_Prestation extends \Maitrepylos\Db {
     }
 
     public function update_formateur($id, \Datetime $date) {
-        $sql = "UPDATE heures SET formateur = 0
+        $sql = "UPDATE heures SET formateur_id = 0
                 WHERE participant_id = ?
                 AND EXTRACT(YEAR_MONTH FROM d_date) = ?
                 AND t_schema IN ('*','+')
-                AND formateur = 1";
+                AND formateur_id = 1";
 
         $stmt = $this->_db->prepare($sql);
         $stmt->bindValue(1, $id);
@@ -620,11 +620,11 @@ class Model_My_Prestation extends \Maitrepylos\Db {
         $stmt->execute();
     }
 
-    public function verifie_formateur($id, \Datetime $date) {
+    public function verifie_formateur_id($id, \Datetime $date) {
         $sql = "SELECT count(*) AS compteur FROM heures
                 WHERE participant_id = ?
                 AND EXTRACT(YEAR_MONTH FROM d_date) = ?
-                AND formateur = 1";
+                AND formateur_id = 1";
 
         $req = $this->_db->prepare($sql);
         $req->execute(array($id, $date->format('Ym')));

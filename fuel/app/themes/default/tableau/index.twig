@@ -105,6 +105,10 @@
 
             <td class="text-center">{{ asset_img({0: 'default.png'}) }}</td>
 
+                {% elseif (contrat[1] == '%') %}
+
+            <td class="text-center">{{ asset_img({0: 'jaune.png'}) }}</td>
+
                 {% elseif (contrat[1] == '*') %}
 
             <td class="text-center">{{ asset_img({0 : 'excla.png'}) }}</td>
@@ -116,10 +120,10 @@
             {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Travail', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
             {{ form_label('J', 'action') }}
-            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Absence à Justifier', 
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/%/'~participant.id_contrat[0]['id_contrat']~'/Absence à Justifier', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
             {{ form_label('A', 'action') }}
-            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/+/'~participant.id_contrat[0]['id_contrat']~'/Absence', 
+            {{ form_checkbox('action[]', date[i]|date('Y-m-d')~'/'~participant.id_participant~'/'~participant[i]~'/*/'~participant.id_contrat[0]['id_contrat']~'/Absence', 
             {'id': 'check'~i~a, 'onclick': 'InactiveCheckBox(chick'~i~a~', chock'~i~a~');' } ) }}
             </td>
             
