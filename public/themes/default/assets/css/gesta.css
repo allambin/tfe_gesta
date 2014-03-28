@@ -136,6 +136,13 @@ ul.nav
     font-size: 18px;
 }
 
+#content h3
+{
+    margin: 10px 0px 10px 0px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 18px;
+}
+
 #content h2.smaller
 {
     font-size: 18px;

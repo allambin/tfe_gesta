@@ -1,5 +1,5 @@
 {% for section in checklist_model %}
-    <h2>{{ section.t_nom }}</h2>
+    <h3>{{ section.t_nom }}</h3>
     {% for valeur in section.valeurs %}
         {% if current_checklist[valeur.id_checklist_valeur] is not null %}
             {{ form_checkbox('liste[]', valeur.id_checklist_valeur, {checked: 'checked'}) }} 
