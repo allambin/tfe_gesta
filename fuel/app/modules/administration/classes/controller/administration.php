@@ -407,6 +407,7 @@ class Controller_Administration extends \Controller_Main
         $this->data['subtitle'] = "Gestion des logins";
         $this->data['users'] = $users;
         $this->data['groupes'] = $groups['groups'];
+        $this->data['back'] = 'index';
         return $this->theme->view($this->dir.'logins', $this->data);
     }
 
