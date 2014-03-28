@@ -17,4 +17,5 @@ return array(
 	'numeric_between' => 'Le champ :label doit contenir une valeur numérique entre :param:1 et :param:2',
 	'valid_string'    => 'La règle :rule(:param:1) a échoué pour le champ :label',
 	'required_with'   => 'Le champ :label doit contenir une valeur si :param:1 contient une valeur.',
+	'is_required'   => 'Le champ :label est requis et doit contenir une valeur.',
 );

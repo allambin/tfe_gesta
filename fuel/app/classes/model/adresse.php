@@ -55,7 +55,7 @@ class Model_Adresse extends Orm\Model
         't_bte' => array(
             'data_type' => 'text',
             'label' => 'Boite*',
-            'validation' => array('max_length'=>array(255), 'is_required', 'valid_string'=>array('numeric'))
+            'validation' => array('max_length'=>array(255), 'is_required')
         ),
         't_code_postal' => array(
             'data_type' => 'text',
@@ -150,7 +150,7 @@ class Model_Adresse extends Orm\Model
         $val->add_field('t_nom_rue', 'Rue', 'is_required|max_length[255]');
         $val->add_field('t_telephone', 'Téléphone', 'exact_length[9]');
         $val->add_field('t_commune', 'Commune', 'is_required|max_length[255]');
-        $val->add_field('t_bte', 'Boite', 'is_required|valid_string[numeric]');
+        $val->add_field('t_bte', 'Boite', 'is_required');
 
         $val->set_message('required', 'Veuillez remplir le champ :label.');
         $val->set_message('min_length', 'Le champ :label doit faire au moins :param:1 caractères.');

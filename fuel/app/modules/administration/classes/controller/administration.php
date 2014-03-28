@@ -76,16 +76,16 @@ class Controller_Administration extends \Controller_Main
         ),
         'fin_formation' => array(
             'name' => array(
-                'single' => 'fin de formation',
-                'plural' => 'fins de formation'
+                'single' => 'sortie',
+                'plural' => 'sorties'
             ),
             'layout' => 'multiple',
             'model' => 'Model_Fin_Formation'
         ),
         'type_formation' => array(
             'name' => array(
-                'single' => 'type de formation',
-                'plural' => 'types de formation'
+                'single' => 'type et motif de sortie',
+                'plural' => 'types et motifs de sortie'
             ),
             'layout' => 'simple',
             'model' => 'Model_Type_Formation'
