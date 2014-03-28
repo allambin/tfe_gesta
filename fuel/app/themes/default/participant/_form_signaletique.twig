@@ -58,7 +58,11 @@
                         <div class="control-group">
                             {{ form_label('Nationalité', 't_nationalite', {class: 'control-label'}) }}
                             <div class="controls">
-                            {{ form_select('t_nationalite', input_post('t_nationalite', participant.t_nationalite), pays) }}
+                            {% if eid %}
+                                {{ form_select('t_nationalite', 'Belgique', pays) }}
+                            {% else %}
+                                {{ form_select('t_nationalite', input_post('t_nationalite', participant.t_nationalite), pays) }}
+                            {% endif %}
                             </div>
                         </div>
                     </td>
