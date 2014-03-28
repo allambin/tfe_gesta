@@ -55,7 +55,7 @@ class Controller_Participant extends \Controller_Main
     public function action_ajax_liste()
     {        
         $columns = array('id_participant', 't_nom', 't_prenom', 'd_date_naissance', 't_lieu_naissance',
-                            't_nationalite', 't_lieu_naissance', 't_registre_national',
+                            't_nationalite', 't_registre_national',
                              't_numero_inscription_onem', 'b_is_actif', ' ');
         
         $entry = \Model_Participant::query()->select('id_participant', 't_nom', 't_prenom', 't_nationalite', 
