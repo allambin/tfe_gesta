@@ -66,6 +66,7 @@ class Observer_Delete extends Orm\Observer
                 foreach ($contrats as $contrat)
                     $contrat->delete();
                 
+                \DB::delete('checklist')->where('participant_id', '=', $model->id_participant)->execute();
                 \DB::delete('ajout_deplacement')->where('participant_id', '=', $model->id_participant)->execute();
                 \DB::delete('heures')->where('participant_id', '=', $model->id_participant)->execute();
                 \DB::delete('heures_fixer')->where('participant_id', '=', $model->id_participant)->execute();
